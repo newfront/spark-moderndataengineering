@@ -1,0 +1,9 @@
+##
+# Hosts file example for Modern Data Engineering with Apache Spark
+#
+# add localhost and docker hosts
+##
+127.0.0.1 localhost
+127.0.0.1 zeppelin
+127.0.0.1 spark
+# End of section

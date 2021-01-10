@@ -1,0 +1,72 @@
+{
+  "paragraphs": [
+    {
+      "text": "%spark\nspark.sparkContext.getConf.toDebugString",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-10 23:09:18.633",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mres1\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d\nPYSPARK_DRIVER_PYTHON\u003dpython\nPYSPARK_PYTHON\u003dpython\nSPARK_HOME\u003d/spark\nspark.app.id\u003dlocal-1610320138136\nspark.app.name\u003dZeppelin\nspark.driver.cores\u003d1\nspark.driver.extraClassPath\u003d:/zeppelin/interpreter/spark/*::/zeppelin/interpreter/zeppelin-interpreter-shaded-0.9.0-preview2.jar:/zeppelin/interpreter/spark/spark-interpreter-0.9.0-preview2.jar\nspark.driver.extraJavaOptions\u003d -Dfile.encoding\u003dUTF-8 -Dlog4j.configuration\u003d\u0027file:///zeppelin/conf/log4j.properties\u0027 -Dlog4j.configurationFile\u003d\u0027file:///zeppelin/conf/log4j2.properties\u0027 -Dzeppelin.log.file\u003d\u0027/logs/zeppelin-interpreter-spark-shared_process--zeppelin.log\u0027\nspark.driver.host\u003dzeppelin\nspark.driver.memory\u003d1g\nspark.driver.port\u003d45697\nspark.executor.cores\u003d1\nspark.executor.id\u003ddriver\nspark.executor.memory\u003d1g\n...\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1610320103402_199331554",
+      "id": "paragraph_1610320103402_199331554",
+      "dateCreated": "2021-01-10 23:08:23.402",
+      "dateStarted": "2021-01-10 23:09:18.656",
+      "dateFinished": "2021-01-10 23:09:19.291",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-10 23:09:18.653",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1610320158652_480149",
+      "id": "paragraph_1610320158652_480149",
+      "dateCreated": "2021-01-10 23:09:18.653",
+      "status": "READY"
+    }
+  ],
+  "name": "IntroToSparkOnZeppelin",
+  "id": "2FWJW97H4",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview2",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
