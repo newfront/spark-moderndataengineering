@@ -3,7 +3,7 @@
     {
       "text": "%md\n# Introduction to Spark on Zeppelin\nIf you are seeing this then you were able to get your local environment running. Congrats.",
       "user": "anonymous",
-      "dateUpdated": "2021-01-16 22:06:28.282",
+      "dateUpdated": "2021-01-17 20:26:26.349",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -38,14 +38,14 @@
       "jobName": "paragraph_1610833094066_1219732012",
       "id": "paragraph_1610833094066_1219732012",
       "dateCreated": "2021-01-16 21:38:14.073",
-      "dateStarted": "2021-01-16 22:06:28.512",
-      "dateFinished": "2021-01-16 22:06:33.141",
+      "dateStarted": "2021-01-17 20:26:26.351",
+      "dateFinished": "2021-01-17 20:26:27.866",
       "status": "FINISHED"
     },
     {
       "text": "%spark\n// shows the spark settings and primes the spark session and context\nspark.sparkContext.getConf.toDebugString",
       "user": "anonymous",
-      "dateUpdated": "2021-01-16 22:16:01.989",
+      "dateUpdated": "2021-01-17 20:26:31.596",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -63,29 +63,20 @@
         "params": {},
         "forms": {}
       },
-      "results": {
-        "code": "ERROR",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "org.apache.zeppelin.interpreter.InterpreterException: java.io.IOException: Interpreter process is not running\nInterpreter launch command:  /spark/bin/spark-submit --class org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer --driver-class-path \":/zeppelin/interpreter/spark/*::/zeppelin/interpreter/zeppelin-interpreter-shaded-0.9.0-preview2.jar:/zeppelin/interpreter/spark/spark-interpreter-0.9.0-preview2.jar\" --driver-java-options \" -Dfile.encoding\u003dUTF-8 -Dlog4j.configuration\u003d\u0027file:///zeppelin/conf/log4j.properties\u0027 -Dlog4j.configurationFile\u003d\u0027file:///zeppelin/conf/log4j2.properties\u0027 -Dzeppelin.log.file\u003d\u0027/logs/zeppelin-interpreter-spark-shared_process--zeppelin.log\u0027\" --conf spark\\.driver\\.cores\\\u003d1 --conf spark\\.executor\\.memory\\\u003d1g --conf spark\\.executor\\.cores\\\u003d1 --conf spark\\.webui\\.yarn\\.useProxy\\\u003dfalse --conf spark\\.app\\.name\\\u003dZeppelin --conf spark\\.driver\\.memory\\\u003d1g --conf spark\\.master\\\u003dlocal\\[\\*\\] /zeppelin/interpreter/spark/spark-interpreter-0.9.0-preview2.jar 172.18.0.2 42527 \"spark-shared_process\" :\n\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.open(RemoteInterpreter.java:134)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.getFormType(RemoteInterpreter.java:281)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:412)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:72)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:130)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:180)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: java.io.IOException: Interpreter process is not running\nInterpreter launch command:  /spark/bin/spark-submit --class org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer --driver-class-path \":/zeppelin/interpreter/spark/*::/zeppelin/interpreter/zeppelin-interpreter-shaded-0.9.0-preview2.jar:/zeppelin/interpreter/spark/spark-interpreter-0.9.0-preview2.jar\" --driver-java-options \" -Dfile.encoding\u003dUTF-8 -Dlog4j.configuration\u003d\u0027file:///zeppelin/conf/log4j.properties\u0027 -Dlog4j.configurationFile\u003d\u0027file:///zeppelin/conf/log4j2.properties\u0027 -Dzeppelin.log.file\u003d\u0027/logs/zeppelin-interpreter-spark-shared_process--zeppelin.log\u0027\" --conf spark\\.driver\\.cores\\\u003d1 --conf spark\\.executor\\.memory\\\u003d1g --conf spark\\.executor\\.cores\\\u003d1 --conf spark\\.webui\\.yarn\\.useProxy\\\u003dfalse --conf spark\\.app\\.name\\\u003dZeppelin --conf spark\\.driver\\.memory\\\u003d1g --conf spark\\.master\\\u003dlocal\\[\\*\\] /zeppelin/interpreter/spark/spark-interpreter-0.9.0-preview2.jar 172.18.0.2 42527 \"spark-shared_process\" :\n\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.internal_create(RemoteInterpreter.java:163)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.open(RemoteInterpreter.java:131)\n\t... 13 more\n"
-          }
-        ]
-      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1610320103402_199331554",
       "id": "paragraph_1610320103402_199331554",
       "dateCreated": "2021-01-10 23:08:23.402",
-      "dateStarted": "2021-01-16 22:16:02.039",
-      "dateFinished": "2021-01-16 22:15:48.178",
-      "status": "ABORT"
+      "dateStarted": "2021-01-17 20:26:31.613",
+      "dateFinished": "2021-01-17 20:26:52.861",
+      "status": "FINISHED"
     },
     {
       "text": "%md\n## Read and Analyze\nThis next paragraph shows the most basic of Spark methods for file based reading. The zero-bells attached `spark.read.text`.\nThis is useful technique if you are working data for the first time and don\u0027t know how to parse it, or maybe are having issues using other methods for automatic parsing.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-01-16 22:07:33.402",
+      "dateUpdated": "2021-01-17 20:28:05.927",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -120,15 +111,15 @@
       "jobName": "paragraph_1610832378788_1358698633",
       "id": "paragraph_1610832378788_1358698633",
       "dateCreated": "2021-01-16 21:26:18.795",
-      "dateStarted": "2021-01-16 22:07:33.448",
-      "dateFinished": "2021-01-16 22:07:33.599",
+      "dateStarted": "2021-01-17 20:28:05.928",
+      "dateFinished": "2021-01-17 20:28:05.950",
       "status": "FINISHED"
     },
     {
       "title": "Read and Analyze",
-      "text": "%spark\n// parse the raw coffee - this is a simple csv file, but we will do things manually in order to understand what is happening\n// format: name, boldness\n\nval df \u003d spark.read.text(\"file:///learn/raw-coffee.txt\")\ndf.printSchema\ndf.show()\n",
+      "text": "%spark\n// parse the raw coffee file. this is a simple csv file without headers. The goal is to build core skills: parsing, exploring data\n// format: name, boldness\n\nval df \u003d spark.read.text(\"file:///learn/raw-coffee.txt\")\ndf.printSchema\n",
       "user": "anonymous",
-      "dateUpdated": "2021-01-16 22:07:33.648",
+      "dateUpdated": "2021-01-17 20:29:42.865",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -148,11 +139,11 @@
         "forms": {}
       },
       "results": {
-        "code": "ERROR",
+        "code": "SUCCESS",
         "msg": [
           {
             "type": "TEXT",
-            "data": "org.apache.zeppelin.interpreter.InterpreterException: java.io.IOException: Interpreter process is not running\nInterpreter launch command:  /spark/bin/spark-submit --class org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer --driver-class-path \":/zeppelin/interpreter/spark/*::/zeppelin/interpreter/zeppelin-interpreter-shaded-0.9.0-preview2.jar:/zeppelin/interpreter/spark/spark-interpreter-0.9.0-preview2.jar\" --driver-java-options \" -Dfile.encoding\u003dUTF-8 -Dlog4j.configuration\u003d\u0027file:///zeppelin/conf/log4j.properties\u0027 -Dlog4j.configurationFile\u003d\u0027file:///zeppelin/conf/log4j2.properties\u0027 -Dzeppelin.log.file\u003d\u0027/logs/zeppelin-interpreter-spark-shared_process--zeppelin.log\u0027\" --conf spark\\.driver\\.cores\\\u003d1 --conf spark\\.executor\\.memory\\\u003d1g --conf spark\\.executor\\.cores\\\u003d1 --conf spark\\.webui\\.yarn\\.useProxy\\\u003dfalse --conf spark\\.app\\.name\\\u003dZeppelin --conf spark\\.driver\\.memory\\\u003d1g --conf spark\\.master\\\u003dlocal\\[\\*\\] /zeppelin/interpreter/spark/spark-interpreter-0.9.0-preview2.jar 172.18.0.2 43201 \"spark-shared_process\" :\n\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.open(RemoteInterpreter.java:134)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.getFormType(RemoteInterpreter.java:281)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:412)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:72)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:130)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:180)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: java.io.IOException: Interpreter process is not running\nInterpreter launch command:  /spark/bin/spark-submit --class org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer --driver-class-path \":/zeppelin/interpreter/spark/*::/zeppelin/interpreter/zeppelin-interpreter-shaded-0.9.0-preview2.jar:/zeppelin/interpreter/spark/spark-interpreter-0.9.0-preview2.jar\" --driver-java-options \" -Dfile.encoding\u003dUTF-8 -Dlog4j.configuration\u003d\u0027file:///zeppelin/conf/log4j.properties\u0027 -Dlog4j.configurationFile\u003d\u0027file:///zeppelin/conf/log4j2.properties\u0027 -Dzeppelin.log.file\u003d\u0027/logs/zeppelin-interpreter-spark-shared_process--zeppelin.log\u0027\" --conf spark\\.driver\\.cores\\\u003d1 --conf spark\\.executor\\.memory\\\u003d1g --conf spark\\.executor\\.cores\\\u003d1 --conf spark\\.webui\\.yarn\\.useProxy\\\u003dfalse --conf spark\\.app\\.name\\\u003dZeppelin --conf spark\\.driver\\.memory\\\u003d1g --conf spark\\.master\\\u003dlocal\\[\\*\\] /zeppelin/interpreter/spark/spark-interpreter-0.9.0-preview2.jar 172.18.0.2 43201 \"spark-shared_process\" :\n\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.internal_create(RemoteInterpreter.java:163)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.open(RemoteInterpreter.java:131)\n\t... 13 more\n"
+            "data": "root\n |-- value: string (nullable \u003d true)\n\n\u001b[1m\u001b[34mdf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [value: string]\n"
           }
         ]
       },
@@ -162,37 +153,50 @@
       "jobName": "paragraph_1610320158652_480149",
       "id": "paragraph_1610320158652_480149",
       "dateCreated": "2021-01-10 23:09:18.653",
-      "dateStarted": "2021-01-16 22:07:33.865",
-      "dateFinished": "2021-01-16 22:07:33.889",
-      "status": "ERROR"
+      "dateStarted": "2021-01-17 20:29:42.884",
+      "dateFinished": "2021-01-17 20:29:46.211",
+      "status": "FINISHED"
     },
     {
-      "text": "%spark\n",
+      "text": "%md\n## Exercise: Basic File Reading and Custom Parsing\nFollow along with the exercise in the chapter by adding a new paragraph below. Just hover below this paragraph and *Add Paragraph*. \n\nRemember. The `%spark` denotes that the paragraph is going to run with instructions against the current Spark Session.",
       "user": "anonymous",
-      "dateUpdated": "2021-01-16 22:07:33.972",
+      "dateUpdated": "2021-01-17 20:33:33.052",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
         "enabled": true,
         "results": {},
         "editorSetting": {
-          "language": "scala",
-          "editOnDblClick": false,
+          "language": "markdown",
+          "editOnDblClick": true,
           "completionKey": "TAB",
-          "completionSupport": true
+          "completionSupport": false
         },
-        "editorMode": "ace/mode/scala"
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eExercise: Basic File Reading and Custom Parsing\u003c/h2\u003e\n\u003cp\u003eFollow along with the exercise in the chapter by adding a new paragraph below. Just hover below this paragraph and \u003cem\u003eAdd Paragraph\u003c/em\u003e.\u003c/p\u003e\n\u003cp\u003eRemember. The \u003ccode\u003e%spark\u003c/code\u003e denotes that the paragraph is going to run with instructions against the current Spark Session.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
-      "jobName": "paragraph_1610831235701_1241826108",
-      "id": "paragraph_1610831235701_1241826108",
-      "dateCreated": "2021-01-16 21:07:15.710",
+      "jobName": "paragraph_1610915402411_709840804",
+      "id": "paragraph_1610915402411_709840804",
+      "dateCreated": "2021-01-17 20:30:02.411",
+      "dateStarted": "2021-01-17 20:33:33.052",
+      "dateFinished": "2021-01-17 20:33:33.076",
       "status": "FINISHED"
     }
   ],
