@@ -10,7 +10,6 @@ services:
       - ${SPARK_HOME}:/spark
     environment:
       - SPARK_HOME=/spark
-      - SPARK_SUBMIT_OPTIONS=
       - ZEPPELIN_LOG_DIR=/logs
       - ZEPPELIN_NOTEBOOK_DIR=/notebook
       - ZEPPELIN_ADDR=0.0.0.0

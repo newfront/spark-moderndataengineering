@@ -1,0 +1,115 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n## Data Inception: Using Spark to help Spark\nIn this following notebook, we will learn to use Spark to help us work more efficiently.\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-17 22:43:54.601",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eData Inception: Using Spark to help Spark\u003c/h2\u003e\n\u003cp\u003eIn this following notebook, we will learn to use Spark to help us work more efficiently.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1610923294026_749698639",
+      "id": "paragraph_1610923294026_749698639",
+      "dateCreated": "2021-01-17 22:41:34.026",
+      "dateStarted": "2021-01-17 22:43:54.602",
+      "dateFinished": "2021-01-17 22:43:54.622",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Read as CSV",
+      "text": "%spark\n\n// load the same file from the IntroToSparkOnZeppelin \nval coffees \u003d spark.read.csv(\"file:///learn/raw-coffee.txt\").toDF(\"name\",\"roast\")\ncoffees.show()",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-17 22:51:32.574",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-----------+-----+\n|       name|roast|\n+-----------+-----+\n|    folgers|   10|\n|      yuban|   10|\n|  nespresso|   10|\n|     ritual|    4|\n|four barrel|    5|\n+-----------+-----+\n\n\u001b[1m\u001b[34mcoffees\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, roast: string]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d20"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d21"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1610923180042_1100920629",
+      "id": "paragraph_1610923180042_1100920629",
+      "dateCreated": "2021-01-17 22:39:40.043",
+      "dateStarted": "2021-01-17 22:45:32.305",
+      "dateFinished": "2021-01-17 22:45:32.815",
+      "status": "FINISHED"
+    }
+  ],
+  "name": "3-2_LetSparkWorkForYou",
+  "id": "2FVST7EN7",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview2",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

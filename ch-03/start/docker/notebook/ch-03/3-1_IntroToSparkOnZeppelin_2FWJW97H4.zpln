@@ -1,0 +1,181 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n# Introduction to Spark on Zeppelin\nIf you are seeing this then you were able to get your local environment running. Congrats.",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-17 22:48:36.859",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eIntroduction to Spark on Zeppelin\u003c/h1\u003e\n\u003cp\u003eIf you are seeing this then you were able to get your local environment running. Congrats.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1610833094066_1219732012",
+      "id": "paragraph_1610833094066_1219732012",
+      "dateCreated": "2021-01-16 21:38:14.073",
+      "dateStarted": "2021-01-17 22:48:36.858",
+      "dateFinished": "2021-01-17 22:48:36.882",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\n// shows the spark settings and primes the spark session and context\nspark.sparkContext.getConf.toDebugString",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-17 22:48:39.700",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mres36\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d\nPYSPARK_DRIVER_PYTHON\u003dpython\nPYSPARK_PYTHON\u003dpython\nSPARK_HOME\u003d/spark\nspark.app.id\u003dlocal-1610915205590\nspark.app.name\u003dZeppelin\nspark.cores.max\u003d8\nspark.driver.cores\u003d1\nspark.driver.extraClassPath\u003d:/zeppelin/interpreter/spark/*::/zeppelin/interpreter/zeppelin-interpreter-shaded-0.9.0-preview2.jar:/zeppelin/interpreter/spark/spark-interpreter-0.9.0-preview2.jar\nspark.driver.extraJavaOptions\u003d -Dfile.encoding\u003dUTF-8 -Dlog4j.configuration\u003d\u0027file:///zeppelin/conf/log4j.properties\u0027 -Dlog4j.configurationFile\u003d\u0027file:///zeppelin/conf/log4j2.properties\u0027 -Dzeppelin.log.file\u003d\u0027/logs/zeppelin-interpreter-spark-shared_process--zeppelin.log\u0027\nspark.driver.host\u003dzeppelin\nspark.driver.memory\u003d1g\nspark.driver.port\u003d38089\nspark.executor.cores\u003d1\nspark.executor.id\u003ddriver\nspark....\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1610320103402_199331554",
+      "id": "paragraph_1610320103402_199331554",
+      "dateCreated": "2021-01-10 23:08:23.402",
+      "dateStarted": "2021-01-17 22:48:39.719",
+      "dateFinished": "2021-01-17 22:48:40.036",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%md\n## Read and Analyze\nThis next paragraph shows the most basic of Spark methods for file based reading. The zero-bells attached `spark.read.text`.\nThis is useful technique if you are working data for the first time and don\u0027t know how to parse it, or maybe are having issues using other methods for automatic parsing.\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-17 22:48:42.619",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eRead and Analyze\u003c/h2\u003e\n\u003cp\u003eThis next paragraph shows the most basic of Spark methods for file based reading. The zero-bells attached \u003ccode\u003espark.read.text\u003c/code\u003e.\u003cbr /\u003e\nThis is useful technique if you are working data for the first time and don\u0026rsquo;t know how to parse it, or maybe are having issues using other methods for automatic parsing.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1610832378788_1358698633",
+      "id": "paragraph_1610832378788_1358698633",
+      "dateCreated": "2021-01-16 21:26:18.795",
+      "dateStarted": "2021-01-17 22:48:42.624",
+      "dateFinished": "2021-01-17 22:48:42.645",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Read and Analyze",
+      "text": "%spark\n// parse the raw coffee file. this is a simple csv file without headers. The goal is to build core skills: parsing, exploring data\n// format: name, boldness\n\nval df \u003d spark.read.text(\"file:///learn/raw-coffee.txt\")\ndf.printSchema\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-17 22:48:44.507",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- value: string (nullable \u003d true)\n\n\u001b[1m\u001b[34mdf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [value: string]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1610320158652_480149",
+      "id": "paragraph_1610320158652_480149",
+      "dateCreated": "2021-01-10 23:09:18.653",
+      "dateStarted": "2021-01-17 22:48:44.519",
+      "dateFinished": "2021-01-17 22:48:44.744",
+      "status": "FINISHED"
+    }
+  ],
+  "name": "3-1_IntroToSparkOnZeppelin",
+  "id": "2FWJW97H4",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview2",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

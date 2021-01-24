@@ -10,7 +10,9 @@ function sparkConf() {
 
 function sparkExists() {
   if [ -z "$SPARK_HOME" ]; then
-    echo "Please follow the installation instructions for Spark from Chapter 2."
+    echo "Missing SPARK_HOME environment variable."
+    echo "1. Ensure you have followed the installation instructions for Spark from Chapter 2."
+    echo "2. Add SPARK_HOME to your .zshrc or .bashrc, then use `source ~/.zshrc` for example to refresh your session"
     exit 1
   else
     echo "SPARK_HOME is set. location=${SPARK_HOME}"
@@ -21,7 +23,7 @@ function createNetwork() {
   cmd="docker network ls | grep ${DOCKER_NETWORK_NAME}"
   eval $cmd
   retVal=$?
-  if [ $retVal -ne 0]; then
+  if [ $retVal -ne 0 ]; then
     docker network create -d bridge ${DOCKER_NETWORK_NAME}
   else
     echo "docker network already exists ${DOCKER_NETWORK_NAME}"
