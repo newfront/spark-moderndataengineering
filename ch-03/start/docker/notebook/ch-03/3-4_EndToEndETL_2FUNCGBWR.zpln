@@ -3,7 +3,7 @@
     {
       "text": "%md\n## Chapter 3: Exercise 3-4: Writing your First Spark ETL\nThis notebook is a full end to end ETL example.\n1. We will read the coffee data into Spark using our custom `StructType`\n2. We will then use `coalesce(1)` to remove additional partitions and save our data in exactly one file\n3. Then we will output the results as a `Parquet` file: which is a strictly typed, hyper structured data format.\n4. Lastly, we will read our resulting parquet file back in and see if the results are what we expected them to be.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-01-19 00:59:14.879",
+      "dateUpdated": "2021-01-31 19:54:03.793",
       "config": {
         "tableHide": false,
         "editorSetting": {
@@ -38,14 +38,14 @@
       "jobName": "paragraph_1611017093358_1451525536",
       "id": "paragraph_1610923294026_749698639",
       "dateCreated": "2021-01-19 00:44:53.358",
-      "dateStarted": "2021-01-19 00:59:14.879",
-      "dateFinished": "2021-01-19 00:59:14.895",
+      "dateStarted": "2021-01-31 19:54:03.809",
+      "dateFinished": "2021-01-31 19:54:03.827",
       "status": "FINISHED"
     },
     {
       "text": "%spark\nimport org.apache.spark.sql.types._\nval coffeeSchema \u003d StructType(\n    Seq(\n        StructField(\"name\", StringType,\n          metadata \u003d new MetadataBuilder()\n            .putString(\"comment\", \"Coffee Brand Name\")\n            .build()\n        ),\n        StructField(\"roast\", DoubleType,\n           metadata \u003d new MetadataBuilder()\n            .putString(\"comment\", \"Coffee Roast Level (1-10)\")\n            .build()\n        )\n    )\n)",
       "user": "anonymous",
-      "dateUpdated": "2021-01-19 00:52:26.344",
+      "dateUpdated": "2021-01-31 19:54:03.909",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -78,15 +78,15 @@
       "jobName": "paragraph_1611017510394_1647092271",
       "id": "paragraph_1611017510394_1647092271",
       "dateCreated": "2021-01-19 00:51:50.395",
-      "dateStarted": "2021-01-19 00:52:26.356",
-      "dateFinished": "2021-01-19 00:52:26.678",
+      "dateStarted": "2021-01-31 19:54:03.920",
+      "dateFinished": "2021-01-31 19:54:04.177",
       "status": "FINISHED"
     },
     {
       "title": "Read, Transform and Write (ETL)",
       "text": "%spark\n\nspark\n  .read\n  .option(\"inferSchema\", \"false\")\n  .schema(coffeeSchema)\n  .csv(\"file:///learn/raw-coffee.txt\")\n  .write\n  .format(\"parquet\")\n  .mode(\"overwrite\")\n  .save(\"file:///learn/coffee.parquet\")",
       "user": "anonymous",
-      "dateUpdated": "2021-01-19 01:11:58.923",
+      "dateUpdated": "2021-01-31 19:54:04.220",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -118,7 +118,7 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d83"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d13"
             }
           ],
           "interpreterSettingId": "spark"
@@ -128,15 +128,15 @@
       "jobName": "paragraph_1611017093358_204766208",
       "id": "paragraph_1610923180042_1100920629",
       "dateCreated": "2021-01-19 00:44:53.358",
-      "dateStarted": "2021-01-19 01:11:58.936",
-      "dateFinished": "2021-01-19 01:11:59.426",
+      "dateStarted": "2021-01-31 19:54:04.230",
+      "dateFinished": "2021-01-31 19:54:06.328",
       "status": "FINISHED"
     },
     {
       "title": "Read our Parquet Results",
       "text": "%spark\n\nspark.read\n  .parquet(\"file:///learn/coffee.parquet\")\n  .createOrReplaceTempView(\"coffee\")\n\nspark.sql(\"desc coffee\").show(false)\nspark.sql(\"select * from coffee\").show",
       "user": "anonymous",
-      "dateUpdated": "2021-01-19 01:52:50.259",
+      "dateUpdated": "2021-01-31 19:54:06.333",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -173,10 +173,10 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d89"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d14"
             },
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d90"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d15"
             }
           ],
           "interpreterSettingId": "spark"
@@ -186,14 +186,14 @@
       "jobName": "paragraph_1611017093359_228195739",
       "id": "paragraph_1610924951387_1045173537",
       "dateCreated": "2021-01-19 00:44:53.359",
-      "dateStarted": "2021-01-19 01:52:50.270",
-      "dateFinished": "2021-01-19 01:52:50.866",
+      "dateStarted": "2021-01-31 19:54:06.357",
+      "dateFinished": "2021-01-31 19:54:07.303",
       "status": "FINISHED"
     },
     {
       "text": "%spark\nval dets \u003d spark.read.parquet(\"file:///learn/coffee.parquet\")\ndets.rdd.partitions.size",
       "user": "anonymous",
-      "dateUpdated": "2021-01-19 01:13:29.870",
+      "dateUpdated": "2021-01-31 19:54:07.359",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -216,7 +216,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "\u001b[1m\u001b[34mdets\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, roast: double]\n\u001b[1m\u001b[34mres111\u001b[0m: \u001b[1m\u001b[32mInt\u001b[0m \u003d 1\n"
+            "data": "\u001b[1m\u001b[34mdets\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, roast: double]\n\u001b[1m\u001b[34mres18\u001b[0m: \u001b[1m\u001b[32mInt\u001b[0m \u003d 1\n"
           }
         ]
       },
@@ -229,7 +229,7 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d88"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d16"
             }
           ],
           "interpreterSettingId": "spark"
@@ -239,15 +239,27 @@
       "jobName": "paragraph_1611017986282_1094491072",
       "id": "paragraph_1611017986282_1094491072",
       "dateCreated": "2021-01-19 00:59:46.282",
-      "dateStarted": "2021-01-19 01:13:29.881",
-      "dateFinished": "2021-01-19 01:13:30.274",
+      "dateStarted": "2021-01-31 19:54:07.370",
+      "dateFinished": "2021-01-31 19:54:07.800",
       "status": "FINISHED"
     },
     {
       "text": "%spark\n",
       "user": "anonymous",
-      "dateUpdated": "2021-01-19 01:13:09.844",
-      "config": {},
+      "dateUpdated": "2021-01-31 19:54:07.869",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
       "settings": {
         "params": {},
         "forms": {}
@@ -258,7 +270,7 @@
       "jobName": "paragraph_1611018789843_2124518909",
       "id": "paragraph_1611018789843_2124518909",
       "dateCreated": "2021-01-19 01:13:09.844",
-      "status": "READY"
+      "status": "FINISHED"
     }
   ],
   "name": "3-4_EndToEndETL",
@@ -271,5 +283,7 @@
   "config": {
     "isZeppelinNotebookCronEnable": false
   },
-  "info": {}
+  "info": {
+    "isRunning": true
+  }
 }

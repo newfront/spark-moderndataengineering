@@ -3,7 +3,7 @@
     {
       "text": "%md\n## Data Inception: Using Spark to help Spark\nIn this following notebook, we will learn to use Spark to help us work more efficiently.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-01-17 22:43:54.601",
+      "dateUpdated": "2021-01-31 19:52:44.840",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -38,15 +38,15 @@
       "jobName": "paragraph_1610923294026_749698639",
       "id": "paragraph_1610923294026_749698639",
       "dateCreated": "2021-01-17 22:41:34.026",
-      "dateStarted": "2021-01-17 22:43:54.602",
-      "dateFinished": "2021-01-17 22:43:54.622",
+      "dateStarted": "2021-01-31 19:52:44.865",
+      "dateFinished": "2021-01-31 19:52:44.884",
       "status": "FINISHED"
     },
     {
       "title": "Read as CSV",
       "text": "%spark\n\n// load the same file from the IntroToSparkOnZeppelin \nval coffees \u003d spark.read.csv(\"file:///learn/raw-coffee.txt\").toDF(\"name\",\"roast\")\ncoffees.show()",
       "user": "anonymous",
-      "dateUpdated": "2021-01-17 22:51:32.574",
+      "dateUpdated": "2021-01-31 19:52:44.964",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -83,10 +83,10 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d20"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d0"
             },
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d21"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d1"
             }
           ],
           "interpreterSettingId": "spark"
@@ -96,8 +96,8 @@
       "jobName": "paragraph_1610923180042_1100920629",
       "id": "paragraph_1610923180042_1100920629",
       "dateCreated": "2021-01-17 22:39:40.043",
-      "dateStarted": "2021-01-17 22:45:32.305",
-      "dateFinished": "2021-01-17 22:45:32.815",
+      "dateStarted": "2021-01-31 19:52:44.976",
+      "dateFinished": "2021-01-31 19:52:50.447",
       "status": "FINISHED"
     }
   ],
@@ -111,5 +111,7 @@
   "config": {
     "isZeppelinNotebookCronEnable": false
   },
-  "info": {}
+  "info": {
+    "isRunning": false
+  }
 }
