@@ -4,7 +4,7 @@
       "title": "Data Generation",
       "text": "%spark\ncase class Store(\n    name: String, \n    capacity: Int, \n    opens: Int, \n    closes: Int)\n    \nval stores \u003d Seq(\n    Store(\"a\", 24, 8, 20),\n    Store(\"b\", 36, 7, 21),\n    Store(\"c\", 18, 5, 23)\n)\n\nval df \u003d spark.createDataFrame(stores)\ndf.createOrReplaceTempView(\"stores\")",
       "user": "anonymous",
-      "dateUpdated": "2021-01-31 19:43:16.186",
+      "dateUpdated": "2021-01-31 20:21:59.626",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -38,15 +38,15 @@
       "jobName": "paragraph_1612037491392_1831291883",
       "id": "paragraph_1612037491392_1831291883",
       "dateCreated": "2021-01-30 20:11:31.392",
-      "dateStarted": "2021-01-31 19:43:16.230",
-      "dateFinished": "2021-01-31 19:43:42.753",
+      "dateStarted": "2021-01-31 20:21:59.652",
+      "dateFinished": "2021-01-31 20:22:00.149",
       "status": "FINISHED"
     },
     {
       "title": "Selection: Find all stores open after 10pm",
       "text": "%spark\nval query \u003d spark.sql(\"select * from stores where closes \u003e\u003d 22\")\n//query.explain(true)\nquery.show()",
       "user": "anonymous",
-      "dateUpdated": "2021-01-31 00:37:27.591",
+      "dateUpdated": "2021-01-31 20:22:00.152",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -80,15 +80,15 @@
       "jobName": "paragraph_1612042148906_1724978527",
       "id": "paragraph_1612042148906_1724978527",
       "dateCreated": "2021-01-30 21:29:08.906",
-      "dateStarted": "2021-01-31 00:37:27.612",
-      "dateFinished": "2021-01-31 00:37:28.030",
+      "dateStarted": "2021-01-31 20:22:00.192",
+      "dateFinished": "2021-01-31 20:22:01.727",
       "status": "FINISHED"
     },
     {
       "title": "Selection: Find all stores open after 10pm (DataFrame approach)",
       "text": "%spark\nimport org.apache.spark.sql.functions._\n\nval filter \u003d df.filter($\"closes\" \u003e\u003d 22)\nval where \u003d df.where(\u0027closes \u003e\u003d 22)\nfilter.show()\nwhere.show()",
       "user": "anonymous",
-      "dateUpdated": "2021-01-31 00:37:34.984",
+      "dateUpdated": "2021-01-31 20:22:01.789",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -122,15 +122,15 @@
       "jobName": "paragraph_1612042843043_1749190313",
       "id": "paragraph_1612042843043_1749190313",
       "dateCreated": "2021-01-30 21:40:43.043",
-      "dateStarted": "2021-01-31 00:37:35.000",
-      "dateFinished": "2021-01-31 00:37:35.391",
+      "dateStarted": "2021-01-31 20:22:01.807",
+      "dateFinished": "2021-01-31 20:22:02.440",
       "status": "FINISHED"
     },
     {
       "title": "Projection: SQL approach",
       "text": "%spark\n// find all stores with an occupancy greater than 20\nval pq \u003d spark.sql(\"select name from stores where capacity \u003e 20\")\n//pq.explain(true)\npq.show()\n",
       "user": "anonymous",
-      "dateUpdated": "2021-01-31 00:37:37.634",
+      "dateUpdated": "2021-01-31 20:22:02.508",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -164,15 +164,15 @@
       "jobName": "paragraph_1612040361468_1903075951",
       "id": "paragraph_1612040361468_1903075951",
       "dateCreated": "2021-01-30 20:59:21.468",
-      "dateStarted": "2021-01-31 00:37:37.653",
-      "dateFinished": "2021-01-31 00:37:38.065",
+      "dateStarted": "2021-01-31 20:22:02.525",
+      "dateFinished": "2021-01-31 20:22:03.037",
       "status": "FINISHED"
     },
     {
       "title": "Projection: DataFrame approach",
       "text": "%spark\ndf\n  .select(\"name\")\n  .where(\u0027capacity \u003e 20)\n  .show\n",
       "user": "anonymous",
-      "dateUpdated": "2021-01-31 00:37:39.918",
+      "dateUpdated": "2021-01-31 20:22:03.127",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -206,15 +206,57 @@
       "jobName": "paragraph_1612047712316_857469",
       "id": "paragraph_1612047712316_857469",
       "dateCreated": "2021-01-30 23:01:52.317",
-      "dateStarted": "2021-01-31 00:37:39.934",
-      "dateFinished": "2021-01-31 00:37:40.313",
+      "dateStarted": "2021-01-31 20:22:03.158",
+      "dateFinished": "2021-01-31 20:22:03.588",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%md\n## Joins\nYou can take advantage of joins to combine two or more sources across a join criteria (eg. special selection predicate). There are a few different ways to join your data and selecting the appropriate join style is critically important to the resulting rows returned post-query.\n\n### Join Styles\n* **Innter Join** - Selects all rows where the conditions are fulfilled across both sides of the join\n* **Right Join**  - Returns all rows from the right-hand view or dataframe, joining all rows where the conditions are met on the left-hand, or appending nulls when conditions are not met\n* **Left Join**   - Returns all rows from the left-hand view or dataframe, joining all rows where the conditions are also met on the right-hand side, or appending nulls when conditions are not met\n* **Semi Join**  - Returns all rows from the left-hand view or dataframe only if the right-hand condition is met (can use to create a selection filter that uses another reference (dataframe or view) without joining any data from the right-hand side of the join. Eg. \"I want to see all stores that have current occupancy data otherwise I am not interested\"\n* **Full Join**   - Returns all rows across both views or dataframes, filling in null values on either side that doesn\u0027t meet the match criteria",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 21:04:26.991",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eJoins\u003c/h2\u003e\n\u003cp\u003eYou can take advantage of joins to combine two or more sources across a join criteria (eg. special selection predicate). There are a few different ways to join your data and selecting the appropriate join style is critically important to the resulting rows returned post-query.\u003c/p\u003e\n\u003ch3\u003eJoin Styles\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003eInnter Join\u003c/strong\u003e - Selects all rows where the conditions are fulfilled across both sides of the join\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eRight Join\u003c/strong\u003e  - Returns all rows from the right-hand view or dataframe, joining all rows where the conditions are met on the left-hand, or appending nulls when conditions are not met\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eLeft Join\u003c/strong\u003e   - Returns all rows from the left-hand view or dataframe, joining all rows where the conditions are also met on the right-hand side, or appending nulls when conditions are not met\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eSemi Join\u003c/strong\u003e  - Returns all rows from the left-hand view or dataframe only if the right-hand condition is met (can use to create a selection filter that uses another reference (dataframe or view) without joining any data from the right-hand side of the join. Eg. \u0026ldquo;I want to see all stores that have current occupancy data otherwise I am not interested\u0026rdquo;\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eFull Join\u003c/strong\u003e   - Returns all rows across both views or dataframes, filling in null values on either side that doesn\u0026rsquo;t meet the match criteria\u003c/li\u003e\n\u003c/ul\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612124536768_249771908",
+      "id": "paragraph_1612124536768_249771908",
+      "dateCreated": "2021-01-31 20:22:16.769",
+      "dateStarted": "2021-01-31 21:04:26.991",
+      "dateFinished": "2021-01-31 21:04:27.012",
       "status": "FINISHED"
     },
     {
       "title": "Expanding our Data through Joins",
-      "text": "%spark\n/*\ncase class Store(\n    name: String, \n    capacity: Int, \n    opens: Int, \n    closes: Int)\n    \nval stores \u003d Seq(\n    Store(\"a\", 24, 8, 20),\n    Store(\"b\", 36, 7, 21),\n    Store(\"c\", 18, 5, 23)\n)\n*/\n\n// each store has a number of current occupants (we can see if there is room in a store for more people)\ncase class StoreOccupants(name: String, occupants: Int)\n\nval occupants \u003d Seq(\n  StoreOccupants(\"a\", 8),\n  StoreOccupants(\"b\", 20),\n  StoreOccupants(\"c\", 16)\n)\n\nval storeOccupants \u003d spark.createDataFrame(occupants)\nstoreOccupants.createOrReplaceTempView(\"store_occupants\")",
+      "text": "%spark\n\n// each store has a number of current occupants (we can see if there is room in a store for more people)\ncase class StoreOccupants(name: String, occupants: Int)\n\nval occupants \u003d Seq(\n  StoreOccupants(\"a\", 8),\n  StoreOccupants(\"b\", 20),\n  StoreOccupants(\"c\", 16),\n  StoreOccupants(\"d\", 55),\n  StoreOccupants(\"e\", 8)\n)\n\nval occupancy \u003d spark.createDataFrame(occupants)\noccupancy.createOrReplaceTempView(\"store_occupants\")",
       "user": "anonymous",
-      "dateUpdated": "2021-01-31 01:10:01.007",
+      "dateUpdated": "2021-01-31 20:51:16.707",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -238,7 +280,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "defined class StoreOccupants\n\u001b[1m\u001b[34moccupants\u001b[0m: \u001b[1m\u001b[32mSeq[StoreOccupants]\u001b[0m \u003d List(StoreOccupants(a,8), StoreOccupants(b,20), StoreOccupants(c,16))\n\u001b[1m\u001b[34mstoreOccupants\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, occupants: int]\n"
+            "data": "defined class StoreOccupants\n\u001b[1m\u001b[34moccupants\u001b[0m: \u001b[1m\u001b[32mSeq[StoreOccupants]\u001b[0m \u003d List(StoreOccupants(a,8), StoreOccupants(b,20), StoreOccupants(c,16), StoreOccupants(d,55), StoreOccupants(e,8))\n\u001b[1m\u001b[34moccupancy\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, occupants: int]\n"
           }
         ]
       },
@@ -248,14 +290,105 @@
       "jobName": "paragraph_1612048965209_215318272",
       "id": "paragraph_1612048965209_215318272",
       "dateCreated": "2021-01-30 23:22:45.209",
-      "dateStarted": "2021-01-31 01:10:01.019",
-      "dateFinished": "2021-01-31 01:10:01.374",
+      "dateStarted": "2021-01-31 20:51:16.720",
+      "dateFinished": "2021-01-31 20:51:17.090",
       "status": "FINISHED"
     },
     {
-      "text": "%spark\n",
+      "title": "Right Join: SparkSQL Way",
+      "text": "%sql\n\nselect stores.*, store_occupants.`occupants` from stores \nright join store_occupants on stores.`name` \u003d\u003d store_occupants.`name`\n",
       "user": "anonymous",
-      "dateUpdated": "2021-01-31 01:11:15.697",
+      "dateUpdated": "2021-01-31 20:40:37.829",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "name": "string",
+                      "capacity": "string",
+                      "opens": "string",
+                      "closes": "string",
+                      "occupants": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "name\tcapacity\topens\tcloses\toccupants\na\t24\t8\t20\t8\nb\t36\t7\t21\t20\nc\t18\t5\t23\t16\nnull\tnull\tnull\tnull\t55\nnull\tnull\tnull\tnull\t8\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d19"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d20"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612055401017_964595988",
+      "id": "paragraph_1612055401017_964595988",
+      "dateCreated": "2021-01-31 01:10:01.017",
+      "dateStarted": "2021-01-31 20:40:37.841",
+      "dateFinished": "2021-01-31 20:40:38.045",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Right Join: DataFrame Way",
+      "text": "%spark\n// df is our stores data\nval rightJoined \u003d df.join(\n    occupancy, df(\"name\") \u003d\u003d\u003d occupancy(\"name\"),\n    \"right\")\n\nrightJoined.show()\n\n// show the query plan\n//rightJoined.explain(true)\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 20:53:54.395",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -267,19 +400,508 @@
           "completionKey": "TAB",
           "completionSupport": true
         },
-        "editorMode": "ace/mode/scala"
+        "editorMode": "ace/mode/scala",
+        "title": true
       },
       "settings": {
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----+--------+-----+------+----+---------+\n|name|capacity|opens|closes|name|occupants|\n+----+--------+-----+------+----+---------+\n|   a|      24|    8|    20|   a|        8|\n|   b|      36|    7|    21|   b|       20|\n|   c|      18|    5|    23|   c|       16|\n|null|    null| null|  null|   d|       55|\n|null|    null| null|  null|   e|        8|\n+----+--------+-----+------+----+---------+\n\n\u001b[1m\u001b[34mrightJoined\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, capacity: int ... 4 more fields]\n"
+          }
+        ]
+      },
       "apps": [],
-      "runtimeInfos": {},
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d41"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d42"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
       "progressUpdateIntervalMs": 500,
-      "jobName": "paragraph_1612055401017_964595988",
-      "id": "paragraph_1612055401017_964595988",
-      "dateCreated": "2021-01-31 01:10:01.017",
-      "status": "READY"
+      "jobName": "paragraph_1612126183281_1040290043",
+      "id": "paragraph_1612126183281_1040290043",
+      "dateCreated": "2021-01-31 20:49:43.281",
+      "dateStarted": "2021-01-31 20:53:54.407",
+      "dateFinished": "2021-01-31 20:53:54.863",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Left Join: SparkSQL Way",
+      "text": "%sql\nselect stores.*, store_occupants.`occupants` from stores \nleft join store_occupants on stores.`name` \u003d\u003d store_occupants.`name`",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 20:38:34.156",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "name": "string",
+                      "capacity": "string",
+                      "opens": "string",
+                      "closes": "string",
+                      "occupants": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "name\tcapacity\topens\tcloses\toccupants\na\t24\t8\t20\t8\nb\t36\t7\t21\t20\nc\t18\t5\t23\t16\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d10"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d11"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612124720819_1009770906",
+      "id": "paragraph_1612124720819_1009770906",
+      "dateCreated": "2021-01-31 20:25:20.819",
+      "dateStarted": "2021-01-31 20:38:33.414",
+      "dateFinished": "2021-01-31 20:38:33.798",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Left Join: DataFrame Way",
+      "text": "%spark\n// df is our stores data\nval leftJoined \u003d df.join(\n    occupancy, df(\"name\") \u003d\u003d\u003d occupancy(\"name\"),\n    \"left\")\n\nleftJoined.show()\n\n// show the query plan\n//leftJoined.explain(true)",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 20:58:34.010",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----+--------+-----+------+----+---------+\n|name|capacity|opens|closes|name|occupants|\n+----+--------+-----+------+----+---------+\n|   a|      24|    8|    20|   a|        8|\n|   b|      36|    7|    21|   b|       20|\n|   c|      18|    5|    23|   c|       16|\n+----+--------+-----+------+----+---------+\n\n\u001b[1m\u001b[34mleftJoined\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, capacity: int ... 4 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d58"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d59"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612126444405_1783165305",
+      "id": "paragraph_1612126444405_1783165305",
+      "dateCreated": "2021-01-31 20:54:04.405",
+      "dateStarted": "2021-01-31 20:58:34.023",
+      "dateFinished": "2021-01-31 20:58:34.464",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Semi Join: SparkSQL Way",
+      "text": "%sql\nselect * from stores semi join store_occupants on stores.`name` \u003d\u003d store_occupants.`name`",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 21:01:00.884",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "name": "string",
+                      "capacity": "string",
+                      "opens": "string",
+                      "closes": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "name\tcapacity\topens\tcloses\na\t24\t8\t20\nb\t36\t7\t21\nc\t18\t5\t23\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d64"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d65"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612126719044_1562801401",
+      "id": "paragraph_1612126719044_1562801401",
+      "dateCreated": "2021-01-31 20:58:39.044",
+      "dateStarted": "2021-01-31 21:01:00.896",
+      "dateFinished": "2021-01-31 21:01:01.093",
+      "status": "FINISHED"
+    },
+    {
+      "title": "SemiJoin: DataFrame Way",
+      "text": "%spark\n// semi-join\n\nval semiJoin \u003d df.join(\n    occupancy, df(\"name\") \u003d\u003d\u003d occupancy(\"name\"),\n    \"semi\")\n\nsemiJoin.show()\n\n// show the query plan\n//semiJoin.explain(true)",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 21:01:26.453",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----+--------+-----+------+\n|name|capacity|opens|closes|\n+----+--------+-----+------+\n|   a|      24|    8|    20|\n|   b|      36|    7|    21|\n|   c|      18|    5|    23|\n+----+--------+-----+------+\n\n\u001b[1m\u001b[34msemiJoin\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, capacity: int ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d67"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d68"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612126605723_918801157",
+      "id": "paragraph_1612126605723_918801157",
+      "dateCreated": "2021-01-31 20:56:45.723",
+      "dateStarted": "2021-01-31 21:01:26.464",
+      "dateFinished": "2021-01-31 21:01:26.898",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Full Join: SparkSQL Way",
+      "text": "%sql\nselect stores.*, store_occupants.* from stores full join store_occupants on stores.`name` \u003d\u003d store_occupants.`name`",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 20:49:32.439",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "name": "string",
+                      "capacity": "string",
+                      "opens": "string",
+                      "closes": "string",
+                      "occupants": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "name\tcapacity\topens\tcloses\tname\toccupants\nnull\tnull\tnull\tnull\te\t8\nnull\tnull\tnull\tnull\td\t55\nc\t18\t5\t23\tc\t16\nb\t36\t7\t21\tb\t20\na\t24\t8\t20\ta\t8\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d29"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d30"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d31"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d32"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d33"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612125513414_612017435",
+      "id": "paragraph_1612125513414_612017435",
+      "dateCreated": "2021-01-31 20:38:33.414",
+      "dateStarted": "2021-01-31 20:49:32.464",
+      "dateFinished": "2021-01-31 20:49:33.708",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Full Join: DataFrame Way",
+      "text": "%spark\n// df is our stores data\nval fullJoined \u003d df.join(\n    occupancy, df(\"name\") \u003d\u003d\u003d occupancy(\"name\"),\n    \"full\")\n\nfullJoined.show()\n\n// show the query plan\n//fullJoined.explain(true)",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 20:55:40.862",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----+--------+-----+------+----+---------+\n|name|capacity|opens|closes|name|occupants|\n+----+--------+-----+------+----+---------+\n|null|    null| null|  null|   e|        8|\n|null|    null| null|  null|   d|       55|\n|   c|      18|    5|    23|   c|       16|\n|   b|      36|    7|    21|   b|       20|\n|   a|      24|    8|    20|   a|        8|\n+----+--------+-----+------+----+---------+\n\n\u001b[1m\u001b[34mfullJoined\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, capacity: int ... 4 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d46"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d47"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d48"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d49"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d50"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612125730666_1732245628",
+      "id": "paragraph_1612125730666_1732245628",
+      "dateCreated": "2021-01-31 20:42:10.667",
+      "dateStarted": "2021-01-31 20:55:40.874",
+      "dateFinished": "2021-01-31 20:55:42.359",
+      "status": "FINISHED"
     }
   ],
   "name": "4_1_DataSelectionAndProjection",
@@ -292,5 +914,7 @@
   "config": {
     "isZeppelinNotebookCronEnable": false
   },
-  "info": {}
+  "info": {
+    "isRunning": false
+  }
 }
