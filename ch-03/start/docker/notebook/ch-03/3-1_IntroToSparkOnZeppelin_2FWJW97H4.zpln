@@ -3,7 +3,7 @@
     {
       "text": "%md\n# Introduction to Spark on Zeppelin\nIf you are seeing this then you were able to get your local environment running. Congrats.",
       "user": "anonymous",
-      "dateUpdated": "2021-01-17 22:48:36.859",
+      "dateUpdated": "2021-01-31 19:52:07.578",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -38,14 +38,14 @@
       "jobName": "paragraph_1610833094066_1219732012",
       "id": "paragraph_1610833094066_1219732012",
       "dateCreated": "2021-01-16 21:38:14.073",
-      "dateStarted": "2021-01-17 22:48:36.858",
-      "dateFinished": "2021-01-17 22:48:36.882",
+      "dateStarted": "2021-01-31 19:52:07.617",
+      "dateFinished": "2021-01-31 19:52:08.990",
       "status": "FINISHED"
     },
     {
       "text": "%spark\n// shows the spark settings and primes the spark session and context\nspark.sparkContext.getConf.toDebugString",
       "user": "anonymous",
-      "dateUpdated": "2021-01-17 22:48:39.700",
+      "dateUpdated": "2021-01-31 19:52:09.063",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -68,7 +68,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "\u001b[1m\u001b[34mres36\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d\nPYSPARK_DRIVER_PYTHON\u003dpython\nPYSPARK_PYTHON\u003dpython\nSPARK_HOME\u003d/spark\nspark.app.id\u003dlocal-1610915205590\nspark.app.name\u003dZeppelin\nspark.cores.max\u003d8\nspark.driver.cores\u003d1\nspark.driver.extraClassPath\u003d:/zeppelin/interpreter/spark/*::/zeppelin/interpreter/zeppelin-interpreter-shaded-0.9.0-preview2.jar:/zeppelin/interpreter/spark/spark-interpreter-0.9.0-preview2.jar\nspark.driver.extraJavaOptions\u003d -Dfile.encoding\u003dUTF-8 -Dlog4j.configuration\u003d\u0027file:///zeppelin/conf/log4j.properties\u0027 -Dlog4j.configurationFile\u003d\u0027file:///zeppelin/conf/log4j2.properties\u0027 -Dzeppelin.log.file\u003d\u0027/logs/zeppelin-interpreter-spark-shared_process--zeppelin.log\u0027\nspark.driver.host\u003dzeppelin\nspark.driver.memory\u003d1g\nspark.driver.port\u003d38089\nspark.executor.cores\u003d1\nspark.executor.id\u003ddriver\nspark....\n"
+            "data": "\u001b[1m\u001b[34mres1\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d\nPYSPARK_DRIVER_PYTHON\u003dpython\nPYSPARK_PYTHON\u003dpython\nSPARK_HOME\u003d/spark\nspark.app.id\u003dlocal-1612122740385\nspark.app.name\u003dZeppelin\nspark.driver.cores\u003d1\nspark.driver.extraClassPath\u003d:/zeppelin/interpreter/spark/*::/zeppelin/interpreter/zeppelin-interpreter-shaded-0.9.0-preview2.jar:/zeppelin/interpreter/spark/spark-interpreter-0.9.0-preview2.jar\nspark.driver.extraJavaOptions\u003d -Dfile.encoding\u003dUTF-8 -Dlog4j.configuration\u003d\u0027file:///zeppelin/conf/log4j.properties\u0027 -Dlog4j.configurationFile\u003d\u0027file:///zeppelin/conf/log4j2.properties\u0027 -Dzeppelin.log.file\u003d\u0027/logs/zeppelin-interpreter-spark-shared_process--zeppelin.log\u0027\nspark.driver.host\u003dzeppelin\nspark.driver.memory\u003d1g\nspark.driver.port\u003d43053\nspark.executor.cores\u003d1\nspark.executor.id\u003ddriver\nspark.executor.memory\u003d1g\n...\n"
           }
         ]
       },
@@ -78,14 +78,14 @@
       "jobName": "paragraph_1610320103402_199331554",
       "id": "paragraph_1610320103402_199331554",
       "dateCreated": "2021-01-10 23:08:23.402",
-      "dateStarted": "2021-01-17 22:48:39.719",
-      "dateFinished": "2021-01-17 22:48:40.036",
+      "dateStarted": "2021-01-31 19:52:09.079",
+      "dateFinished": "2021-01-31 19:52:27.597",
       "status": "FINISHED"
     },
     {
       "text": "%md\n## Read and Analyze\nThis next paragraph shows the most basic of Spark methods for file based reading. The zero-bells attached `spark.read.text`.\nThis is useful technique if you are working data for the first time and don\u0027t know how to parse it, or maybe are having issues using other methods for automatic parsing.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-01-17 22:48:42.619",
+      "dateUpdated": "2021-01-31 19:52:27.674",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -120,15 +120,15 @@
       "jobName": "paragraph_1610832378788_1358698633",
       "id": "paragraph_1610832378788_1358698633",
       "dateCreated": "2021-01-16 21:26:18.795",
-      "dateStarted": "2021-01-17 22:48:42.624",
-      "dateFinished": "2021-01-17 22:48:42.645",
+      "dateStarted": "2021-01-31 19:52:27.690",
+      "dateFinished": "2021-01-31 19:52:27.709",
       "status": "FINISHED"
     },
     {
       "title": "Read and Analyze",
       "text": "%spark\n// parse the raw coffee file. this is a simple csv file without headers. The goal is to build core skills: parsing, exploring data\n// format: name, boldness\n\nval df \u003d spark.read.text(\"file:///learn/raw-coffee.txt\")\ndf.printSchema\n",
       "user": "anonymous",
-      "dateUpdated": "2021-01-17 22:48:44.507",
+      "dateUpdated": "2021-01-31 19:52:27.787",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -162,8 +162,8 @@
       "jobName": "paragraph_1610320158652_480149",
       "id": "paragraph_1610320158652_480149",
       "dateCreated": "2021-01-10 23:09:18.653",
-      "dateStarted": "2021-01-17 22:48:44.519",
-      "dateFinished": "2021-01-17 22:48:44.744",
+      "dateStarted": "2021-01-31 19:52:27.800",
+      "dateFinished": "2021-01-31 19:52:31.063",
       "status": "FINISHED"
     }
   ],
@@ -177,5 +177,7 @@
   "config": {
     "isZeppelinNotebookCronEnable": false
   },
-  "info": {}
+  "info": {
+    "isRunning": true
+  }
 }
