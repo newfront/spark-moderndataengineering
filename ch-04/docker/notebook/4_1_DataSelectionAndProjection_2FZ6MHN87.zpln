@@ -1,0 +1,296 @@
+{
+  "paragraphs": [
+    {
+      "title": "Data Generation",
+      "text": "%spark\ncase class Store(\n    name: String, \n    capacity: Int, \n    opens: Int, \n    closes: Int)\n    \nval stores \u003d Seq(\n    Store(\"a\", 24, 8, 20),\n    Store(\"b\", 36, 7, 21),\n    Store(\"c\", 18, 5, 23)\n)\n\nval df \u003d spark.createDataFrame(stores)\ndf.createOrReplaceTempView(\"stores\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 19:43:16.186",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defined class Store\n\u001b[1m\u001b[34mstores\u001b[0m: \u001b[1m\u001b[32mSeq[Store]\u001b[0m \u003d List(Store(a,24,8,20), Store(b,36,7,21), Store(c,18,5,23))\n\u001b[1m\u001b[34mdf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, capacity: int ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612037491392_1831291883",
+      "id": "paragraph_1612037491392_1831291883",
+      "dateCreated": "2021-01-30 20:11:31.392",
+      "dateStarted": "2021-01-31 19:43:16.230",
+      "dateFinished": "2021-01-31 19:43:42.753",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Selection: Find all stores open after 10pm",
+      "text": "%spark\nval query \u003d spark.sql(\"select * from stores where closes \u003e\u003d 22\")\n//query.explain(true)\nquery.show()",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 00:37:27.591",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----+--------+-----+------+\n|name|capacity|opens|closes|\n+----+--------+-----+------+\n|   c|      18|    5|    23|\n+----+--------+-----+------+\n\n\u001b[1m\u001b[34mquery\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, capacity: int ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612042148906_1724978527",
+      "id": "paragraph_1612042148906_1724978527",
+      "dateCreated": "2021-01-30 21:29:08.906",
+      "dateStarted": "2021-01-31 00:37:27.612",
+      "dateFinished": "2021-01-31 00:37:28.030",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Selection: Find all stores open after 10pm (DataFrame approach)",
+      "text": "%spark\nimport org.apache.spark.sql.functions._\n\nval filter \u003d df.filter($\"closes\" \u003e\u003d 22)\nval where \u003d df.where(\u0027closes \u003e\u003d 22)\nfilter.show()\nwhere.show()",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 00:37:34.984",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----+--------+-----+------+\n|name|capacity|opens|closes|\n+----+--------+-----+------+\n|   c|      18|    5|    23|\n+----+--------+-----+------+\n\n+----+--------+-----+------+\n|name|capacity|opens|closes|\n+----+--------+-----+------+\n|   c|      18|    5|    23|\n+----+--------+-----+------+\n\nimport org.apache.spark.sql.functions._\n\u001b[1m\u001b[34mfilter\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[org.apache.spark.sql.Row]\u001b[0m \u003d [name: string, capacity: int ... 2 more fields]\n\u001b[1m\u001b[34mwhere\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[org.apache.spark.sql.Row]\u001b[0m \u003d [name: string, capacity: int ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612042843043_1749190313",
+      "id": "paragraph_1612042843043_1749190313",
+      "dateCreated": "2021-01-30 21:40:43.043",
+      "dateStarted": "2021-01-31 00:37:35.000",
+      "dateFinished": "2021-01-31 00:37:35.391",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Projection: SQL approach",
+      "text": "%spark\n// find all stores with an occupancy greater than 20\nval pq \u003d spark.sql(\"select name from stores where capacity \u003e 20\")\n//pq.explain(true)\npq.show()\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 00:37:37.634",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----+\n|name|\n+----+\n|   a|\n|   b|\n+----+\n\n\u001b[1m\u001b[34mpq\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612040361468_1903075951",
+      "id": "paragraph_1612040361468_1903075951",
+      "dateCreated": "2021-01-30 20:59:21.468",
+      "dateStarted": "2021-01-31 00:37:37.653",
+      "dateFinished": "2021-01-31 00:37:38.065",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Projection: DataFrame approach",
+      "text": "%spark\ndf\n  .select(\"name\")\n  .where(\u0027capacity \u003e 20)\n  .show\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 00:37:39.918",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----+\n|name|\n+----+\n|   a|\n|   b|\n+----+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612047712316_857469",
+      "id": "paragraph_1612047712316_857469",
+      "dateCreated": "2021-01-30 23:01:52.317",
+      "dateStarted": "2021-01-31 00:37:39.934",
+      "dateFinished": "2021-01-31 00:37:40.313",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Expanding our Data through Joins",
+      "text": "%spark\n/*\ncase class Store(\n    name: String, \n    capacity: Int, \n    opens: Int, \n    closes: Int)\n    \nval stores \u003d Seq(\n    Store(\"a\", 24, 8, 20),\n    Store(\"b\", 36, 7, 21),\n    Store(\"c\", 18, 5, 23)\n)\n*/\n\n// each store has a number of current occupants (we can see if there is room in a store for more people)\ncase class StoreOccupants(name: String, occupants: Int)\n\nval occupants \u003d Seq(\n  StoreOccupants(\"a\", 8),\n  StoreOccupants(\"b\", 20),\n  StoreOccupants(\"c\", 16)\n)\n\nval storeOccupants \u003d spark.createDataFrame(occupants)\nstoreOccupants.createOrReplaceTempView(\"store_occupants\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 01:10:01.007",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defined class StoreOccupants\n\u001b[1m\u001b[34moccupants\u001b[0m: \u001b[1m\u001b[32mSeq[StoreOccupants]\u001b[0m \u003d List(StoreOccupants(a,8), StoreOccupants(b,20), StoreOccupants(c,16))\n\u001b[1m\u001b[34mstoreOccupants\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, occupants: int]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612048965209_215318272",
+      "id": "paragraph_1612048965209_215318272",
+      "dateCreated": "2021-01-30 23:22:45.209",
+      "dateStarted": "2021-01-31 01:10:01.019",
+      "dateFinished": "2021-01-31 01:10:01.374",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 01:11:15.697",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612055401017_964595988",
+      "id": "paragraph_1612055401017_964595988",
+      "dateCreated": "2021-01-31 01:10:01.017",
+      "status": "READY"
+    }
+  ],
+  "name": "4_1_DataSelectionAndProjection",
+  "id": "2FZ6MHN87",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview2",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

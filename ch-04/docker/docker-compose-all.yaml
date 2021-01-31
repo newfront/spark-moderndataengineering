@@ -1,0 +1,32 @@
+version: '3'
+services:
+  zeppelin:
+    image: apache/zeppelin:0.9.0
+    container_name: zeppelin
+    volumes:
+      - ${PWD}/notebook:/notebook
+      - ${PWD}/logs:/logs
+      - ${PWD}/data:/learn
+      - ${SPARK_HOME}:/spark
+    environment:
+      - SPARK_HOME=/spark
+      - ZEPPELIN_LOG_DIR=/logs
+      - ZEPPELIN_NOTEBOOK_DIR=/notebook
+      - ZEPPELIN_ADDR=0.0.0.0
+      - ZEPPELIN_SPARK_MAXRESULT=10000
+      - ZEPPELIN_INTERPRETER_OUTPUT_LIMIT=204800
+    healthcheck:
+      interval: 5s
+      retries: 10
+    ports:
+      - 8080:8080
+      - 4040:4040
+      - 4041:4041
+    networks:
+      - mde
+    hostname: "zeppelin"
+
+networks:
+  mde:
+    external:
+      name: mde
