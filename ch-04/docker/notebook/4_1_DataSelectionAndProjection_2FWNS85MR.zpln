@@ -1,0 +1,74 @@
+{
+  "paragraphs": [
+    {
+      "title": "Data Generation",
+      "text": "%spark\nimport org.apache.spark.sql.functions._\n\ncase class Store(\n    name: String, \n    capacity: Int, \n    opens: Int, \n    closes: Int)\n    \nval stores \u003d Seq(\n    Store(\"a\", 24, 8, 20),\n    Store(\"b\", 36, 7, 21),\n    Store(\"c\", 18, 5, 23)\n)\n\nval df \u003d spark.createDataFrame(stores)\ndf.createOrReplaceTempView(\"stores\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 21:58:28.037",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.functions._\ndefined class Store\n\u001b[1m\u001b[34mstores\u001b[0m: \u001b[1m\u001b[32mSeq[Store]\u001b[0m \u003d List(Store(a,24,8,20), Store(b,36,7,21), Store(c,18,5,23))\n\u001b[1m\u001b[34mdf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, capacity: int ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612130230142_1133059849",
+      "id": "paragraph_1612037491392_1831291883",
+      "dateCreated": "2021-01-31 21:57:10.142",
+      "dateStarted": "2021-01-31 21:58:28.048",
+      "dateFinished": "2021-01-31 21:58:28.348",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-01-31 21:57:10.145",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1612130230145_326211536",
+      "id": "paragraph_1612128941610_339683865",
+      "dateCreated": "2021-01-31 21:57:10.145",
+      "status": "READY"
+    }
+  ],
+  "name": "4_1_DataSelectionAndProjection-Start",
+  "id": "2FWNS85MR",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview2",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
