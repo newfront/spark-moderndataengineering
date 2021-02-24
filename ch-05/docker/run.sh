@@ -32,6 +32,10 @@ function createNetwork() {
 
 function start() {
   # there is an expectation that $SPARK_HOME and $JAVA_HOME are both available to the session
+  if [ ! -d "${PWD}/data/mysqldir" -d ]; then
+    echo "mysqldir doesn't exist. Adding docker/data/mysqldir for mysql database"
+    mkdir "${PWD}/data/mysqldir"
+  fi
   sparkExists
   createNetwork
   docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --remove-orphans mysql
@@ -43,6 +47,15 @@ function stop() {
   docker-compose -f ${DOCKER_COMPOSE_FILE} down --remove-orphans
 }
 
+function restart() {
+  stop && start
+}
+
+function hiveInit() {
+  docker cp "${PWD}/hive/install/hive-schema-2.3.0.mysql.sql" "mysql:/"
+  docker cp "${PWD}/hive/install/hive-txn-schema-2.3.0.mysql.sql" "mysql:/"
+}
+
 case "$1" in
   start)
     start
@@ -50,7 +63,13 @@ case "$1" in
   stop)
     stop
   ;;
+  restart)
+    restart
+  ;;
+  hiveInit)
+    hiveInit
+  ;;
   *)
-    echo $"Usage: $0 {start | stop}"
+    echo $"Usage: $0 {start | stop | restart | initHive}"
   ;;
 esac

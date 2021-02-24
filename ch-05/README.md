@@ -23,6 +23,7 @@ If localhost doesn't exist on your setup, or if you would like to add `zeppelin`
 127.0.0.1 localhost
 127.0.0.1 zeppelin
 127.0.0.1 spark
+127.0.0.1 mysql
 # End of section
 ~~~
 

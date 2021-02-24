@@ -29,9 +29,12 @@ services:
       - ${PWD}/logs:/logs
       - ${PWD}/data:/learn
       - ${SPARK_HOME}:/spark
+      - ${PWD}/spark/conf:/spark/conf
+      - ${PWD}/spark/jars:/spark/user_jars
+      - ${PWD}/spark/sql/:/spark/sql/
     environment:
       - SPARK_HOME=/spark
-      - SPARK_SUBMIT_OPTIONS=--packages org.mariadb.jdbc:mariadb-java-client:2.7.2
+      - SPARK_SUBMIT_OPTIONS=--packages=org.mariadb.jdbc:mariadb-java-client:2.7.2 --jars=/spark/user_jars/mysql-connector-java-8.0.23.jar
       - ZEPPELIN_LOG_DIR=/logs
       - ZEPPELIN_NOTEBOOK_DIR=/notebook
       - ZEPPELIN_ADDR=0.0.0.0

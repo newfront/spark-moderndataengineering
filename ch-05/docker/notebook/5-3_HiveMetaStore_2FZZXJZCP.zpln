@@ -1,0 +1,1073 @@
+{
+  "paragraphs": [
+    {
+      "text": "%spark\nspark.sparkContext.getConf.getAllWithPrefix(\"spark.sql\")\nval sparkConf \u003d spark.sparkContext.getConf\nval sparkSqlWareHouse \u003d sparkConf.get(\"spark.sql.warehouse.dir\")\nval sparkSqlCatalogType \u003d sparkConf.get(\"spark.sql.catalogImplementation\")\nval hiveMetaDataVersion \u003d sparkConf.get(\"spark.sql.hive.metastore.version\")\nval hiveMetaStoreDependencies \u003d sparkConf.get(\"spark.sql.hive.metastore.jars\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 01:56:59.118",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34msparkConf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.SparkConf\u001b[0m \u003d org.apache.spark.SparkConf@8d8170e\n\u001b[1m\u001b[34msparkSqlWareHouse\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d /spark/sql/warehouse/\n\u001b[1m\u001b[34msparkSqlCatalogType\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d hive\n\u001b[1m\u001b[34mhiveMetaDataVersion\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d 2.3.7\n\u001b[1m\u001b[34mhiveMetaStoreDependencies\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d builtin\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614032139535_1034844617",
+      "id": "paragraph_1614032139535_1034844617",
+      "dateCreated": "2021-02-22 22:15:39.535",
+      "dateStarted": "2021-02-24 01:56:59.170",
+      "dateFinished": "2021-02-24 01:57:21.406",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%md\n## Check that the Hive Jars are available. (We are using the built in 2.3.7 jars)",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 01:57:38.671",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCheck that the Hive Jars are available. (We are using the built in 2.3.7 jars)\u003c/h2\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614123794708_908909546",
+      "id": "paragraph_1614123794708_908909546",
+      "dateCreated": "2021-02-23 23:43:14.708",
+      "dateStarted": "2021-02-24 01:57:38.679",
+      "dateFinished": "2021-02-24 01:57:39.908",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%sh\nls -la /spark/jars | grep hive",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 01:57:41.543",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "sh",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/sh"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "-rw-r--r--   1 zeppelin root   183472 Oct 21 21:35 hive-beeline-2.3.7.jar\n-rw-r--r--   1 zeppelin root    43387 Oct 21 21:35 hive-cli-2.3.7.jar\n-rw-r--r--   1 zeppelin root   436980 Oct 21 17:01 hive-common-2.3.7.jar\n-rw-r--r--   1 zeppelin root 10839104 Oct 21 17:01 hive-exec-2.3.7-core.jar\n-rw-r--r--   1 zeppelin root   116311 Oct 21 21:35 hive-jdbc-2.3.7.jar\n-rw-r--r--   1 zeppelin root   326419 Oct 21 17:01 hive-llap-common-2.3.7.jar\n-rw-r--r--   1 zeppelin root  8194428 Oct 21 17:01 hive-metastore-2.3.7.jar\n-rw-r--r--   1 zeppelin root   916206 Oct 21 17:01 hive-serde-2.3.7.jar\n-rw-r--r--   1 zeppelin root  1679364 Jan  4 20:51 hive-service-rpc-3.1.2.jar\n-rw-r--r--   1 zeppelin root    54116 Oct 21 17:01 hive-shims-0.23-2.3.7.jar\n-rw-r--r--   1 zeppelin root     8785 Oct 21 17:01 hive-shims-2.3.7.jar\n-rw-r--r--   1 zeppelin root   120305 Oct 21 17:01 hive-shims-common-2.3.7.jar\n-rw-r--r--   1 zeppelin root    12984 Oct 21 17:01 hive-shims-scheduler-2.3.7.jar\n-rw-r--r--   1 zeppelin root   234942 Aug 28 09:22 hive-storage-api-2.7.1.jar\n-rw-r--r--   1 zeppelin root   236672 Jan  4 20:19 hive-storage-api-2.7.2.jar\n-rw-r--r--   1 zeppelin root    38352 Oct 21 17:01 hive-vector-code-gen-2.3.7.jar\n-rw-r--r--   1 zeppelin root   693141 Aug 28 09:22 spark-hive_2.12-3.0.1.jar\n-rw-r--r--   1 zeppelin root  2079848 Aug 28 09:22 spark-hive-thriftserver_2.12-3.0.1.jar\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614123754324_2141490739",
+      "id": "paragraph_1614123754324_2141490739",
+      "dateCreated": "2021-02-23 23:42:34.324",
+      "dateStarted": "2021-02-24 01:57:41.565",
+      "dateFinished": "2021-02-24 01:57:42.634",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nimport java.io.File\nimport org.apache.spark.sql._\n\nval sparkSessionHive \u003d SparkSession.builder\n  .master(spark.conf.get(\"spark.master\"))\n  .appName(\"hive-support\")\n  .enableHiveSupport()\n  .getOrCreate()",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 01:58:05.109",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import java.io.File\nimport org.apache.spark.sql._\n\u001b[1m\u001b[34msparkSessionHive\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.SparkSession\u001b[0m \u003d org.apache.spark.sql.SparkSession@20e9ba0e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614033004668_108238026",
+      "id": "paragraph_1614033004668_108238026",
+      "dateCreated": "2021-02-22 22:30:04.668",
+      "dateStarted": "2021-02-24 01:58:05.139",
+      "dateFinished": "2021-02-24 01:58:07.207",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nval sparkVersion \u003d spark.version\nval hadoopVersion \u003d org.apache.hadoop.util.VersionInfo.getVersion\nval hiveShimLoaderVersion \u003d org.apache.hadoop.hive.shims.ShimLoader.getMajorVersion\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 01:58:09.797",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34msparkVersion\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d 3.0.1\n\u001b[1m\u001b[34mhadoopVersion\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d 3.2.0\n\u001b[1m\u001b[34mhiveShimLoaderVersion\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d 0.23\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614123651166_1117601234",
+      "id": "paragraph_1614123651166_1117601234",
+      "dateCreated": "2021-02-23 23:40:51.166",
+      "dateStarted": "2021-02-24 01:58:09.820",
+      "dateFinished": "2021-02-24 01:58:10.415",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\n\nsparkSessionHive.sql(\"show tables;\").show",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 01:58:13.606",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+---------+-----------+\n|database|tableName|isTemporary|\n+--------+---------+-----------+\n+--------+---------+-----------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614033667916_1671895241",
+      "id": "paragraph_1614033667916_1671895241",
+      "dateCreated": "2021-02-22 22:41:07.919",
+      "dateStarted": "2021-02-24 01:58:13.632",
+      "dateFinished": "2021-02-24 01:58:23.755",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nsparkSessionHive.conf.get(\"spark.sql.catalogImplementation\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:04:10.841",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mres6\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d hive\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614033688152_324946610",
+      "id": "paragraph_1614033688152_324946610",
+      "dateCreated": "2021-02-22 22:41:28.152",
+      "dateStarted": "2021-02-24 02:04:10.857",
+      "dateFinished": "2021-02-24 02:04:11.178",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nsparkSessionHive.sharedState.externalCatalog.listTables(\"default\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:04:18.718",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mres7\u001b[0m: \u001b[1m\u001b[32mSeq[String]\u001b[0m \u003d Buffer()\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614131951560_589500840",
+      "id": "paragraph_1614131951560_589500840",
+      "dateCreated": "2021-02-24 01:59:11.560",
+      "dateStarted": "2021-02-24 02:04:18.730",
+      "dateFinished": "2021-02-24 02:04:18.998",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nval customers \u003d sparkSessionHive.read\n  .format(\"jdbc\")\n  .option(\"url\", \"jdbc:mysql://mysql:3306/default\")\n  .option(\"driver\", \"org.mariadb.jdbc.Driver\")\n  .option(\"dbtable\", \"customers\")\n  .option(\"user\", \"dataeng\")\n  .option(\"password\", \"dataengineering_user\")\n  .load()",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:37:55.856",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mcustomers\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [id: string, created: timestamp ... 4 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614131983761_1528819603",
+      "id": "paragraph_1614131983761_1528819603",
+      "dateCreated": "2021-02-24 01:59:43.761",
+      "dateStarted": "2021-02-24 02:37:55.870",
+      "dateFinished": "2021-02-24 02:37:56.164",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\ncustomers.printSchema",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:38:11.682",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- id: string (nullable \u003d true)\n |-- created: timestamp (nullable \u003d true)\n |-- updated: timestamp (nullable \u003d true)\n |-- first_name: string (nullable \u003d true)\n |-- last_name: string (nullable \u003d true)\n |-- email: string (nullable \u003d true)\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614134279414_187302561",
+      "id": "paragraph_1614134279414_187302561",
+      "dateCreated": "2021-02-24 02:37:59.414",
+      "dateStarted": "2021-02-24 02:38:11.693",
+      "dateFinished": "2021-02-24 02:38:11.899",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nsparkSessionHive.catalog.currentDatabase",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:11:22.774",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mres9\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d default\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614132270576_485271213",
+      "id": "paragraph_1614132270576_485271213",
+      "dateCreated": "2021-02-24 02:04:30.582",
+      "dateStarted": "2021-02-24 02:11:22.784",
+      "dateFinished": "2021-02-24 02:11:23.033",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\ncustomers\n  .write\n  .mode(\"errorIfExists\")\n  .saveAsTable(\"hive_customers\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:14:03.850",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d0"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614132682783_1946545629",
+      "id": "paragraph_1614132682783_1946545629",
+      "dateCreated": "2021-02-24 02:11:22.783",
+      "dateStarted": "2021-02-24 02:14:03.879",
+      "dateFinished": "2021-02-24 02:14:10.268",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%md\n## Loading Data using the Hive MetaStore\n\n~~~\nspark.table(\"{TABLE_NAME}\")\n~~~\n\nFor example.",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:42:31.042",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eLoading Data using the Hive MetaStore\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003espark.table(\u0026quot;{TABLE_NAME}\u0026quot;)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eFor example.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614134497516_278573766",
+      "id": "paragraph_1614134497516_278573766",
+      "dateCreated": "2021-02-24 02:41:37.516",
+      "dateStarted": "2021-02-24 02:42:31.042",
+      "dateFinished": "2021-02-24 02:42:31.063",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Loading Data from the DataLake",
+      "text": "%spark\nval fromDataLake \u003d sparkSessionHive.table(\"hive_customers\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:42:42.696",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mfromDataLake\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [id: string, created: timestamp ... 4 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614134306083_1042728519",
+      "id": "paragraph_1614134306083_1042728519",
+      "dateCreated": "2021-02-24 02:38:26.083",
+      "dateStarted": "2021-02-24 02:39:49.541",
+      "dateFinished": "2021-02-24 02:39:49.818",
+      "status": "FINISHED"
+    },
+    {
+      "title": "View the Customers",
+      "text": "%sql\nselect * from hive_customers;",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:43:28.653",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "id": "string",
+                      "created": "string",
+                      "updated": "string",
+                      "first_name": "string",
+                      "last_name": "string",
+                      "email": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "id\tcreated\tupdated\tfirst_name\tlast_name\temail\n1\t2021-02-16 00:16:06.0\t2021-02-16 00:16:06.0\tScott\tHaines\tscott@coffeeco.com\n2\t2021-02-16 00:16:06.0\t2021-02-16 00:16:06.0\tJohn\tHamm\tjohn.hamm@acme.com\n3\t2021-02-16 00:16:06.0\t2021-02-16 00:16:06.0\tMilo\tHaines\tmhaines@coffeeco.com\n4\t2021-02-21 21:00:00.0\t2021-02-21 21:00:00.0\tPenny\tHaines\tpenny@coffeeco.com\n5\t2021-02-21 22:00:00.0\t2021-02-21 22:00:00.0\tCloud\tFast\tcloud.fast@acme.com\n6\t2021-02-21 23:00:00.0\t2021-02-21 23:00:00.0\tMarshal\tHaines\tpaws@coffeeco.com\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d2"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614134391949_814651548",
+      "id": "paragraph_1614134391949_814651548",
+      "dateCreated": "2021-02-24 02:39:51.949",
+      "dateStarted": "2021-02-24 02:43:28.665",
+      "dateFinished": "2021-02-24 02:43:28.850",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%md\n# MySQL MetaStore Data for your `hive_customers` Table\n\n## Exploring the MetaData Stored in MySQL\n\n~~~\nmysql\u003e select * from TBLS;\n+--------+-------------+-------+------------------+----------+-----------+-------+----------------+---------------+--------------------+--------------------+----------------------------------------+\n| TBL_ID | CREATE_TIME | DB_ID | LAST_ACCESS_TIME | OWNER    | RETENTION | SD_ID | TBL_NAME       | TBL_TYPE      | VIEW_EXPANDED_TEXT | VIEW_ORIGINAL_TEXT | IS_REWRITE_ENABLED                     |\n+--------+-------------+-------+------------------+----------+-----------+-------+----------------+---------------+--------------------+--------------------+----------------------------------------+\n|      1 |  1614132850 |     1 |                0 | zeppelin |         0 |     1 | hive_customers | MANAGED_TABLE | NULL               | NULL               | 0x00                                   |\n+--------+-------------+-------+------------------+----------+-----------+-------+----------------+---------------+--------------------+--------------------+----------------------------------------+\n1 row in set (0.00 sec)\n~~~\n\n~~~\nmysql\u003e select * from TABLE_PARAMS;\n+--------+-----------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n| TBL_ID | PARAM_KEY                         | PARAM_VALUE                                                                                                                                                                                                                                                                                                                                                                                                                            |\n+--------+-----------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n|      1 | numFiles                          | 1                                                                                                                                                                                                                                                                                                                                                                                                                                      |\n|      1 | spark.sql.create.version          | 3.0.1                                                                                                                                                                                                                                                                                                                                                                                                                                  |\n|      1 | spark.sql.sources.provider        | parquet                                                                                                                                                                                                                                                                                                                                                                                                                                |\n|      1 | spark.sql.sources.schema.numParts | 1                                                                                                                                                                                                                                                                                                                                                                                                                                      |\n|      1 | spark.sql.sources.schema.part.0   | {\"type\":\"struct\",\"fields\":[{\"name\":\"id\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"created\",\"type\":\"timestamp\",\"nullable\":true,\"metadata\":{}},{\"name\":\"updated\",\"type\":\"timestamp\",\"nullable\":true,\"metadata\":{}},{\"name\":\"first_name\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"last_name\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"email\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}}]} |\n|      1 | totalSize                         | 1721                                                                                                                                                                                                                                                                                                                                                                                                                                   |\n|      1 | transient_lastDdlTime             | 1614132850                                                                                                                                                                                                                                                                                                                                                                                                                             |\n+--------+-----------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n7 rows in set (0.00 sec)\n~~~\n\n~~~\nmysql\u003e select * from COLUMNS_V2;\n+-------+-----------------------------------+-------------+-----------+-------------+\n| CD_ID | COMMENT                           | COLUMN_NAME | TYPE_NAME | INTEGER_IDX |\n+-------+-----------------------------------+-------------+-----------+-------------+\n|     4 | NULL                              | created     | timestamp |           1 |\n|     4 | Not to be used for Marketing      | email       | string    |           5 |\n|     4 | Our Friendly Customers First Name | first_name  | string    |           3 |\n|     4 | NULL                              | id          | string    |           0 |\n|     4 | Our Customers Last Name           | last_name   | string    |           4 |\n|     4 | NULL                              | updated     | timestamp |           2 |\n+-------+-----------------------------------+-------------+-----------+-------------+\n6 rows in set (0.00 sec)\n~~~\n\nGet the Location of the Warehouse for the Table\n~~~\nSELECT DISTINCT B.TBL_ID AS TABLE_ID, \nB.TBL_NAME AS TABLE_NAME, \nA.LOCATION AS HDFS_PATH\nFROM SDS A, TBLS B\nWHERE A.SD_ID\u003dB.SD_ID;\n~~~\n~~~\n+----------+----------------+------------------------------------------+\n| TABLE_ID | TABLE_NAME     | HDFS_PATH                                |\n+----------+----------------+------------------------------------------+\n|        1 | hive_customers | file:/spark/sql/warehouse/hive_customers |\n+----------+----------------+------------------------------------------+\n~~~",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:48:50.294",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eMySQL MetaStore Data for your \u003ccode\u003ehive_customers\u003c/code\u003e Table\u003c/h1\u003e\n\u003ch2\u003eExploring the MetaData Stored in MySQL\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003emysql\u0026gt; select * from TBLS;\n+--------+-------------+-------+------------------+----------+-----------+-------+----------------+---------------+--------------------+--------------------+----------------------------------------+\n| TBL_ID | CREATE_TIME | DB_ID | LAST_ACCESS_TIME | OWNER    | RETENTION | SD_ID | TBL_NAME       | TBL_TYPE      | VIEW_EXPANDED_TEXT | VIEW_ORIGINAL_TEXT | IS_REWRITE_ENABLED                     |\n+--------+-------------+-------+------------------+----------+-----------+-------+----------------+---------------+--------------------+--------------------+----------------------------------------+\n|      1 |  1614132850 |     1 |                0 | zeppelin |         0 |     1 | hive_customers | MANAGED_TABLE | NULL               | NULL               | 0x00                                   |\n+--------+-------------+-------+------------------+----------+-----------+-------+----------------+---------------+--------------------+--------------------+----------------------------------------+\n1 row in set (0.00 sec)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cpre\u003e\u003ccode\u003emysql\u0026gt; select * from TABLE_PARAMS;\n+--------+-----------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n| TBL_ID | PARAM_KEY                         | PARAM_VALUE                                                                                                                                                                                                                                                                                                                                                                                                                            |\n+--------+-----------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n|      1 | numFiles                          | 1                                                                                                                                                                                                                                                                                                                                                                                                                                      |\n|      1 | spark.sql.create.version          | 3.0.1                                                                                                                                                                                                                                                                                                                                                                                                                                  |\n|      1 | spark.sql.sources.provider        | parquet                                                                                                                                                                                                                                                                                                                                                                                                                                |\n|      1 | spark.sql.sources.schema.numParts | 1                                                                                                                                                                                                                                                                                                                                                                                                                                      |\n|      1 | spark.sql.sources.schema.part.0   | {\u0026quot;type\u0026quot;:\u0026quot;struct\u0026quot;,\u0026quot;fields\u0026quot;:[{\u0026quot;name\u0026quot;:\u0026quot;id\u0026quot;,\u0026quot;type\u0026quot;:\u0026quot;string\u0026quot;,\u0026quot;nullable\u0026quot;:true,\u0026quot;metadata\u0026quot;:{}},{\u0026quot;name\u0026quot;:\u0026quot;created\u0026quot;,\u0026quot;type\u0026quot;:\u0026quot;timestamp\u0026quot;,\u0026quot;nullable\u0026quot;:true,\u0026quot;metadata\u0026quot;:{}},{\u0026quot;name\u0026quot;:\u0026quot;updated\u0026quot;,\u0026quot;type\u0026quot;:\u0026quot;timestamp\u0026quot;,\u0026quot;nullable\u0026quot;:true,\u0026quot;metadata\u0026quot;:{}},{\u0026quot;name\u0026quot;:\u0026quot;first_name\u0026quot;,\u0026quot;type\u0026quot;:\u0026quot;string\u0026quot;,\u0026quot;nullable\u0026quot;:true,\u0026quot;metadata\u0026quot;:{}},{\u0026quot;name\u0026quot;:\u0026quot;last_name\u0026quot;,\u0026quot;type\u0026quot;:\u0026quot;string\u0026quot;,\u0026quot;nullable\u0026quot;:true,\u0026quot;metadata\u0026quot;:{}},{\u0026quot;name\u0026quot;:\u0026quot;email\u0026quot;,\u0026quot;type\u0026quot;:\u0026quot;string\u0026quot;,\u0026quot;nullable\u0026quot;:true,\u0026quot;metadata\u0026quot;:{}}]} |\n|      1 | totalSize                         | 1721                                                                                                                                                                                                                                                                                                                                                                                                                                   |\n|      1 | transient_lastDdlTime             | 1614132850                                                                                                                                                                                                                                                                                                                                                                                                                             |\n+--------+-----------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n7 rows in set (0.00 sec)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cpre\u003e\u003ccode\u003emysql\u0026gt; select * from COLUMNS_V2;\n+-------+-----------------------------------+-------------+-----------+-------------+\n| CD_ID | COMMENT                           | COLUMN_NAME | TYPE_NAME | INTEGER_IDX |\n+-------+-----------------------------------+-------------+-----------+-------------+\n|     4 | NULL                              | created     | timestamp |           1 |\n|     4 | Not to be used for Marketing      | email       | string    |           5 |\n|     4 | Our Friendly Customers First Name | first_name  | string    |           3 |\n|     4 | NULL                              | id          | string    |           0 |\n|     4 | Our Customers Last Name           | last_name   | string    |           4 |\n|     4 | NULL                              | updated     | timestamp |           2 |\n+-------+-----------------------------------+-------------+-----------+-------------+\n6 rows in set (0.00 sec)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eGet the Location of the Warehouse for the Table\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eSELECT DISTINCT B.TBL_ID AS TABLE_ID, \nB.TBL_NAME AS TABLE_NAME, \nA.LOCATION AS HDFS_PATH\nFROM SDS A, TBLS B\nWHERE A.SD_ID\u003dB.SD_ID;\n\u003c/code\u003e\u003c/pre\u003e\n\u003cpre\u003e\u003ccode\u003e+----------+----------------+------------------------------------------+\n| TABLE_ID | TABLE_NAME     | HDFS_PATH                                |\n+----------+----------------+------------------------------------------+\n|        1 | hive_customers | file:/spark/sql/warehouse/hive_customers |\n+----------+----------------+------------------------------------------+\n\u003c/code\u003e\u003c/pre\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614132843869_1058875845",
+      "id": "paragraph_1614132843869_1058875845",
+      "dateCreated": "2021-02-24 02:14:03.869",
+      "dateStarted": "2021-02-24 02:48:50.294",
+      "dateFinished": "2021-02-24 02:48:50.306",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nsparkSessionHive.catalog.listTables.show",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:18:41.915",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------------+--------+-----------+---------+-----------+\n|          name|database|description|tableType|isTemporary|\n+--------------+--------+-----------+---------+-----------+\n|hive_customers| default|       null|  MANAGED|      false|\n+--------------+--------+-----------+---------+-----------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614133059777_1698030844",
+      "id": "paragraph_1614133059777_1698030844",
+      "dateCreated": "2021-02-24 02:17:39.777",
+      "dateStarted": "2021-02-24 02:18:41.927",
+      "dateFinished": "2021-02-24 02:18:43.067",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nsparkSessionHive.catalog.listDatabases.show(false)",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:19:52.737",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-------+---------------------+-------------------------+\n|name   |description          |locationUri              |\n+-------+---------------------+-------------------------+\n|default|Default Hive database|file:/spark/sql/warehouse|\n+-------+---------------------+-------------------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614133020031_1219115877",
+      "id": "paragraph_1614133020031_1219115877",
+      "dateCreated": "2021-02-24 02:17:00.032",
+      "dateStarted": "2021-02-24 02:19:52.749",
+      "dateFinished": "2021-02-24 02:19:53.073",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%sql\nALTER TABLE hive_customers SET TBLPROPERTIES (\u0027comment\u0027 \u003d \u0027Our loyal patrons of CoffeeCo\u0027)",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:22:44.541",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614133174215_1964198111",
+      "id": "paragraph_1614133174215_1964198111",
+      "dateCreated": "2021-02-24 02:19:34.215",
+      "dateStarted": "2021-02-24 02:22:44.555",
+      "dateFinished": "2021-02-24 02:22:45.199",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%md\n[All of the Databricks Reference](https://docs.databricks.com/spark/latest/spark-sql/language-manual/sql-ref-syntax-ddl-alter-table.html)\n\n~~~\nALTER TABLE StudentInfo ALTER COLUMN name COMMENT \"new comment\";\n~~~\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:35:49.411",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e\u003ca href\u003d\"https://docs.databricks.com/spark/latest/spark-sql/language-manual/sql-ref-syntax-ddl-alter-table.html\"\u003eAll of the Databricks Reference\u003c/a\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eALTER TABLE StudentInfo ALTER COLUMN name COMMENT \u0026quot;new comment\u0026quot;;\n\u003c/code\u003e\u003c/pre\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614133841320_702960978",
+      "id": "paragraph_1614133841320_702960978",
+      "dateCreated": "2021-02-24 02:30:41.320",
+      "dateStarted": "2021-02-24 02:35:49.410",
+      "dateFinished": "2021-02-24 02:35:49.416",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%sql\nALTER TABLE hive_customers ALTER COLUMN first_name COMMENT \"Our Friendly Customers First Name\";\nALTER TABLE hive_customers ALTER COLUMN last_name COMMENT \"Our Customers Last Name\";\nALTER TABLE hive_customers ALTER COLUMN email COMMENT \"Not to be used for Marketing\";",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:35:09.425",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614133599477_2107221871",
+      "id": "paragraph_1614133599477_2107221871",
+      "dateCreated": "2021-02-24 02:26:39.477",
+      "dateStarted": "2021-02-24 02:35:09.439",
+      "dateFinished": "2021-02-24 02:35:10.293",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nsparkSessionHive.sql(\"desc hive_customers\").show(false)",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:40:36.148",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----------+---------+---------------------------------+\n|col_name  |data_type|comment                          |\n+----------+---------+---------------------------------+\n|id        |string   |null                             |\n|created   |timestamp|null                             |\n|updated   |timestamp|null                             |\n|first_name|string   |Our Friendly Customers First Name|\n|last_name |string   |Our Customers Last Name          |\n|email     |string   |Not to be used for Marketing     |\n+----------+---------+---------------------------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614134414307_1504412999",
+      "id": "paragraph_1614134414307_1504412999",
+      "dateCreated": "2021-02-24 02:40:14.307",
+      "dateStarted": "2021-02-24 02:40:36.161",
+      "dateFinished": "2021-02-24 02:40:36.487",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nsparkSessionHive.catalog.refreshTable(\"hive_customers\")\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:35:12.046",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614133216111_1284185910",
+      "id": "paragraph_1614133216111_1284185910",
+      "dateCreated": "2021-02-24 02:20:16.111",
+      "dateStarted": "2021-02-24 02:35:12.058",
+      "dateFinished": "2021-02-24 02:35:12.370",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%sql\nDESCRIBE EXTENDED hive_customers",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:35:13.251",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "col_name": "string",
+                      "data_type": "string",
+                      "comment": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "col_name\tdata_type\tcomment\nid\tstring\tnull\ncreated\ttimestamp\tnull\nupdated\ttimestamp\tnull\nfirst_name\tstring\tOur Friendly Customers First Name\nlast_name\tstring\tOur Customers Last Name\nemail\tstring\tNot to be used for Marketing\n\t\t\n# Detailed Table Information\t\t\nDatabase\tdefault\t\nTable\thive_customers\t\nOwner\tzeppelin\t\nCreated Time\tWed Feb 24 02:14:10 UTC 2021\t\nLast Access\tUNKNOWN\t\nCreated By\tSpark 3.0.1\t\nType\tMANAGED\t\nProvider\tparquet\t\nComment\tOur loyal patrons of CoffeeCo\t\nStatistics\t1721 bytes\t\nLocation\tfile:/spark/sql/warehouse/hive_customers\t\nSerde Library\torg.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe\t\nInputFormat\torg.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat\t\nOutputFormat\torg.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat\t\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614133431449_1680772555",
+      "id": "paragraph_1614133431449_1680772555",
+      "dateCreated": "2021-02-24 02:23:51.449",
+      "dateStarted": "2021-02-24 02:35:13.265",
+      "dateFinished": "2021-02-24 02:35:13.479",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%sql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 02:25:50.814",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614133550814_1372181408",
+      "id": "paragraph_1614133550814_1372181408",
+      "dateCreated": "2021-02-24 02:25:50.814",
+      "status": "READY"
+    }
+  ],
+  "name": "5-3_HiveMetaStore",
+  "id": "2FZZXJZCP",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview2",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
