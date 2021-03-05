@@ -1,64 +1,70 @@
-# Bootstrap The Hive Metastore
+# The Hive Metastore
 
-1. Copy the `hive-schema-2.3.0.mysql.sql` into the mysql docker container
-
+## Prepare the `mysql` docker container
+Copy the `hive-schema-2.3.0.mysql.sql` into the mysql docker container.
 ~~~
 cd /path/to/ch-05/docker && ./run.sh hiveInit
 ~~~
 
-The hiveInit will run the following command. That will copy the SQL file into MySQL
+The `hiveInit` will run the following commands. This copies the hive metastore table generation SQL scripts onto the `mysql` docker.
 ~~~
 docker cp hive/install/hive-schema-2.3.0.mysql.sql mysql:/
 docker cp hive/install/hive-txn-schema-2.3.0.mysql.sql mysql:/
 ~~~
 
-2. Connect to the mysql docker container
+## Connect to the `mysql` docker container
+Use the docker exec command to log into the container context.
 ~~~
 docker exec -it mysql bash
 ~~~
 
-3.  Authenticate as the Root MySQL User
+## Authenticate as the `root` MySQL User
 Follow the command below from within in mysql docker container to authenticate to mysql using `-u root -p` and the `MYSQL_ROOT_PASSWORD`. The MYSQL_ROOT_PASSWORD value can be found in the `docker-compose-all.yaml`
 ~~~
 mysql -u root -p
 ~~~
 
-4. Create the hive metastore database
+## Create the hive `metastore` database
 ~~~
 mysql> CREATE DATABASE `metastore`;
 ~~~
 
-5. Grant the dataeng user access to the metastore db
+## Grant the `dataeng` user access to the `metastore` db
+
+`It is worth noting that you can also create new users who have specific access to only a few tables, or all tables, or only read or write access. This allows you to govern the database access using privileges bound to a users grant permissions.`
+
 ~~~
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'dataeng'@'%';
-GRANT ALL PRIVILEGES ON metastore.* TO 'dataeng'@'%';
+GRANT ALL PRIVILEGES ON `default`.* TO 'dataeng'@'%';
+GRANT ALL PRIVILEGES ON `metastore`.* TO 'dataeng'@'%';
 FLUSH PRIVILEGES;
 ~~~
 
-6. Exit as the root user
+### Exit as the `root` user
 ~~~
 mysql> exit
 ~~~
 
-7. Authenticate into MySQL as the `dataeng` user
+### Authenticate as the `dataeng` user
 ~~~
 mysql -u dataeng -p
 ~~~
 
-8. Switch Databases to the `metastore`
+### Switch Databases to the `metastore`
 ~~~
 mysql> use metastore;
 ~~~
 
-9. Use the MYSQL `SOURCE` command to read in the hive 2.3.0 schema
-This is the file that you copied using `docker cp` in Step 1
+### Import the Hive Metastore Tables
+Use the MySQL `SOURCE` command to read in the hive 2.3.0 schema
+This is the file that you copied using `docker cp`.
 ~~~
 mysql> SOURCE /hive-schema-2.3.0.mysql.sql;
 ~~~
 
 Now you will be able to use the Hive Metastore.
 
-10. Check that you have all the Tables
+### Check the Tables
 From the mysql commandline `mysql>`. Run the following.
 ~~~
 use metastore;
@@ -131,4 +137,4 @@ You should see
 57 rows in set (0.00 sec)
 ~~~
 
-Now you are golden.
+Now you are golden. Your Hive metastore is ready for action.

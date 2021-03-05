@@ -1,0 +1,726 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n# MySQL DataSource via JDBC DataFrameReader\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 21:16:33.207",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eMySQL DataSource via JDBC DataFrameReader\u003c/h1\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614201359165_586278564",
+      "id": "paragraph_1614201359165_586278564",
+      "dateCreated": "2021-02-24 21:15:59.165",
+      "dateStarted": "2021-02-24 21:16:33.208",
+      "dateFinished": "2021-02-24 21:16:33.222",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\n// shared configuration\n// note: this password is for Docker mysql only - it isn\u0027t smart to add passwords to code that is version controlled!\nval jdbcDriver \u003d spark.conf.get(\"spark.jdbc.driver.class\", \"org.mariadb.jdbc.Driver\")\nval dbHost     \u003d spark.conf.get(\"spark.jdbc.host\",\"mysql\")\nval dbPort     \u003d spark.conf.get(\"spark.jdbc.port\", \"3306\")\nval defaultDb  \u003d spark.conf.get(\"spark.jdbc.default.db\", \"default\")\nval dbTable    \u003d spark.conf.get(\"spark.jdbc.table\", \"customers\")\nval dbUser     \u003d spark.conf.get(\"spark.jdbc.user\", \"dataeng\")\nval dbPass     \u003d spark.conf.get(\"spark.jdbc.password\", \"dataengineering_user\")\n\nval connectionUrl \u003d s\"jdbc:mysql://$dbHost:$dbPort/$defaultDb\"\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 03:45:48.009",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mjdbcDriver\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d org.mariadb.jdbc.Driver\n\u001b[1m\u001b[34mdbHost\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d mysql\n\u001b[1m\u001b[34mdbPort\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d 3306\n\u001b[1m\u001b[34mdefaultDb\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d default\n\u001b[1m\u001b[34mdbTable\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d customers\n\u001b[1m\u001b[34mdbUser\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d dataeng\n\u001b[1m\u001b[34mdbPass\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d dataengineering_user\n\u001b[1m\u001b[34mconnectionUrl\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d jdbc:mysql://mysql:3306/default\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614213590359_2024560442",
+      "id": "paragraph_1614213590359_2024560442",
+      "dateCreated": "2021-02-25 00:39:50.359",
+      "dateStarted": "2021-02-25 03:45:48.045",
+      "dateFinished": "2021-02-25 03:45:50.630",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Reading Data From JDBC Connections",
+      "text": "%spark\nval customers \u003d spark.read\n  .format(\"jdbc\")\n  .option(\"url\", connectionUrl)\n  .option(\"driver\", jdbcDriver)\n  .option(\"dbtable\", dbTable)\n  .option(\"user\", dbUser)\n  .option(\"password\", dbPass)\n  .load()\n\ncustomers.printSchema\ncustomers.createOrReplaceTempView(\"customers\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 03:45:53.164",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- id: string (nullable \u003d true)\n |-- created: timestamp (nullable \u003d true)\n |-- updated: timestamp (nullable \u003d true)\n |-- first_name: string (nullable \u003d true)\n |-- last_name: string (nullable \u003d true)\n |-- email: string (nullable \u003d true)\n\n\u001b[1m\u001b[34mcustomers\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [id: string, created: timestamp ... 4 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614184981488_759162661",
+      "id": "paragraph_1614184981488_759162661",
+      "dateCreated": "2021-02-24 16:43:01.488",
+      "dateStarted": "2021-02-25 03:45:53.186",
+      "dateFinished": "2021-02-25 03:45:57.003",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%sql\nselect * from customers",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 03:45:58.196",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "id": "string",
+                      "created": "string",
+                      "updated": "string",
+                      "first_name": "string",
+                      "last_name": "string",
+                      "email": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "id\tcreated\tupdated\tfirst_name\tlast_name\temail\n1\t2021-02-16 00:16:06.0\t2021-02-16 00:16:06.0\tScott\tHaines\tscott@coffeeco.com\n2\t2021-02-16 00:16:06.0\t2021-02-16 00:16:06.0\tJohn\tHamm\tjohn.hamm@acme.com\n3\t2021-02-16 00:16:06.0\t2021-02-16 00:16:06.0\tMilo\tHaines\tmhaines@coffeeco.com\n4\t2021-02-21 21:00:00.0\t2021-02-21 21:00:00.0\tPenny\tHaines\tpenny@coffeeco.com\n5\t2021-02-21 22:00:00.0\t2021-02-21 22:00:00.0\tCloud\tFast\tcloud.fast@acme.com\n6\t2021-02-21 23:00:00.0\t2021-02-21 23:00:00.0\tMarshal\tHaines\tpaws@coffeeco.com\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d0"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614213752264_1780383982",
+      "id": "paragraph_1614213752264_1780383982",
+      "dateCreated": "2021-02-25 00:42:32.264",
+      "dateStarted": "2021-02-25 03:45:58.213",
+      "dateFinished": "2021-02-25 03:46:02.513",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nimport org.apache.spark.sql._\nimport java.sql.Timestamp\n\n// spark: SparkSession (from spark-shell)\nassert(spark.isInstanceOf[SparkSession])\n\ndef ts(timeStr: String): Timestamp \u003d Timestamp.valueOf(timeStr)\n\n// create some new customers\nval records \u003d Seq(\n  Row(\"4\",ts(\"2021-02-21 21:00:00\"),ts(\"2021-02-21 21:00:00\"),\"Penny\",\"Haines\",\"penny@coffeeco.com\"),\n  Row(\"5\",ts(\"2021-02-21 22:00:00\"),ts(\"2021-02-21 22:00:00\"),\"Cloud\",\"Fast\",\"cloud.fast@acme.com\"),\n  Row(\"6\",ts(\"2021-02-21 23:00:00\"),ts(\"2021-02-21 23:00:00\"),\"Marshal\",\"Haines\",\"paws@coffeeco.com\")\n)\n\n// generate a new DataFrame using the new records and the schema from df (connect-jdbc.scala)\nval additional \u003d spark.createDataFrame(\n    spark.sparkContext.parallelize(records),\n    customers.schema\n)\n\n// note: (doesn\u0027t deduplicate)\nadditional\n  .write\n  .format(\"jdbc\")\n  .mode(\"ignore\")\n  .options(Map[String, String](\n    \"url\" -\u003e connectionUrl,\n    \"driver\" -\u003e jdbcDriver,\n    \"dbtable\" -\u003e dbTable,\n    \"user\" -\u003e dbUser,\n    \"password\" -\u003e dbPass\n  )\n).save()\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 03:46:04.849",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql._\nimport java.sql.Timestamp\n\u001b[1m\u001b[34mts\u001b[0m: \u001b[1m\u001b[32m(timeStr: String)java.sql.Timestamp\u001b[0m\n\u001b[1m\u001b[34mrecords\u001b[0m: \u001b[1m\u001b[32mSeq[org.apache.spark.sql.Row]\u001b[0m \u003d List([4,2021-02-21 21:00:00.0,2021-02-21 21:00:00.0,Penny,Haines,penny@coffeeco.com], [5,2021-02-21 22:00:00.0,2021-02-21 22:00:00.0,Cloud,Fast,cloud.fast@acme.com], [6,2021-02-21 23:00:00.0,2021-02-21 23:00:00.0,Marshal,Haines,paws@coffeeco.com])\n\u001b[1m\u001b[34madditional\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [id: string, created: timestamp ... 4 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614213413596_418016277",
+      "id": "paragraph_1614213413596_418016277",
+      "dateCreated": "2021-02-25 00:36:53.596",
+      "dateStarted": "2021-02-25 03:46:04.882",
+      "dateFinished": "2021-02-25 03:46:06.293",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%md\n# Fixing the Customers Table\n\n~~~sql\nCREATE TABLE IF NOT EXISTS `customers` (\n  `id` text,\n  `created` timestamp NULL DEFAULT NULL,\n  `updated` timestamp NULL DEFAULT NULL,\n  `first_name` text,\n  `last_name` text,\n  `email` text\n);\n~~~\n\nThe initial customers table we whipped up in Exercise 5-1 is a little naive. We can do *better*.\n\n## Creating a Better Customers Table\n\n~~~sql\nCREATE TABLE IF NOT EXISTS `bettercustomers` (\n  `id` mediumint NOT NULL AUTO_INCREMENT COMMENT \u0027customer automatic id\u0027,\n  `created` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT \u0027customer join date\u0027,\n  `updated` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT \u0027last record update\u0027,\n  `first_name` varchar(100) NOT NULL,\n  `last_name` varchar(100) NOT NULL,\n  `email` varchar(255) NOT NULL UNIQUE,\n  PRIMARY KEY (`id`)\n);\n~~~\n\n### Inserting Customer Records Into BetterCustomers Table\n~~~sql\nINSERT INTO bettercustomers (created, first_name, last_name, email)\nVALUES\n(\"2021-02-16 00:16:06\", \"Scott\", \"Haines\", \"scott@coffeeco.com\"),\n(\"2021-02-16 00:16:06\", \"John\", \"Hamm\", \"john.hamm@acme.com\"),\n(\"2021-02-16 00:16:06\", \"Milo\", \"Haines\", \"mhaines@coffeeco.com\"),\n(\"2021-02-21 21:00:00\", \"Penny\", \"Haines\", \"penny@coffeeco.com\"),\n(\"2021-02-21 22:00:00\", \"Cloud\", \"Fast\", \"cloud.fast@acme.com\"),\n(\"2021-02-21 23:00:00\", \"Marshal\", \"Haines\", \"paws@coffeeco.com\"),\n(\"2021-02-24 09:00:00\", \"Willow\", \"Haines\", \"willow@coffeeco.com\"),\n(\"2021-02-24 09:00:00\", \"Clover\", \"Haines\", \"pup@coffeeco.com\");\n~~~",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 03:46:08.682",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eFixing the Customers Table\u003c/h1\u003e\n\u003cpre\u003e\u003ccode class\u003d\"language-sql\"\u003eCREATE TABLE IF NOT EXISTS `customers` (\n  `id` text,\n  `created` timestamp NULL DEFAULT NULL,\n  `updated` timestamp NULL DEFAULT NULL,\n  `first_name` text,\n  `last_name` text,\n  `email` text\n);\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe initial customers table we whipped up in Exercise 5-1 is a little naive. We can do \u003cem\u003ebetter\u003c/em\u003e.\u003c/p\u003e\n\u003ch2\u003eCreating a Better Customers Table\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class\u003d\"language-sql\"\u003eCREATE TABLE IF NOT EXISTS `bettercustomers` (\n  `id` mediumint NOT NULL AUTO_INCREMENT COMMENT \u0027customer automatic id\u0027,\n  `created` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT \u0027customer join date\u0027,\n  `updated` timestamp DEFAULT CURRENT_TIMESTAMP COMMENT \u0027last record update\u0027,\n  `first_name` varchar(100) NOT NULL,\n  `last_name` varchar(100) NOT NULL,\n  `email` varchar(255) NOT NULL UNIQUE,\n  PRIMARY KEY (`id`)\n);\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003eInserting Customer Records Into BetterCustomers Table\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class\u003d\"language-sql\"\u003eINSERT INTO bettercustomers (created, first_name, last_name, email)\nVALUES\n(\u0026quot;2021-02-16 00:16:06\u0026quot;, \u0026quot;Scott\u0026quot;, \u0026quot;Haines\u0026quot;, \u0026quot;scott@coffeeco.com\u0026quot;),\n(\u0026quot;2021-02-16 00:16:06\u0026quot;, \u0026quot;John\u0026quot;, \u0026quot;Hamm\u0026quot;, \u0026quot;john.hamm@acme.com\u0026quot;),\n(\u0026quot;2021-02-16 00:16:06\u0026quot;, \u0026quot;Milo\u0026quot;, \u0026quot;Haines\u0026quot;, \u0026quot;mhaines@coffeeco.com\u0026quot;),\n(\u0026quot;2021-02-21 21:00:00\u0026quot;, \u0026quot;Penny\u0026quot;, \u0026quot;Haines\u0026quot;, \u0026quot;penny@coffeeco.com\u0026quot;),\n(\u0026quot;2021-02-21 22:00:00\u0026quot;, \u0026quot;Cloud\u0026quot;, \u0026quot;Fast\u0026quot;, \u0026quot;cloud.fast@acme.com\u0026quot;),\n(\u0026quot;2021-02-21 23:00:00\u0026quot;, \u0026quot;Marshal\u0026quot;, \u0026quot;Haines\u0026quot;, \u0026quot;paws@coffeeco.com\u0026quot;),\n(\u0026quot;2021-02-24 09:00:00\u0026quot;, \u0026quot;Willow\u0026quot;, \u0026quot;Haines\u0026quot;, \u0026quot;willow@coffeeco.com\u0026quot;),\n(\u0026quot;2021-02-24 09:00:00\u0026quot;, \u0026quot;Clover\u0026quot;, \u0026quot;Haines\u0026quot;, \u0026quot;pup@coffeeco.com\u0026quot;);\n\u003c/code\u003e\u003c/pre\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614213858686_160867183",
+      "id": "paragraph_1614213858686_160867183",
+      "dateCreated": "2021-02-25 00:44:18.686",
+      "dateStarted": "2021-02-25 03:46:08.684",
+      "dateFinished": "2021-02-25 03:46:09.919",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Load up our Better Customers",
+      "text": "%spark\nval betterCustomers \u003d spark.read\n  .format(\"jdbc\")\n  .option(\"url\", connectionUrl)\n  .option(\"driver\", jdbcDriver)\n  .option(\"dbtable\", \"bettercustomers\")\n  .option(\"user\", dbUser)\n  .option(\"password\", dbPass)\n  .load()\n\nbetterCustomers.printSchema\n\nbetterCustomers.show(false)\n\nbetterCustomers.createOrReplaceTempView(\"bettercustomers\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 03:46:12.999",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- id: integer (nullable \u003d true)\n |-- created: timestamp (nullable \u003d true)\n |-- updated: timestamp (nullable \u003d true)\n |-- first_name: string (nullable \u003d true)\n |-- last_name: string (nullable \u003d true)\n |-- email: string (nullable \u003d true)\n\n+---+-------------------+-------------------+----------+---------+---------------------+\n|id |created            |updated            |first_name|last_name|email                |\n+---+-------------------+-------------------+----------+---------+---------------------+\n|1  |2021-02-16 00:16:06|2021-02-25 03:39:23|Scott     |Haines   |scott@coffeeco.com   |\n|2  |2021-02-16 00:16:06|2021-02-25 03:39:23|John      |Hamm     |john.hamm@acme.com   |\n|3  |2021-02-16 00:16:06|2021-02-25 03:39:23|Milo      |Haines   |mhaines@coffeeco.com |\n|4  |2021-02-21 21:00:00|2021-02-25 03:39:23|Penny     |Haines   |penny@coffeeco.com   |\n|5  |2021-02-21 22:00:00|2021-02-25 03:39:23|Cloud     |Fast     |cloud.fast@acme.com  |\n|6  |2021-02-21 23:00:00|2021-02-25 03:39:23|Marshal   |Haines   |paws@coffeeco.com    |\n|7  |2021-02-24 09:00:00|2021-02-25 03:39:23|Willow    |Haines   |willow@coffeeco.com  |\n|8  |2021-02-24 09:00:00|2021-02-25 03:39:23|Clover    |Haines   |pup@coffeeco.com     |\n|9  |2021-02-25 03:39:43|2021-02-25 03:39:43|The       |Rock     |djohnson@coffeeco.com|\n|10 |2021-02-25 03:39:43|2021-02-25 03:39:43|Nanna     |Haines   |nhugs@coffeeco.com   |\n+---+-------------------+-------------------+----------+---------+---------------------+\n\n\u001b[1m\u001b[34mbetterCustomers\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [id: int, created: timestamp ... 4 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d1"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614185019787_1496963524",
+      "id": "paragraph_1614185019787_1496963524",
+      "dateCreated": "2021-02-24 16:43:39.787",
+      "dateStarted": "2021-02-25 03:46:13.021",
+      "dateFinished": "2021-02-25 03:46:14.019",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Getting the Schema",
+      "text": "%spark\nbetterCustomers.schema",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 03:46:16.221",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mres5\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.types.StructType\u001b[0m \u003d StructType(StructField(id,IntegerType,true), StructField(created,TimestampType,true), StructField(updated,TimestampType,true), StructField(first_name,StringType,true), StructField(last_name,StringType,true), StructField(email,StringType,true))\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614186266127_1397870333",
+      "id": "paragraph_1614186266127_1397870333",
+      "dateCreated": "2021-02-24 17:04:26.127",
+      "dateStarted": "2021-02-25 03:46:16.236",
+      "dateFinished": "2021-02-25 03:46:16.566",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Write Records without Supplying Automatic Fields",
+      "text": "%spark\n\nimport org.apache.spark.sql.types._\n\nval simpleFieldNames \u003d Set(\"first_name\", \"last_name\", \"email\")\nval simpleSchema \u003d StructType(\n    betterCustomers.schema.fields.filter(sf \u003d\u003e simpleFieldNames.contains(sf.name))\n)\n\nval saveMode \u003d \"ignore\" // change this to append to write through\n\n// create simplified Rows!\nval rows \u003d spark.createDataFrame(\n  spark.sparkContext.parallelize(\n      Seq(\n          Row(\"Nanna\",\"Haines\",\"nhugs@coffeeco.com\"),\n          Row(\"The\",\"Rock\",\"djohnson@coffeeco.com\")\n      )\n  ),\n  simpleSchema\n)\n\nrows\n.write\n.format(\"jdbc\")\n.mode(saveMode)\n.options(Map[String, String](\n  \"url\" -\u003e connectionUrl,\n  \"driver\" -\u003e jdbcDriver,\n  \"dbtable\" -\u003e \"bettercustomers\",\n  \"user\" -\u003e dbUser,\n  \"password\" -\u003e dbPass\n))\n.save()",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 03:47:02.014",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 167.798,
+              "optionOpen": false
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.types._\n\u001b[1m\u001b[34msimpleFieldNames\u001b[0m: \u001b[1m\u001b[32mscala.collection.immutable.Set[String]\u001b[0m \u003d Set(first_name, last_name, email)\n\u001b[1m\u001b[34msimpleSchema\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.types.StructType\u001b[0m \u003d StructType(StructField(first_name,StringType,true), StructField(last_name,StringType,true), StructField(email,StringType,true))\n\u001b[1m\u001b[34msaveMode\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d ignore\n\u001b[1m\u001b[34mrows\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [first_name: string, last_name: string ... 1 more field]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614224798281_1065230385",
+      "id": "paragraph_1614224798281_1065230385",
+      "dateCreated": "2021-02-25 03:46:38.282",
+      "dateStarted": "2021-02-25 03:47:02.040",
+      "dateFinished": "2021-02-25 03:47:02.833",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%md\n## Note\nIt is worth pointing out that if you use `mode(\"overwrite\")` in the example prior example, then the Table schema will actually be rewritten which isn\u0027t what we want.",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 03:32:06.152",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eNote\u003c/h2\u003e\n\u003cp\u003eIt is worth pointing out that if you use \u003ccode\u003emode(\u0026quot;overwrite\u0026quot;)\u003c/code\u003e in the example prior example, then the Table schema will actually be rewritten which isn\u0026rsquo;t what we want.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614223864606_1489564927",
+      "id": "paragraph_1614223864606_1489564927",
+      "dateCreated": "2021-02-25 03:31:04.606",
+      "dateStarted": "2021-02-25 03:32:06.153",
+      "dateFinished": "2021-02-25 03:32:06.159",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%sql\nselect * from bettercustomers;",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 03:40:02.808",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "id": "string",
+                      "created": "string",
+                      "updated": "string",
+                      "first_name": "string",
+                      "last_name": "string",
+                      "email": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "id\tcreated\tupdated\tfirst_name\tlast_name\temail\n1\t2021-02-16 00:16:06.0\t2021-02-25 03:39:23.0\tScott\tHaines\tscott@coffeeco.com\n2\t2021-02-16 00:16:06.0\t2021-02-25 03:39:23.0\tJohn\tHamm\tjohn.hamm@acme.com\n3\t2021-02-16 00:16:06.0\t2021-02-25 03:39:23.0\tMilo\tHaines\tmhaines@coffeeco.com\n4\t2021-02-21 21:00:00.0\t2021-02-25 03:39:23.0\tPenny\tHaines\tpenny@coffeeco.com\n5\t2021-02-21 22:00:00.0\t2021-02-25 03:39:23.0\tCloud\tFast\tcloud.fast@acme.com\n6\t2021-02-21 23:00:00.0\t2021-02-25 03:39:23.0\tMarshal\tHaines\tpaws@coffeeco.com\n7\t2021-02-24 09:00:00.0\t2021-02-25 03:39:23.0\tWillow\tHaines\twillow@coffeeco.com\n8\t2021-02-24 09:00:00.0\t2021-02-25 03:39:23.0\tClover\tHaines\tpup@coffeeco.com\n9\t2021-02-25 03:39:43.0\t2021-02-25 03:39:43.0\tThe\tRock\tdjohnson@coffeeco.com\n10\t2021-02-25 03:39:43.0\t2021-02-25 03:39:43.0\tNanna\tHaines\tnhugs@coffeeco.com\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d63"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614222679551_1672528284",
+      "id": "paragraph_1614222679551_1672528284",
+      "dateCreated": "2021-02-25 03:11:19.551",
+      "dateStarted": "2021-02-25 03:40:02.822",
+      "dateFinished": "2021-02-25 03:40:02.897",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%sql\nDESCRIBE EXTENDED bettercustomers",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 03:33:06.215",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "col_name": "string",
+                      "data_type": "string",
+                      "comment": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "col_name\tdata_type\tcomment\nid\tint\tnull\ncreated\ttimestamp\tnull\nupdated\ttimestamp\tnull\nfirst_name\tstring\tnull\nlast_name\tstring\tnull\nemail\tstring\tnull\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614186078742_145044323",
+      "id": "paragraph_1614186078742_145044323",
+      "dateCreated": "2021-02-24 17:01:18.742",
+      "dateStarted": "2021-02-25 03:33:06.226",
+      "dateFinished": "2021-02-25 03:33:06.256",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Get the Table Comments from MySQL Information Schema",
+      "text": "%spark\nval schema \u003d spark\n.read\n.format(\"jdbc\")\n.options(Map[String, String](\n    \"url\" -\u003e connectionUrl,\n    \"driver\" -\u003e jdbcDriver,\n    \"query\" -\u003e \n\"\"\"\nselect column_name, data_type, is_nullable, column_comment from information_schema.`columns` \nwhere table_name \u003d \u0027bettercustomers\u0027 \nand table_schema \u003d \u0027default\u0027\n\"\"\",\n    \"user\" -\u003e dbUser,\n    \"password\" -\u003e dbPass\n  )\n)\n.load()\n.toDF(\"name\", \"type\", \"nullable\", \"comment\")\n\nschema\n  .select(\"name\", \"comment\")\n  .where(col(\"comment\").isNotNull)\n  .where(col(\"comment\").notEqual(\"\"))\n  .show(false)\n\n// can turn this into a map and apply it while iterating over the betterCustomers schema.fields -\u003e then we won\u0027t loose the metadata\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 03:40:10.704",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-------+---------------------+\n|name   |comment              |\n+-------+---------------------+\n|created|customer join date   |\n|id     |customer automatic id|\n|updated|last record update   |\n+-------+---------------------+\n\n\u001b[1m\u001b[34mschema\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [name: string, type: string ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d64"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614186138107_513561362",
+      "id": "paragraph_1614186138107_513561362",
+      "dateCreated": "2021-02-24 17:02:18.107",
+      "dateStarted": "2021-02-25 03:40:10.717",
+      "dateFinished": "2021-02-25 03:40:11.310",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 03:34:03.771",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614224043771_381645452",
+      "id": "paragraph_1614224043771_381645452",
+      "dateCreated": "2021-02-25 03:34:03.771",
+      "status": "READY"
+    }
+  ],
+  "name": "5-2_MySQLAndSpark",
+  "id": "2G1SGWZBW",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview2",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

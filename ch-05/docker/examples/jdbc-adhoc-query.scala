@@ -8,11 +8,11 @@ $SPARK_HOME/bin/spark-shell \
   --conf "spark.jdbc.host=127.0.0.1" \
   --conf "spark.jdbc.port=3306" \
   --conf "spark.jdbc.default.db=default" \
-  --conf "spark.jdbc.table=customers" \
+  --conf "spark.sql.query=select id, first_name, email from customers where email LIKE '%coffeeco%' ORDER BY email ASC LIMIT 3" \
   --conf "spark.jdbc.user=dataeng" \
   --conf "spark.jdbc.password=dataengineering_user" \
   --jars=spark/jars/mariadb-java-client-2.7.2.jar,spark/jars/mysql-connector-java-8.0.23.jar \
-  -i examples/connect-jdbc.scala
+  -i examples/jdbc-adhoc-query.scala
 */
 import org.apache.spark.sql._
 
@@ -24,9 +24,10 @@ val jdbcDriver = spark.conf.get("spark.jdbc.driver.class", "com.mysql.cj.jdbc.Dr
 val dbHost     = spark.conf.get("spark.jdbc.host","localhost")
 val dbPort     = spark.conf.get("spark.jdbc.port", "3306")
 val defaultDb  = spark.conf.get("spark.jdbc.default.db", "default")
-val dbTable    = spark.conf.get("spark.jdbc.table", "customers")
 val dbUser     = spark.conf.get("spark.jdbc.user", "dataeng")
 val dbPass     = spark.conf.get("spark.jdbc.password")
+
+val query      = spark.conf.get("spark.sql.query", s"select * from customers limit 5")
 
 val connectionUrl = s"jdbc:mysql://$dbHost:$dbPort/$defaultDb"
 
@@ -39,49 +40,17 @@ val df = spark
 .options(Map[String, String](
     "url" -> connectionUrl,
     "driver" -> jdbcDriver,
-    "dbtable" -> dbTable,
+    "query" -> query,
     "user" -> dbUser,
     "password" -> dbPass
   )
 )
 .load()
 
-/*
-// advanced: load and partition by timestamp
-val df = spark
-.read
-.format("jdbc")
-.options(Map[String, String](
-    "url" -> connectionUrl,
-    "driver" -> jdbcDriver,
-    "dbtable" -> dbTable,
-    "user" -> dbUser,
-    "password" -> dbPass,
-    "numPartitions" -> "2",
-    "partitionColumn" -> "created",
-    "lowerBound" -> "2021-02-16 02:00:00",
-    "upperBound" -> "2021-02-21 21:00:00"
-  )
-)
-.load()
-*/
+println(s"running query: $query")
 
-/*
-// advanced: load and split by date
-val df = spark
-.read
-.format("jdbc")
-.options(Map[String, String](
-    "url" -> connectionUrl,
-    "driver" -> jdbcDriver,
-    "dbtable" -> dbTable,
-    "user" -> dbUser,
-    "password" -> dbPass,
-    "numPartitions" -> "2",
-    "partitionColumn" -> "created",
-    "lowerBound" -> "2021-02-16",
-    "upperBound" -> "2021-02-21"
-  )
-)
-.load()
-*/
+df.show(truncate=false)
+
+println("query executed")
+// exit the spark-shell
+sys.exit(0)

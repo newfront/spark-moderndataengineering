@@ -13,7 +13,7 @@
     --conf "spark.jdbc.user=dataeng" \
     --conf "spark.jdbc.password=dataengineering_user" \
     --packages=mysql:mysql-connector-java:8.0.23 \
-    --jars=jars/mariadb-java-client-2.7.2.jar \
+    --jars=spark/jars/mariadb-java-client-2.7.2.jar \
     -i examples/connect-jdbc.scala
   3. :load examples/save-jdbc.scala 
 */
