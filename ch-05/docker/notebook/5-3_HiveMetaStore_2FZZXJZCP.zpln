@@ -3,7 +3,7 @@
     {
       "text": "%md\n## Interoperating with MySQL and Apache Spark\nThe **Hive Metastore** can be used as a Data Catalog within the Spark ecosystem. This means that you can publish rich descriptions of the data your are producing, and this can be equally as useful when fetching data from other `tables` not managed by you or your team.\n\n### Hive MetaStore Configuration\n~~~\nspark.sql.hive.metastore.version: 2.3.7\nspark.sql.hive.metastore.jars: builtin\nspark.sql.hive.metastore.schema.verification: true\nspark.sql.hive.metastore.schema.verification.record.version: true\nspark.hadoop.javax.jdo.option.ConnectionURL jdbc:mysql://mysql:3306/default\nspark.hadoop.javax.jdo.option.ConnectionDriverName org.mariadb.jdbc.Driver\nspark.hadoop.javax.jdo.option.ConnectionUserName dataeng\nspark.hadoop.javax.jdo.option.ConnectionPassword dataengineering_user",
       "user": "anonymous",
-      "dateUpdated": "2021-02-25 23:44:40.041",
+      "dateUpdated": "2021-03-07 23:36:08.104",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -38,14 +38,14 @@
       "jobName": "paragraph_1614184811354_645457992",
       "id": "paragraph_1614184811354_645457992",
       "dateCreated": "2021-02-24 16:40:11.355",
-      "dateStarted": "2021-02-25 23:44:40.042",
-      "dateFinished": "2021-02-25 23:44:40.061",
+      "dateStarted": "2021-03-07 23:36:08.106",
+      "dateFinished": "2021-03-07 23:36:09.868",
       "status": "FINISHED"
     },
     {
       "text": "%spark\nspark.sparkContext.getConf.getAllWithPrefix(\"spark.sql\")\nval sparkConf \u003d spark.sparkContext.getConf\nval sparkSqlWareHouse \u003d sparkConf.get(\"spark.sql.warehouse.dir\")\nval sparkSqlCatalogType \u003d sparkConf.get(\"spark.sql.catalogImplementation\")\nval hiveMetaDataVersion \u003d sparkConf.get(\"spark.sql.hive.metastore.version\")\nval hiveMetaStoreDependencies \u003d sparkConf.get(\"spark.sql.hive.metastore.jars\")",
       "user": "anonymous",
-      "dateUpdated": "2021-02-25 23:39:35.935",
+      "dateUpdated": "2021-03-07 23:36:24.848",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -64,11 +64,11 @@
         "forms": {}
       },
       "results": {
-        "code": "SUCCESS",
+        "code": "ERROR",
         "msg": [
           {
             "type": "TEXT",
-            "data": "\u001b[1m\u001b[34msparkConf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.SparkConf\u001b[0m \u003d org.apache.spark.SparkConf@6ac9e3c4\n\u001b[1m\u001b[34msparkSqlWareHouse\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d /spark/sql/warehouse/\n\u001b[1m\u001b[34msparkSqlCatalogType\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d hive\n\u001b[1m\u001b[34mhiveMetaDataVersion\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d 2.3.7\n\u001b[1m\u001b[34mhiveMetaStoreDependencies\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d builtin\n"
+            "data": "org.apache.zeppelin.interpreter.InterpreterException: org.apache.zeppelin.interpreter.InterpreterException: Fail to open SparkInterpreter\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.open(LazyOpenInterpreter.java:76)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:760)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:668)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:130)\n\tat org.apache.zeppelin.scheduler.FIFOScheduler.lambda$runJobInScheduler$0(FIFOScheduler.java:39)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: org.apache.zeppelin.interpreter.InterpreterException: Fail to open SparkInterpreter\n\tat org.apache.zeppelin.spark.SparkInterpreter.open(SparkInterpreter.java:122)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.open(LazyOpenInterpreter.java:70)\n\t... 8 more\nCaused by: java.lang.Exception: This is not officially supported spark version: 3.1.1\nYou can set zeppelin.spark.enableSupportedVersionCheck to false if you really want to try this version of spark.\n\tat org.apache.zeppelin.spark.SparkInterpreter.open(SparkInterpreter.java:112)\n\t... 9 more\n"
           }
         ]
       },
@@ -78,9 +78,9 @@
       "jobName": "paragraph_1614032139535_1034844617",
       "id": "paragraph_1614032139535_1034844617",
       "dateCreated": "2021-02-22 22:15:39.535",
-      "dateStarted": "2021-02-25 23:39:35.953",
-      "dateFinished": "2021-02-25 23:39:36.544",
-      "status": "FINISHED"
+      "dateStarted": "2021-03-07 23:36:24.867",
+      "dateFinished": "2021-03-07 23:36:47.617",
+      "status": "ERROR"
     },
     {
       "text": "%md\n## Spark Hive Jars\nYou will need to be working with a version of Spark that is built with all the right hive jars (`2.3.7`).\n\nRunning the following `shell` block will automatically scan and find the `hive` jars from your `SPARK_HOME`.",

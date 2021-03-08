@@ -51,6 +51,8 @@ services:
     networks:
       - mde
     hostname: "zeppelin"
+    depends_on:
+      - mysql
 
 networks:
   mde:

@@ -43,9 +43,9 @@
       "status": "FINISHED"
     },
     {
-      "text": "%md\n## Create a Table and add some Data\n1. Reconnect to the Docker mysql container. `docker exec -it mysql bash` and run `mysql -u dataeng -p` and re-enter your password.\n2. Create the customers table\n3. Add some customers\n\n### Create the Customers Table\n~~~\nCREATE TABLE IF NOT EXISTS customers (\n  id VARCHAR(32),\n  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  first_name VARCHAR(100),\n  last_name VARCHAR(100),\n  email VARCHAR(255)\n);\n~~~\n\n### Add Some Customers to your Table\n~~~\nINSERT INTO customers (first_name, last_name, email)\nVALUES\n(\"Scott\", \"Haines\", \"scott@coffeeco.com\"),\n(\"John\", \"Hamm\", \"john.hamm@acme.com\"),\n(\"Milo\", \"Haines\", \"mhaines@coffeeco.com\");\n~~~",
+      "text": "%md\n## Create a Table and add some Data\n1. Reconnect to the Docker mysql container. `docker exec -it mysql bash` and run `mysql -u dataeng -p` and re-enter your password.\n2. Create the customers table\n3. Add some customers\n\n### Create the Customers Table\n~~~\nCREATE TABLE IF NOT EXISTS customers (\n  id VARCHAR(32),\n  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  first_name VARCHAR(100),\n  last_name VARCHAR(100),\n  email VARCHAR(255)\n);\n~~~\n\n### Add Some Customers to your Table\n~~~\nINSERT INTO customers (id, first_name, last_name, email)\nVALUES\n(\"1\", \"Scott\", \"Haines\", \"scott@coffeeco.com\"),\n(\"2\", \"John\", \"Hamm\", \"john.hamm@acme.com\"),\n(\"3\", \"Milo\", \"Haines\", \"mhaines@coffeeco.com\");\n~~~",
       "user": "anonymous",
-      "dateUpdated": "2021-02-24 16:39:27.332",
+      "dateUpdated": "2021-03-08 00:48:35.810",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -70,7 +70,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCreate a Table and add some Data\u003c/h2\u003e\n\u003col\u003e\n\u003cli\u003eReconnect to the Docker mysql container. \u003ccode\u003edocker exec -it mysql bash\u003c/code\u003e and run \u003ccode\u003emysql -u dataeng -p\u003c/code\u003e and re-enter your password.\u003c/li\u003e\n\u003cli\u003eCreate the customers table\u003c/li\u003e\n\u003cli\u003eAdd some customers\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch3\u003eCreate the Customers Table\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003eCREATE TABLE IF NOT EXISTS customers (\n  id VARCHAR(32),\n  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  first_name VARCHAR(100),\n  last_name VARCHAR(100),\n  email VARCHAR(255)\n);\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003eAdd Some Customers to your Table\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003eINSERT INTO customers (first_name, last_name, email)\nVALUES\n(\u0026quot;Scott\u0026quot;, \u0026quot;Haines\u0026quot;, \u0026quot;scott@coffeeco.com\u0026quot;),\n(\u0026quot;John\u0026quot;, \u0026quot;Hamm\u0026quot;, \u0026quot;john.hamm@acme.com\u0026quot;),\n(\u0026quot;Milo\u0026quot;, \u0026quot;Haines\u0026quot;, \u0026quot;mhaines@coffeeco.com\u0026quot;);\n\u003c/code\u003e\u003c/pre\u003e\n\n\u003c/div\u003e"
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCreate a Table and add some Data\u003c/h2\u003e\n\u003col\u003e\n\u003cli\u003eReconnect to the Docker mysql container. \u003ccode\u003edocker exec -it mysql bash\u003c/code\u003e and run \u003ccode\u003emysql -u dataeng -p\u003c/code\u003e and re-enter your password.\u003c/li\u003e\n\u003cli\u003eCreate the customers table\u003c/li\u003e\n\u003cli\u003eAdd some customers\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch3\u003eCreate the Customers Table\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003eCREATE TABLE IF NOT EXISTS customers (\n  id VARCHAR(32),\n  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  first_name VARCHAR(100),\n  last_name VARCHAR(100),\n  email VARCHAR(255)\n);\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003eAdd Some Customers to your Table\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003eINSERT INTO customers (id, first_name, last_name, email)\nVALUES\n(\u0026quot;1\u0026quot;, \u0026quot;Scott\u0026quot;, \u0026quot;Haines\u0026quot;, \u0026quot;scott@coffeeco.com\u0026quot;),\n(\u0026quot;2\u0026quot;, \u0026quot;John\u0026quot;, \u0026quot;Hamm\u0026quot;, \u0026quot;john.hamm@acme.com\u0026quot;),\n(\u0026quot;3\u0026quot;, \u0026quot;Milo\u0026quot;, \u0026quot;Haines\u0026quot;, \u0026quot;mhaines@coffeeco.com\u0026quot;);\n\u003c/code\u003e\u003c/pre\u003e\n\n\u003c/div\u003e"
           }
         ]
       },
@@ -80,8 +80,8 @@
       "jobName": "paragraph_1613345119805_928436152",
       "id": "paragraph_1613345119805_928436152",
       "dateCreated": "2021-02-14 23:25:19.805",
-      "dateStarted": "2021-02-24 16:39:27.344",
-      "dateFinished": "2021-02-24 16:39:28.869",
+      "dateStarted": "2021-03-08 00:48:35.816",
+      "dateFinished": "2021-03-08 00:48:35.831",
       "status": "FINISHED"
     },
     {
