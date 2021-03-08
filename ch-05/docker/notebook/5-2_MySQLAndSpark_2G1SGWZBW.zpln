@@ -45,7 +45,7 @@
     {
       "text": "%spark\n// shared configuration\n// note: this password is for Docker mysql only - it isn\u0027t smart to add passwords to code that is version controlled!\nval jdbcDriver \u003d spark.conf.get(\"spark.jdbc.driver.class\", \"org.mariadb.jdbc.Driver\")\nval dbHost     \u003d spark.conf.get(\"spark.jdbc.host\",\"mysql\")\nval dbPort     \u003d spark.conf.get(\"spark.jdbc.port\", \"3306\")\nval defaultDb  \u003d spark.conf.get(\"spark.jdbc.default.db\", \"default\")\nval dbTable    \u003d spark.conf.get(\"spark.jdbc.table\", \"customers\")\nval dbUser     \u003d spark.conf.get(\"spark.jdbc.user\", \"dataeng\")\nval dbPass     \u003d spark.conf.get(\"spark.jdbc.password\", \"dataengineering_user\")\n\nval connectionUrl \u003d s\"jdbc:mysql://$dbHost:$dbPort/$defaultDb\"\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-08 00:43:50.905",
+      "dateUpdated": "2021-03-08 16:59:22.536",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -78,15 +78,15 @@
       "jobName": "paragraph_1614213590359_2024560442",
       "id": "paragraph_1614213590359_2024560442",
       "dateCreated": "2021-02-25 00:39:50.359",
-      "dateStarted": "2021-03-08 00:43:50.924",
-      "dateFinished": "2021-03-08 00:44:10.698",
+      "dateStarted": "2021-03-08 16:59:22.557",
+      "dateFinished": "2021-03-08 16:59:24.866",
       "status": "FINISHED"
     },
     {
       "title": "Reading Data From JDBC Connections",
       "text": "%spark\nval customers \u003d spark.read\n  .format(\"jdbc\")\n  .option(\"url\", connectionUrl)\n  .option(\"driver\", jdbcDriver)\n  .option(\"dbtable\", dbTable)\n  .option(\"user\", dbUser)\n  .option(\"password\", dbPass)\n  .load()\n\ncustomers.printSchema\ncustomers.createOrReplaceTempView(\"customers\")",
       "user": "anonymous",
-      "dateUpdated": "2021-03-08 00:48:47.193",
+      "dateUpdated": "2021-03-08 16:59:27.868",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -120,14 +120,56 @@
       "jobName": "paragraph_1614184981488_759162661",
       "id": "paragraph_1614184981488_759162661",
       "dateCreated": "2021-02-24 16:43:01.488",
-      "dateStarted": "2021-03-08 00:48:47.209",
-      "dateFinished": "2021-03-08 00:48:47.557",
+      "dateStarted": "2021-03-08 16:59:27.895",
+      "dateFinished": "2021-03-08 16:59:31.122",
       "status": "FINISHED"
+    },
+    {
+      "title": "Write New Customers to MySQL",
+      "text": "%spark\nimport org.apache.spark.sql._\nimport java.sql.Timestamp\nimport java.time._\n\n// spark: SparkSession (from spark-shell)\nassert(spark.isInstanceOf[SparkSession])\n\ndef ts(timeStr: String) \u003d Timestamp.valueOf(timeStr)\ndef time \u003d Timestamp.from(Instant.now())\n\n// create some new customers\nval records \u003d Seq(\n  Row(\"4\",ts(\"2021-02-21 21:00:00\"),time,\"Penny\",\"Haines\",\"penny@coffeeco.com\"),\n  Row(\"5\",ts(\"2021-02-21 22:00:00\"),time,\"Cloud\",\"Fast\",\"cloud.fast@acme.com\"),\n  Row(\"6\",ts(\"2021-02-21 23:00:00\"),time,\"Marshal\",\"Haines\",\"paws@coffeeco.com\")\n)\n\n// generate a new DataFrame using the new records and the schema from df (connect-jdbc.scala)\nval newCustomers \u003d spark.createDataFrame(\n    spark.sparkContext.parallelize(records),\n    customers.schema\n)\n\n// note: doesn\u0027t deduplicate if set to `mode(\"ignore\")`. It will just do nothing.\nnewCustomers\n  .write\n  .format(\"jdbc\")\n  //.mode(\"append\") // change to ignore to stop adding duplicates\n  .options(Map[String, String](\n    \"url\" -\u003e connectionUrl,\n    \"driver\" -\u003e jdbcDriver,\n    \"dbtable\" -\u003e dbTable,\n    \"user\" -\u003e dbUser,\n    \"password\" -\u003e dbPass\n  )\n).save()\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-08 17:08:53.638",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "org.apache.spark.sql.AnalysisException: Table or view \u0027customers\u0027 already exists. SaveMode: ErrorIfExists.\n  at org.apache.spark.sql.execution.datasources.jdbc.JdbcRelationProvider.createRelation(JdbcRelationProvider.scala:71)\n  at org.apache.spark.sql.execution.datasources.SaveIntoDataSourceCommand.run(SaveIntoDataSourceCommand.scala:46)\n  at org.apache.spark.sql.execution.command.ExecutedCommandExec.sideEffectResult$lzycompute(commands.scala:70)\n  at org.apache.spark.sql.execution.command.ExecutedCommandExec.sideEffectResult(commands.scala:68)\n  at org.apache.spark.sql.execution.command.ExecutedCommandExec.doExecute(commands.scala:90)\n  at org.apache.spark.sql.execution.SparkPlan.$anonfun$execute$1(SparkPlan.scala:180)\n  at org.apache.spark.sql.execution.SparkPlan.$anonfun$executeQuery$1(SparkPlan.scala:218)\n  at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:151)\n  at org.apache.spark.sql.execution.SparkPlan.executeQuery(SparkPlan.scala:215)\n  at org.apache.spark.sql.execution.SparkPlan.execute(SparkPlan.scala:176)\n  at org.apache.spark.sql.execution.QueryExecution.toRdd$lzycompute(QueryExecution.scala:132)\n  at org.apache.spark.sql.execution.QueryExecution.toRdd(QueryExecution.scala:131)\n  at org.apache.spark.sql.DataFrameWriter.$anonfun$runCommand$1(DataFrameWriter.scala:989)\n  at org.apache.spark.sql.execution.SQLExecution$.$anonfun$withNewExecutionId$5(SQLExecution.scala:103)\n  at org.apache.spark.sql.execution.SQLExecution$.withSQLConfPropagated(SQLExecution.scala:163)\n  at org.apache.spark.sql.execution.SQLExecution$.$anonfun$withNewExecutionId$1(SQLExecution.scala:90)\n  at org.apache.spark.sql.SparkSession.withActive(SparkSession.scala:772)\n  at org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:64)\n  at org.apache.spark.sql.DataFrameWriter.runCommand(DataFrameWriter.scala:989)\n  at org.apache.spark.sql.DataFrameWriter.saveToV1Source(DataFrameWriter.scala:438)\n  at org.apache.spark.sql.DataFrameWriter.saveInternal(DataFrameWriter.scala:415)\n  at org.apache.spark.sql.DataFrameWriter.save(DataFrameWriter.scala:301)\n  ... 52 elided\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614213413596_418016277",
+      "id": "paragraph_1614213413596_418016277",
+      "dateCreated": "2021-02-25 00:36:53.596",
+      "dateStarted": "2021-03-08 17:08:41.736",
+      "dateFinished": "2021-03-08 17:08:42.559",
+      "status": "ERROR"
     },
     {
       "text": "%sql\nselect * from customers",
       "user": "anonymous",
-      "dateUpdated": "2021-03-08 01:37:38.241",
+      "dateUpdated": "2021-03-08 16:59:33.371",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -196,7 +238,7 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d27"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d0"
             }
           ],
           "interpreterSettingId": "spark"
@@ -206,61 +248,8 @@
       "jobName": "paragraph_1614213752264_1780383982",
       "id": "paragraph_1614213752264_1780383982",
       "dateCreated": "2021-02-25 00:42:32.264",
-      "dateStarted": "2021-03-08 01:37:38.258",
-      "dateFinished": "2021-03-08 01:37:38.331",
-      "status": "FINISHED"
-    },
-    {
-      "text": "%spark\nimport org.apache.spark.sql._\nimport java.sql.Timestamp\nimport java.time._\n\n// spark: SparkSession (from spark-shell)\nassert(spark.isInstanceOf[SparkSession])\n\ndef ts(timeStr: String): Timestamp \u003d Timestamp.valueOf(timeStr)\ndef time \u003d Timestamp.from(Instant.now())\n// create some new customers\nval records \u003d Seq(\n  Row(\"4\",ts(\"2021-02-21 21:00:00\"),time,\"Penny\",\"Haines\",\"penny@coffeeco.com\"),\n  Row(\"5\",ts(\"2021-02-21 22:00:00\"),time,\"Cloud\",\"Fast\",\"cloud.fast@acme.com\"),\n  Row(\"6\",ts(\"2021-02-21 23:00:00\"),time,\"Marshal\",\"Haines\",\"paws@coffeeco.com\")\n)\n\n// generate a new DataFrame using the new records and the schema from df (connect-jdbc.scala)\nval additional \u003d spark.createDataFrame(\n    spark.sparkContext.parallelize(records),\n    customers.schema\n)\n\n// note: doesn\u0027t deduplicate if set to `mode(\"ignore\")`. It will just do nothing.\nadditional\n  .write\n  .format(\"jdbc\")\n  .mode(\"append\") // change to ignore to ignore duplicates\n  .options(Map[String, String](\n    \"url\" -\u003e connectionUrl,\n    \"driver\" -\u003e jdbcDriver,\n    \"dbtable\" -\u003e dbTable,\n    \"user\" -\u003e dbUser,\n    \"password\" -\u003e dbPass\n  )\n).save()\n",
-      "user": "anonymous",
-      "dateUpdated": "2021-03-08 01:37:34.557",
-      "config": {
-        "colWidth": 12.0,
-        "fontSize": 9.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala",
-          "editOnDblClick": false,
-          "completionKey": "TAB",
-          "completionSupport": true
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "import org.apache.spark.sql._\nimport java.sql.Timestamp\nimport java.time._\n\u001b[1m\u001b[34mts\u001b[0m: \u001b[1m\u001b[32m(timeStr: String)java.sql.Timestamp\u001b[0m\n\u001b[1m\u001b[34mtime\u001b[0m: \u001b[1m\u001b[32mjava.sql.Timestamp\u001b[0m\n\u001b[1m\u001b[34mrecords\u001b[0m: \u001b[1m\u001b[32mSeq[org.apache.spark.sql.Row]\u001b[0m \u003d List([4,2021-02-21 21:00:00.0,2021-03-08 01:37:35.19,Penny,Haines,penny@coffeeco.com], [5,2021-02-21 22:00:00.0,2021-03-08 01:37:35.19,Cloud,Fast,cloud.fast@acme.com], [6,2021-02-21 23:00:00.0,2021-03-08 01:37:35.19,Marshal,Haines,paws@coffeeco.com])\n\u001b[1m\u001b[34madditional\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [id: string, created: timestamp ... 4 more fields]\n"
-          }
-        ]
-      },
-      "apps": [],
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "SPARK JOB",
-          "tooltip": "View in Spark web UI",
-          "group": "spark",
-          "values": [
-            {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d26"
-            }
-          ],
-          "interpreterSettingId": "spark"
-        }
-      },
-      "progressUpdateIntervalMs": 500,
-      "jobName": "paragraph_1614213413596_418016277",
-      "id": "paragraph_1614213413596_418016277",
-      "dateCreated": "2021-02-25 00:36:53.596",
-      "dateStarted": "2021-03-08 01:37:34.570",
-      "dateFinished": "2021-03-08 01:37:35.392",
+      "dateStarted": "2021-03-08 16:59:33.394",
+      "dateFinished": "2021-03-08 16:59:36.746",
       "status": "FINISHED"
     },
     {
@@ -490,7 +479,7 @@
       "title": "Load up our Better Customers",
       "text": "%spark\nval betterCustomers \u003d spark.read\n  .format(\"jdbc\")\n  .option(\"url\", connectionUrl)\n  .option(\"driver\", jdbcDriver)\n  .option(\"dbtable\", \"bettercustomers\")\n  .option(\"user\", dbUser)\n  .option(\"password\", dbPass)\n  .load()\n\nbetterCustomers.printSchema\n\nbetterCustomers.show(false)\n\nbetterCustomers.createOrReplaceTempView(\"bettercustomers\")",
       "user": "anonymous",
-      "dateUpdated": "2021-03-05 22:39:26.719",
+      "dateUpdated": "2021-03-08 17:23:54.204",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -514,7 +503,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "root\n |-- id: integer (nullable \u003d true)\n |-- created: timestamp (nullable \u003d true)\n |-- updated: timestamp (nullable \u003d true)\n |-- first_name: string (nullable \u003d true)\n |-- last_name: string (nullable \u003d true)\n |-- email: string (nullable \u003d true)\n\n+---+-------------------+-------------------+----------+---------+---------------------+\n|id |created            |updated            |first_name|last_name|email                |\n+---+-------------------+-------------------+----------+---------+---------------------+\n|1  |2021-02-16 00:16:06|2021-03-05 22:05:29|Scott     |Haines   |scott@coffeeco.com   |\n|2  |2021-02-16 00:16:06|2021-03-05 22:05:29|John      |Hamm     |john.hamm@acme.com   |\n|3  |2021-02-16 00:16:06|2021-03-05 22:05:29|Milo      |Haines   |mhaines@coffeeco.com |\n|4  |2021-02-21 21:00:00|2021-03-05 22:05:29|Penny     |Haines   |penny@coffeeco.com   |\n|5  |2021-02-21 22:00:00|2021-03-05 22:05:29|Cloud     |Fast     |cloud.fast@acme.com  |\n|6  |2021-02-21 23:00:00|2021-03-05 22:05:29|Marshal   |Haines   |paws@coffeeco.com    |\n|7  |2021-02-24 09:00:00|2021-03-05 22:05:29|Willow    |Haines   |willow@coffeeco.com  |\n|8  |2021-02-24 09:00:00|2021-03-05 22:05:29|Clover    |Haines   |pup@coffeeco.com     |\n|9  |2021-03-05 22:06:16|2021-03-05 22:06:16|Nanna     |Haines   |nhugs@coffeeco.com   |\n|10 |2021-03-05 22:06:16|2021-03-05 22:06:16|The       |Rock     |djohnson@coffeeco.com|\n+---+-------------------+-------------------+----------+---------+---------------------+\n\n\u001b[1m\u001b[34mbetterCustomers\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [id: int, created: timestamp ... 4 more fields]\n"
+            "data": "root\n |-- id: integer (nullable \u003d true)\n |-- created: timestamp (nullable \u003d true)\n |-- updated: timestamp (nullable \u003d true)\n |-- first_name: string (nullable \u003d true)\n |-- last_name: string (nullable \u003d true)\n |-- email: string (nullable \u003d true)\n\n+---+-------------------+-------------------+----------+---------+--------------------+\n|id |created            |updated            |first_name|last_name|email               |\n+---+-------------------+-------------------+----------+---------+--------------------+\n|1  |2021-02-16 00:16:06|2021-03-08 17:23:41|Scott     |Haines   |scott@coffeeco.com  |\n|2  |2021-02-16 00:16:06|2021-03-08 17:23:41|John      |Hamm     |john.hamm@acme.com  |\n|3  |2021-02-16 00:16:06|2021-03-08 17:23:41|Milo      |Haines   |mhaines@coffeeco.com|\n|4  |2021-02-21 21:00:00|2021-03-08 17:23:41|Penny     |Haines   |penny@coffeeco.com  |\n|5  |2021-02-21 22:00:00|2021-03-08 17:23:41|Cloud     |Fast     |cloud.fast@acme.com |\n|6  |2021-02-21 23:00:00|2021-03-08 17:23:41|Marshal   |Haines   |paws@coffeeco.com   |\n|7  |2021-02-24 09:00:00|2021-03-08 17:23:41|Willow    |Haines   |willow@coffeeco.com |\n|8  |2021-02-24 09:00:00|2021-03-08 17:23:41|Clover    |Haines   |pup@coffeeco.com    |\n+---+-------------------+-------------------+----------+---------+--------------------+\n\n\u001b[1m\u001b[34mbetterCustomers\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [id: int, created: timestamp ... 4 more fields]\n"
           }
         ]
       },
@@ -527,7 +516,7 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d19"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d3"
             }
           ],
           "interpreterSettingId": "spark"
@@ -537,15 +526,15 @@
       "jobName": "paragraph_1614185019787_1496963524",
       "id": "paragraph_1614185019787_1496963524",
       "dateCreated": "2021-02-24 16:43:39.787",
-      "dateStarted": "2021-03-05 22:39:26.732",
-      "dateFinished": "2021-03-05 22:39:27.238",
+      "dateStarted": "2021-03-08 17:23:54.222",
+      "dateFinished": "2021-03-08 17:23:54.838",
       "status": "FINISHED"
     },
     {
       "title": "Getting the Schema",
       "text": "%spark\nbetterCustomers.schema",
       "user": "anonymous",
-      "dateUpdated": "2021-03-05 22:05:52.788",
+      "dateUpdated": "2021-03-08 17:23:59.313",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -569,7 +558,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "\u001b[1m\u001b[34mres17\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.types.StructType\u001b[0m \u003d StructType(StructField(id,IntegerType,true), StructField(created,TimestampType,true), StructField(updated,TimestampType,true), StructField(first_name,StringType,true), StructField(last_name,StringType,true), StructField(email,StringType,true))\n"
+            "data": "\u001b[1m\u001b[34mres12\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.types.StructType\u001b[0m \u003d StructType(StructField(id,IntegerType,true), StructField(created,TimestampType,true), StructField(updated,TimestampType,true), StructField(first_name,StringType,true), StructField(last_name,StringType,true), StructField(email,StringType,true))\n"
           }
         ]
       },
@@ -579,15 +568,15 @@
       "jobName": "paragraph_1614186266127_1397870333",
       "id": "paragraph_1614186266127_1397870333",
       "dateCreated": "2021-02-24 17:04:26.127",
-      "dateStarted": "2021-03-05 22:05:52.811",
-      "dateFinished": "2021-03-05 22:05:53.055",
+      "dateStarted": "2021-03-08 17:23:59.341",
+      "dateFinished": "2021-03-08 17:23:59.612",
       "status": "FINISHED"
     },
     {
-      "title": "Write Customer Records with Minimal Schema",
-      "text": "%spark\n\nimport org.apache.spark.sql.types._\nimport org.apache.spark.sql._\n\nval simpleFieldNames \u003d Set(\"first_name\", \"last_name\", \"email\")\nval simpleSchema \u003d StructType(\n    betterCustomers.schema.fields.filter(sf \u003d\u003e simpleFieldNames.contains(sf.name))\n)\n\nval saveMode \u003d \"ignore\" // change this to append to write through. The email constraint means this can only be run once - cause otherwise we\u0027d have duplicates.\n\n// create simplified Rows!\nval rows \u003d spark.createDataFrame(\n  spark.sparkContext.parallelize(\n      Seq(\n          Row(\"Nanna\",\"Haines\",\"nhugs@coffeeco.com\"),\n          Row(\"The\",\"Rock\",\"djohnson@coffeeco.com\")\n      )\n  ),\n  simpleSchema\n)\n\nrows\n.write\n.format(\"jdbc\")\n.mode(saveMode)\n.options(Map[String, String](\n  \"url\" -\u003e connectionUrl,\n  \"driver\" -\u003e jdbcDriver,\n  \"dbtable\" -\u003e \"bettercustomers\",\n  \"user\" -\u003e dbUser,\n  \"password\" -\u003e dbPass/*,\n  \"truncate\" -\u003e \"true\"*/\n))\n.save()",
+      "title": "Write Better Customer Records with Minimal Schema",
+      "text": "%spark\n\nimport org.apache.spark.sql.types._\nimport org.apache.spark.sql._\n\nval simpleFieldNames \u003d Set(\"first_name\", \"last_name\", \"email\")\nval simpleSchema \u003d StructType(\n    betterCustomers.schema.fields.filter(sf \u003d\u003e simpleFieldNames.contains(sf.name))\n)\n\nval saveMode \u003d \"append\" // change this to append to write through. The email constraint means this can only be run once - cause otherwise we\u0027d get an error.\n\n// create simplified Rows!\nval rows \u003d spark.createDataFrame(\n  spark.sparkContext.parallelize(\n      Seq(\n          Row(\"Nanna\",\"Haines\",\"nhugs@coffeeco.com\"),\n          Row(\"The\",\"Rock\",\"djohnson@coffeeco.com\")\n      )\n  ),\n  simpleSchema\n)\n\nrows\n.write\n.format(\"jdbc\")\n.mode(saveMode)\n.options(Map[String, String](\n  \"url\" -\u003e connectionUrl,\n  \"driver\" -\u003e jdbcDriver,\n  \"dbtable\" -\u003e \"bettercustomers\",\n  \"user\" -\u003e dbUser,\n  \"password\" -\u003e dbPass/*,\n  \"truncate\" -\u003e \"true\"*/\n))\n.save()",
       "user": "anonymous",
-      "dateUpdated": "2021-03-08 02:01:48.050",
+      "dateUpdated": "2021-03-08 17:25:02.039",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -617,28 +606,41 @@
         "forms": {}
       },
       "results": {
-        "code": "SUCCESS",
+        "code": "ERROR",
         "msg": [
           {
             "type": "TEXT",
-            "data": "import org.apache.spark.sql.types._\nimport org.apache.spark.sql._\n\u001b[1m\u001b[34msimpleFieldNames\u001b[0m: \u001b[1m\u001b[32mscala.collection.immutable.Set[String]\u001b[0m \u003d Set(first_name, last_name, email)\n\u001b[1m\u001b[34msimpleSchema\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.types.StructType\u001b[0m \u003d StructType(StructField(first_name,StringType,true), StructField(last_name,StringType,true), StructField(email,StringType,true))\n\u001b[1m\u001b[34msaveMode\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d ignore\n\u001b[1m\u001b[34mrows\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [first_name: string, last_name: string ... 1 more field]\n"
+            "data": "org.apache.spark.SparkException: Job aborted due to stage failure: Task 1 in stage 5.0 failed 1 times, most recent failure: Lost task 1.0 in stage 5.0 (TID 12) (zeppelin executor driver): java.sql.BatchUpdateException: (conn\u003d42) Duplicate entry \u0027nhugs@coffeeco.com\u0027 for key \u0027bettercustomers.email\u0027\n\tat org.mariadb.jdbc.MariaDbStatement.executeBatchExceptionEpilogue(MariaDbStatement.java:324)\n\tat org.mariadb.jdbc.ClientSidePreparedStatement.executeBatch(ClientSidePreparedStatement.java:300)\n\tat org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils$.savePartition(JdbcUtils.scala:692)\n\tat org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils$.$anonfun$saveTable$1(JdbcUtils.scala:856)\n\tat org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils$.$anonfun$saveTable$1$adapted(JdbcUtils.scala:854)\n\tat org.apache.spark.rdd.RDD.$anonfun$foreachPartition$2(RDD.scala:1020)\n\tat org.apache.spark.rdd.RDD.$anonfun$foreachPartition$2$adapted(RDD.scala:1020)\n\tat org.apache.spark.SparkContext.$anonfun$runJob$5(SparkContext.scala:2242)\n\tat org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:90)\n\tat org.apache.spark.scheduler.Task.run(Task.scala:131)\n\tat org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$3(Executor.scala:497)\n\tat org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:1439)\n\tat org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:500)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: java.sql.SQLIntegrityConstraintViolationException: (conn\u003d42) Duplicate entry \u0027nhugs@coffeeco.com\u0027 for key \u0027bettercustomers.email\u0027\n\tat org.mariadb.jdbc.internal.util.exceptions.ExceptionFactory.createException(ExceptionFactory.java:70)\n\tat org.mariadb.jdbc.internal.util.exceptions.ExceptionFactory.create(ExceptionFactory.java:153)\n\tat org.mariadb.jdbc.MariaDbStatement.executeBatchExceptionEpilogue(MariaDbStatement.java:320)\n\t... 15 more\nCaused by: org.mariadb.jdbc.internal.util.exceptions.MariaDbSqlException: Duplicate entry \u0027nhugs@coffeeco.com\u0027 for key \u0027bettercustomers.email\u0027\n\tat org.mariadb.jdbc.internal.util.exceptions.MariaDbSqlException.of(MariaDbSqlException.java:34)\n\tat org.mariadb.jdbc.internal.protocol.AbstractQueryProtocol.exceptionWithQuery(AbstractQueryProtocol.java:192)\n\tat org.mariadb.jdbc.internal.protocol.AbstractQueryProtocol.access$000(AbstractQueryProtocol.java:106)\n\tat org.mariadb.jdbc.internal.protocol.AbstractQueryProtocol$1.handleResultException(AbstractQueryProtocol.java:690)\n\tat org.mariadb.jdbc.internal.protocol.AsyncMultiRead.call(AsyncMultiRead.java:141)\n\tat org.mariadb.jdbc.internal.protocol.AsyncMultiRead.call(AsyncMultiRead.java:67)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\t... 3 more\nCaused by: java.sql.SQLException: Duplicate entry \u0027nhugs@coffeeco.com\u0027 for key \u0027bettercustomers.email\u0027\n\tat org.mariadb.jdbc.internal.protocol.AbstractQueryProtocol.readErrorPacket(AbstractQueryProtocol.java:1681)\n\tat org.mariadb.jdbc.internal.protocol.AbstractQueryProtocol.readPacket(AbstractQueryProtocol.java:1543)\n\tat org.mariadb.jdbc.internal.protocol.AbstractQueryProtocol.getResult(AbstractQueryProtocol.java:1506)\n\tat org.mariadb.jdbc.internal.protocol.AsyncMultiRead.call(AsyncMultiRead.java:132)\n\t... 5 more\n\nDriver stacktrace:\n  at org.apache.spark.scheduler.DAGScheduler.failJobAndIndependentStages(DAGScheduler.scala:2253)\n  at org.apache.spark.scheduler.DAGScheduler.$anonfun$abortStage$2(DAGScheduler.scala:2202)\n  at org.apache.spark.scheduler.DAGScheduler.$anonfun$abortStage$2$adapted(DAGScheduler.scala:2201)\n  at scala.collection.mutable.ResizableArray.foreach(ResizableArray.scala:62)\n  at scala.collection.mutable.ResizableArray.foreach$(ResizableArray.scala:55)\n  at scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:49)\n  at org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:2201)\n  at org.apache.spark.scheduler.DAGScheduler.$anonfun$handleTaskSetFailed$1(DAGScheduler.scala:1078)\n  at org.apache.spark.scheduler.DAGScheduler.$anonfun$handleTaskSetFailed$1$adapted(DAGScheduler.scala:1078)\n  at scala.Option.foreach(Option.scala:407)\n  at org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:1078)\n  at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:2440)\n  at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:2382)\n  at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:2371)\n  at org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:49)\n  at org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:868)\n  at org.apache.spark.SparkContext.runJob(SparkContext.scala:2202)\n  at org.apache.spark.SparkContext.runJob(SparkContext.scala:2223)\n  at org.apache.spark.SparkContext.runJob(SparkContext.scala:2242)\n  at org.apache.spark.SparkContext.runJob(SparkContext.scala:2267)\n  at org.apache.spark.rdd.RDD.$anonfun$foreachPartition$1(RDD.scala:1020)\n  at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:151)\n  at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:112)\n  at org.apache.spark.rdd.RDD.withScope(RDD.scala:414)\n  at org.apache.spark.rdd.RDD.foreachPartition(RDD.scala:1018)\n  at org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils$.saveTable(JdbcUtils.scala:854)\n  at org.apache.spark.sql.execution.datasources.jdbc.JdbcRelationProvider.createRelation(JdbcRelationProvider.scala:68)\n  at org.apache.spark.sql.execution.datasources.SaveIntoDataSourceCommand.run(SaveIntoDataSourceCommand.scala:46)\n  at org.apache.spark.sql.execution.command.ExecutedCommandExec.sideEffectResult$lzycompute(commands.scala:70)\n  at org.apache.spark.sql.execution.command.ExecutedCommandExec.sideEffectResult(commands.scala:68)\n  at org.apache.spark.sql.execution.command.ExecutedCommandExec.doExecute(commands.scala:90)\n  at org.apache.spark.sql.execution.SparkPlan.$anonfun$execute$1(SparkPlan.scala:180)\n  at org.apache.spark.sql.execution.SparkPlan.$anonfun$executeQuery$1(SparkPlan.scala:218)\n  at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:151)\n  at org.apache.spark.sql.execution.SparkPlan.executeQuery(SparkPlan.scala:215)\n  at org.apache.spark.sql.execution.SparkPlan.execute(SparkPlan.scala:176)\n  at org.apache.spark.sql.execution.QueryExecution.toRdd$lzycompute(QueryExecution.scala:132)\n  at org.apache.spark.sql.execution.QueryExecution.toRdd(QueryExecution.scala:131)\n  at org.apache.spark.sql.DataFrameWriter.$anonfun$runCommand$1(DataFrameWriter.scala:989)\n  at org.apache.spark.sql.execution.SQLExecution$.$anonfun$withNewExecutionId$5(SQLExecution.scala:103)\n  at org.apache.spark.sql.execution.SQLExecution$.withSQLConfPropagated(SQLExecution.scala:163)\n  at org.apache.spark.sql.execution.SQLExecution$.$anonfun$withNewExecutionId$1(SQLExecution.scala:90)\n  at org.apache.spark.sql.SparkSession.withActive(SparkSession.scala:772)\n  at org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:64)\n  at org.apache.spark.sql.DataFrameWriter.runCommand(DataFrameWriter.scala:989)\n  at org.apache.spark.sql.DataFrameWriter.saveToV1Source(DataFrameWriter.scala:438)\n  at org.apache.spark.sql.DataFrameWriter.saveInternal(DataFrameWriter.scala:415)\n  at org.apache.spark.sql.DataFrameWriter.save(DataFrameWriter.scala:301)\n  ... 60 elided\nCaused by: java.sql.BatchUpdateException: (conn\u003d42) Duplicate entry \u0027nhugs@coffeeco.com\u0027 for key \u0027bettercustomers.email\u0027\n  at org.mariadb.jdbc.MariaDbStatement.executeBatchExceptionEpilogue(MariaDbStatement.java:324)\n  at org.mariadb.jdbc.ClientSidePreparedStatement.executeBatch(ClientSidePreparedStatement.java:300)\n  at org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils$.savePartition(JdbcUtils.scala:692)\n  at org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils$.$anonfun$saveTable$1(JdbcUtils.scala:856)\n  at org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils$.$anonfun$saveTable$1$adapted(JdbcUtils.scala:854)\n  at org.apache.spark.rdd.RDD.$anonfun$foreachPartition$2(RDD.scala:1020)\n  at org.apache.spark.rdd.RDD.$anonfun$foreachPartition$2$adapted(RDD.scala:1020)\n  at org.apache.spark.SparkContext.$anonfun$runJob$5(SparkContext.scala:2242)\n  at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:90)\n  at org.apache.spark.scheduler.Task.run(Task.scala:131)\n  at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$3(Executor.scala:497)\n  at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:1439)\n  at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:500)\n  ... 3 more\nCaused by: java.sql.SQLIntegrityConstraintViolationException: (conn\u003d42) Duplicate entry \u0027nhugs@coffeeco.com\u0027 for key \u0027bettercustomers.email\u0027\n  at org.mariadb.jdbc.internal.util.exceptions.ExceptionFactory.createException(ExceptionFactory.java:70)\n  at org.mariadb.jdbc.internal.util.exceptions.ExceptionFactory.create(ExceptionFactory.java:153)\n  at org.mariadb.jdbc.MariaDbStatement.executeBatchExceptionEpilogue(MariaDbStatement.java:320)\n  ... 15 more\nCaused by: org.mariadb.jdbc.internal.util.exceptions.MariaDbSqlException: Duplicate entry \u0027nhugs@coffeeco.com\u0027 for key \u0027bettercustomers.email\u0027\n  at org.mariadb.jdbc.internal.util.exceptions.MariaDbSqlException.of(MariaDbSqlException.java:34)\n  at org.mariadb.jdbc.internal.protocol.AbstractQueryProtocol.exceptionWithQuery(AbstractQueryProtocol.java:192)\n  at org.mariadb.jdbc.internal.protocol.AbstractQueryProtocol.access$000(AbstractQueryProtocol.java:106)\n  at org.mariadb.jdbc.internal.protocol.AbstractQueryProtocol$1.handleResultException(AbstractQueryProtocol.java:690)\n  at org.mariadb.jdbc.internal.protocol.AsyncMultiRead.call(AsyncMultiRead.java:141)\n  at org.mariadb.jdbc.internal.protocol.AsyncMultiRead.call(AsyncMultiRead.java:67)\n  at java.util.concurrent.FutureTask.run(FutureTask.java:266)\n  ... 3 more\nCaused by: java.sql.SQLException: Duplicate entry \u0027nhugs@coffeeco.com\u0027 for key \u0027bettercustomers.email\u0027\n  at org.mariadb.jdbc.internal.protocol.AbstractQueryProtocol.readErrorPacket(AbstractQueryProtocol.java:1681)\n  at org.mariadb.jdbc.internal.protocol.AbstractQueryProtocol.readPacket(AbstractQueryProtocol.java:1543)\n  at org.mariadb.jdbc.internal.protocol.AbstractQueryProtocol.getResult(AbstractQueryProtocol.java:1506)\n  at org.mariadb.jdbc.internal.protocol.AsyncMultiRead.call(AsyncMultiRead.java:132)\n  ... 5 more\n"
           }
         ]
       },
       "apps": [],
-      "runtimeInfos": {},
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d5"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614224798281_1065230385",
       "id": "paragraph_1614224798281_1065230385",
       "dateCreated": "2021-02-25 03:46:38.282",
-      "dateStarted": "2021-03-05 22:41:05.287",
-      "dateFinished": "2021-03-05 22:41:05.892",
-      "status": "FINISHED"
+      "dateStarted": "2021-03-08 17:24:49.978",
+      "dateFinished": "2021-03-08 17:24:51.097",
+      "status": "ERROR"
     },
     {
-      "text": "%md\n## Note\nIt is worth pointing out that if you use `mode(\"overwrite\")` in the **Write Records without Supplying Automatic Fields** example above, then the Table schema will actually be rewritten which isn\u0027t certainly not what we want.\n\n### Why is that? \nGiven that Spark uses the DataFrame schema to define the format of the table, when we call `write.mode(\"overwrite\")...` we will actually be doing the following.\n1. First Spark will Drop the table (if it already exists)\n2. Second Spark will use the `df.schema` to define the new create table syntax\n3. Lastly, Spark will write the rows into the database\n\n### If the table is first `truncated` then it will preserve the original schema defined by you when you created the database table.\n",
+      "text": "%md\n## Note\nIt is worth pointing out that if you use `mode(\"overwrite\")` in the **Write Customer Records without Supplying Automatic Fields** example above, then the Table schema will actually be rewritten which isn\u0027t certainly not what we want.\n\n### Why is that? \nGiven that Spark uses the DataFrame schema to define the format of the table, when we call `write.mode(\"overwrite\")...` we will actually be doing the following.\n1. First Spark will Drop the table (if it already exists)\n2. Second Spark will use the `rows.schema` to define the new create table syntax\n3. Lastly, Spark will write the rows into the database\n\nThis would change the table schema, and that is bad for business.\n\n### If the table is first `truncated` then it will preserve the original schema defined by you when you created the database table.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-05 22:40:13.860",
+      "dateUpdated": "2021-03-08 17:26:24.747",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -663,7 +665,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eNote\u003c/h2\u003e\n\u003cp\u003eIt is worth pointing out that if you use \u003ccode\u003emode(\u0026quot;overwrite\u0026quot;)\u003c/code\u003e in the \u003cstrong\u003eWrite Records without Supplying Automatic Fields\u003c/strong\u003e example above, then the Table schema will actually be rewritten which isn\u0026rsquo;t certainly not what we want.\u003c/p\u003e\n\u003ch3\u003eWhy is that?\u003c/h3\u003e\n\u003cp\u003eGiven that Spark uses the DataFrame schema to define the format of the table, when we call \u003ccode\u003ewrite.mode(\u0026quot;overwrite\u0026quot;)...\u003c/code\u003e we will actually be doing the following.\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003eFirst Spark will Drop the table (if it already exists)\u003c/li\u003e\n\u003cli\u003eSecond Spark will use the \u003ccode\u003edf.schema\u003c/code\u003e to define the new create table syntax\u003c/li\u003e\n\u003cli\u003eLastly, Spark will write the rows into the database\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch3\u003eIf the table is first \u003ccode\u003etruncated\u003c/code\u003e then it will preserve the original schema defined by you when you created the database table.\u003c/h3\u003e\n\n\u003c/div\u003e"
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eNote\u003c/h2\u003e\n\u003cp\u003eIt is worth pointing out that if you use \u003ccode\u003emode(\u0026quot;overwrite\u0026quot;)\u003c/code\u003e in the \u003cstrong\u003eWrite Customer Records without Supplying Automatic Fields\u003c/strong\u003e example above, then the Table schema will actually be rewritten which isn\u0026rsquo;t certainly not what we want.\u003c/p\u003e\n\u003ch3\u003eWhy is that?\u003c/h3\u003e\n\u003cp\u003eGiven that Spark uses the DataFrame schema to define the format of the table, when we call \u003ccode\u003ewrite.mode(\u0026quot;overwrite\u0026quot;)...\u003c/code\u003e we will actually be doing the following.\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003eFirst Spark will Drop the table (if it already exists)\u003c/li\u003e\n\u003cli\u003eSecond Spark will use the \u003ccode\u003erows.schema\u003c/code\u003e to define the new create table syntax\u003c/li\u003e\n\u003cli\u003eLastly, Spark will write the rows into the database\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003eThis would change the table schema, and that is bad for business.\u003c/p\u003e\n\u003ch3\u003eIf the table is first \u003ccode\u003etruncated\u003c/code\u003e then it will preserve the original schema defined by you when you created the database table.\u003c/h3\u003e\n\n\u003c/div\u003e"
           }
         ]
       },
@@ -673,15 +675,15 @@
       "jobName": "paragraph_1614223864606_1489564927",
       "id": "paragraph_1614223864606_1489564927",
       "dateCreated": "2021-02-25 03:31:04.606",
-      "dateStarted": "2021-03-05 22:40:13.861",
-      "dateFinished": "2021-03-05 22:40:13.881",
+      "dateStarted": "2021-03-08 17:26:24.747",
+      "dateFinished": "2021-03-08 17:26:24.763",
       "status": "FINISHED"
     },
     {
       "title": "Safe Overwrite of the bettercustomers Table",
-      "text": "%spark\n\nval stored \u003d spark.sql(\"select * from bettercustomers\")\nstored.cache // will persist the dataframe - but there is a catch, spark needs to pass over the data twice to cache it, and we can use the count or head trick to do just that\nstored.count // kicks off the cache\n\nstored\n  .write\n  .mode(\"overwrite\")\n  .format(\"jdbc\")\n  .option(\"url\", connectionUrl)\n  .option(\"driver\", jdbcDriver)\n  .option(\"dbtable\", \"bettercustomers\")\n  .option(\"user\", dbUser)\n  .option(\"password\", dbPass)\n  .option(\"truncate\", true)\n  .save()\n\n// we no longer need to store the cached backup\nstored.unpersist",
+      "text": "%spark\n\n// use interpreted Spark SQL to generate a DataFrame from our bettercustomers table\nval stored \u003d spark.sql(\"select * from bettercustomers\")\nstored.cache // will persist the dataframe - but there is a catch, spark needs to pass over the data twice to cache it, and we can use the count or head trick to do just that\nstored.count // kicks off the cache\n\nstored\n  .write\n  .mode(\"overwrite\")\n  .format(\"jdbc\")\n  .option(\"url\", connectionUrl)\n  .option(\"driver\", jdbcDriver)\n  .option(\"dbtable\", \"bettercustomers\")\n  .option(\"user\", dbUser)\n  .option(\"password\", dbPass)\n  .option(\"truncate\", true)\n  .save()\n\n// we no longer need to store the cached backup\nstored.unpersist",
       "user": "anonymous",
-      "dateUpdated": "2021-03-05 22:10:19.490",
+      "dateUpdated": "2021-03-08 17:26:37.703",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -705,7 +707,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "\u001b[1m\u001b[34mstored\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [id: int, created: timestamp ... 4 more fields]\n"
+            "data": "\u001b[1m\u001b[34mstored\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [id: int, created: timestamp ... 4 more fields]\n\u001b[1m\u001b[34mres17\u001b[0m: \u001b[1m\u001b[32mstored.type\u001b[0m \u003d [id: int, created: timestamp ... 4 more fields]\n"
           }
         ]
       },
@@ -718,10 +720,10 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d14"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d6"
             },
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d15"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d7"
             }
           ],
           "interpreterSettingId": "spark"
@@ -731,14 +733,14 @@
       "jobName": "paragraph_1614981430657_1900932859",
       "id": "paragraph_1614981430657_1900932859",
       "dateCreated": "2021-03-05 21:57:10.657",
-      "dateStarted": "2021-03-05 22:07:12.676",
-      "dateFinished": "2021-03-05 22:07:13.637",
+      "dateStarted": "2021-03-08 17:26:37.717",
+      "dateFinished": "2021-03-08 17:26:39.675",
       "status": "FINISHED"
     },
     {
       "text": "%sql\nselect * from bettercustomers;",
       "user": "anonymous",
-      "dateUpdated": "2021-03-05 22:40:38.894",
+      "dateUpdated": "2021-03-08 17:26:48.075",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -794,7 +796,7 @@
         "msg": [
           {
             "type": "TABLE",
-            "data": "id\tcreated\tupdated\tfirst_name\tlast_name\temail\n"
+            "data": "id\tcreated\tupdated\tfirst_name\tlast_name\temail\n1\t2021-02-16 00:16:06.0\t2021-03-08 17:23:41.0\tScott\tHaines\tscott@coffeeco.com\n2\t2021-02-16 00:16:06.0\t2021-03-08 17:23:41.0\tJohn\tHamm\tjohn.hamm@acme.com\n3\t2021-02-16 00:16:06.0\t2021-03-08 17:23:41.0\tMilo\tHaines\tmhaines@coffeeco.com\n4\t2021-02-21 21:00:00.0\t2021-03-08 17:23:41.0\tPenny\tHaines\tpenny@coffeeco.com\n5\t2021-02-21 22:00:00.0\t2021-03-08 17:23:41.0\tCloud\tFast\tcloud.fast@acme.com\n6\t2021-02-21 23:00:00.0\t2021-03-08 17:23:41.0\tMarshal\tHaines\tpaws@coffeeco.com\n7\t2021-02-24 09:00:00.0\t2021-03-08 17:23:41.0\tWillow\tHaines\twillow@coffeeco.com\n8\t2021-02-24 09:00:00.0\t2021-03-08 17:23:41.0\tClover\tHaines\tpup@coffeeco.com\n9\t2021-03-08 17:24:21.0\t2021-03-08 17:24:21.0\tThe\tRock\tdjohnson@coffeeco.com\n10\t2021-03-08 17:24:21.0\t2021-03-08 17:24:21.0\tNanna\tHaines\tnhugs@coffeeco.com\n"
           }
         ]
       },
@@ -807,7 +809,7 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d22"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d8"
             }
           ],
           "interpreterSettingId": "spark"
@@ -817,8 +819,8 @@
       "jobName": "paragraph_1614222679551_1672528284",
       "id": "paragraph_1614222679551_1672528284",
       "dateCreated": "2021-02-25 03:11:19.551",
-      "dateStarted": "2021-03-05 22:40:38.910",
-      "dateFinished": "2021-03-05 22:40:38.994",
+      "dateStarted": "2021-03-08 17:26:48.090",
+      "dateFinished": "2021-03-08 17:26:48.226",
       "status": "FINISHED"
     },
     {
