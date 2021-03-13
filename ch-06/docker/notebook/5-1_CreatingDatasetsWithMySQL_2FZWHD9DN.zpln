@@ -1,0 +1,141 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n## MySQL Docker Environment\nThis chapter\u0027s docker environment spins up `MySQL 8`.\nThe user `dataeng` has been created for working with MySQL data in Spark.\nThe password is customized in the `docker-compose-all.yaml` under `MYSQL_PASSWORD` (`dataengineering_user`). \n\nTo get into the MySQL console, use the following. When prompted use the password `dataengineering_user`\n~~~\ndocker exec -it mysql bash\nmysql -u dataeng -p\n~~~\n\nWhen you are logged in. You should see the following: \n~~~\nWelcome to the MySQL monitor.  Commands end with ; or \\g.\nYour MySQL connection id is 11\nServer version: 8.0.23 MySQL Community Server - GPL\n\nCopyright (c) 2000, 2021, Oracle and/or its affiliates.\n\nOracle is a registered trademark of Oracle Corporation and/or its\naffiliates. Other names may be trademarks of their respective\nowners.\n\nType \u0027help;\u0027 or \u0027\\h\u0027 for help. Type \u0027\\c\u0027 to clear the current input statement.\n\nmysql\u003e \n~~~\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-16 00:45:40.370",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eMySQL Docker Environment\u003c/h2\u003e\n\u003cp\u003eThis chapter\u0026rsquo;s docker environment spins up \u003ccode\u003eMySQL 8\u003c/code\u003e.\u003cbr /\u003e\nThe user \u003ccode\u003edataeng\u003c/code\u003e has been created for working with MySQL data in Spark.\u003cbr /\u003e\nThe password is customized in the \u003ccode\u003edocker-compose-all.yaml\u003c/code\u003e under \u003ccode\u003eMYSQL_PASSWORD\u003c/code\u003e (\u003ccode\u003edataengineering_user\u003c/code\u003e).\u003c/p\u003e\n\u003cp\u003eTo get into the MySQL console, use the following. When prompted use the password \u003ccode\u003edataengineering_user\u003c/code\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003edocker exec -it mysql bash\nmysql -u dataeng -p\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eWhen you are logged in. You should see the following:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eWelcome to the MySQL monitor.  Commands end with ; or \\g.\nYour MySQL connection id is 11\nServer version: 8.0.23 MySQL Community Server - GPL\n\nCopyright (c) 2000, 2021, Oracle and/or its affiliates.\n\nOracle is a registered trademark of Oracle Corporation and/or its\naffiliates. Other names may be trademarks of their respective\nowners.\n\nType \u0027help;\u0027 or \u0027\\h\u0027 for help. Type \u0027\\c\u0027 to clear the current input statement.\n\nmysql\u0026gt; \n\u003c/code\u003e\u003c/pre\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1613341150711_1824638657",
+      "id": "paragraph_1613341150711_1824638657",
+      "dateCreated": "2021-02-14 22:19:10.711",
+      "dateStarted": "2021-02-16 00:45:40.371",
+      "dateFinished": "2021-02-16 00:45:40.395",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%md\n## Create a Table and add some Data\n1. Reconnect to the Docker mysql container. `docker exec -it mysql bash` and run `mysql -u dataeng -p` and re-enter your password.\n2. Create the customers table\n3. Add some customers\n\n### Create the Customers Table\n~~~\nCREATE TABLE IF NOT EXISTS customers (\n  id VARCHAR(32),\n  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  first_name VARCHAR(100),\n  last_name VARCHAR(100),\n  email VARCHAR(255)\n);\n~~~\n\n### Add Some Customers to your Table\n~~~\nINSERT INTO customers (id, first_name, last_name, email)\nVALUES\n(\"1\", \"Scott\", \"Haines\", \"scott@coffeeco.com\"),\n(\"2\", \"John\", \"Hamm\", \"john.hamm@acme.com\"),\n(\"3\", \"Milo\", \"Haines\", \"mhaines@coffeeco.com\");\n~~~",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-08 00:48:35.810",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCreate a Table and add some Data\u003c/h2\u003e\n\u003col\u003e\n\u003cli\u003eReconnect to the Docker mysql container. \u003ccode\u003edocker exec -it mysql bash\u003c/code\u003e and run \u003ccode\u003emysql -u dataeng -p\u003c/code\u003e and re-enter your password.\u003c/li\u003e\n\u003cli\u003eCreate the customers table\u003c/li\u003e\n\u003cli\u003eAdd some customers\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch3\u003eCreate the Customers Table\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003eCREATE TABLE IF NOT EXISTS customers (\n  id VARCHAR(32),\n  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  first_name VARCHAR(100),\n  last_name VARCHAR(100),\n  email VARCHAR(255)\n);\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003eAdd Some Customers to your Table\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003eINSERT INTO customers (id, first_name, last_name, email)\nVALUES\n(\u0026quot;1\u0026quot;, \u0026quot;Scott\u0026quot;, \u0026quot;Haines\u0026quot;, \u0026quot;scott@coffeeco.com\u0026quot;),\n(\u0026quot;2\u0026quot;, \u0026quot;John\u0026quot;, \u0026quot;Hamm\u0026quot;, \u0026quot;john.hamm@acme.com\u0026quot;),\n(\u0026quot;3\u0026quot;, \u0026quot;Milo\u0026quot;, \u0026quot;Haines\u0026quot;, \u0026quot;mhaines@coffeeco.com\u0026quot;);\n\u003c/code\u003e\u003c/pre\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1613345119805_928436152",
+      "id": "paragraph_1613345119805_928436152",
+      "dateCreated": "2021-02-14 23:25:19.805",
+      "dateStarted": "2021-03-08 00:48:35.816",
+      "dateFinished": "2021-03-08 00:48:35.831",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%md\n## Select the customers Table rows\n\n**MySQL command**\n~~~\nmysql\u003e select * from customers;\n~~~\n\n**Output**\n~~~\n+------+---------------------+---------------------+------------+-----------+----------------------+\n| id   | created             | updated             | first_name | last_name | email                |\n+------+---------------------+---------------------+------------+-----------+----------------------+\n| 1    | 2021-02-16 00:16:06 | 2021-02-16 00:16:06 | Scott      | Haines    | scott@coffeeco.com   |\n| 2    | 2021-02-16 00:16:06 | 2021-02-16 00:16:06 | John       | Hamm      | john.hamm@acme.com   |\n| 3    | 2021-02-16 00:16:06 | 2021-02-16 00:16:06 | Milo       | Haines    | mhaines@coffeeco.com |\n+------+---------------------+---------------------+------------+-----------+----------------------+\n3 rows in set (0.00 sec)\n~~~\n\nWhen you are done in the MySQL cli, just exit with `exit` command.\n\n~~~\nmysql\u003e exit\nBye\n~~~",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-24 16:42:17.823",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eSelect the customers Table rows\u003c/h2\u003e\n\u003cp\u003e\u003cstrong\u003eMySQL command\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003emysql\u0026gt; select * from customers;\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eOutput\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e+------+---------------------+---------------------+------------+-----------+----------------------+\n| id   | created             | updated             | first_name | last_name | email                |\n+------+---------------------+---------------------+------------+-----------+----------------------+\n| 1    | 2021-02-16 00:16:06 | 2021-02-16 00:16:06 | Scott      | Haines    | scott@coffeeco.com   |\n| 2    | 2021-02-16 00:16:06 | 2021-02-16 00:16:06 | John       | Hamm      | john.hamm@acme.com   |\n| 3    | 2021-02-16 00:16:06 | 2021-02-16 00:16:06 | Milo       | Haines    | mhaines@coffeeco.com |\n+------+---------------------+---------------------+------------+-----------+----------------------+\n3 rows in set (0.00 sec)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eWhen you are done in the MySQL cli, just exit with \u003ccode\u003eexit\u003c/code\u003e command.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003emysql\u0026gt; exit\nBye\n\u003c/code\u003e\u003c/pre\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1613434624432_1068976263",
+      "id": "paragraph_1613434624432_1068976263",
+      "dateCreated": "2021-02-16 00:17:04.432",
+      "dateStarted": "2021-02-24 16:42:17.822",
+      "dateFinished": "2021-02-24 16:42:17.842",
+      "status": "FINISHED"
+    }
+  ],
+  "name": "5-1_CreatingDatasetsWithMySQL",
+  "id": "2FZWHD9DN",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview2",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
