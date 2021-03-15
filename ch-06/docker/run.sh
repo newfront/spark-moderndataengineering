@@ -50,8 +50,22 @@ function stop() {
 function restart() {
   stop && start
 }
+function bootstrap() {
+  docker cp "${PWD}/examples/bootstrap.sh" "mysql:/"
+  docker cp "${PWD}/examples/bootstrap.sql" "mysql:/"
+  hiveInit
+  docker exec mysql /bootstrap.sh
+
+  echo "To bootstrap hive. You have to do so as root from within the docker context"
+  echo "1. docker exec -it mysql bash"
+  echo "2. mysql -u root -p"
+  echo "3. source bootstrap-hive.sql"
+  echo "See http://localhost:8080/#/notebook/2FZZXJZCP for more details."
+}
 
 function hiveInit() {
+  # copy the hive init db files for bootstrap
+  docker cp "${PWD}/examples/bootstrap-hive.sql" "mysql:/"
   docker cp "${PWD}/hive/install/hive-schema-2.3.0.mysql.sql" "mysql:/"
   docker cp "${PWD}/hive/install/hive-txn-schema-2.3.0.mysql.sql" "mysql:/"
 }
@@ -69,7 +83,11 @@ case "$1" in
   hiveInit)
     hiveInit
   ;;
+  bootstrap)
+    # setup the mysql database and tables
+    bootstrap
+  ;;
   *)
-    echo $"Usage: $0 {start | stop | restart | initHive}"
+    echo $"Usage: $0 {start | stop | restart | initHive | bootstrap }"
   ;;
 esac
