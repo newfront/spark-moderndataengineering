@@ -35,8 +35,8 @@ mysql> CREATE DATABASE `metastore`;
 
 ~~~
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'dataeng'@'%';
-GRANT ALL PRIVILEGES ON `default`.* TO 'dataeng'@'%';
-GRANT ALL PRIVILEGES ON `metastore`.* TO 'dataeng'@'%';
+GRANT ALL PRIVILEGES ON default.* TO 'dataeng'@'%';
+GRANT ALL PRIVILEGES ON metastore.* TO 'dataeng'@'%';
 FLUSH PRIVILEGES;
 ~~~
 

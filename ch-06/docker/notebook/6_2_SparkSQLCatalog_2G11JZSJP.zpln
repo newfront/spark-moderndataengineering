@@ -1,9 +1,10 @@
 {
   "paragraphs": [
     {
+      "title": "Useful Variables for versioning",
       "text": "%spark\nspark.sparkContext.getConf.getAllWithPrefix(\"spark.sql\")\nval sparkConf \u003d spark.sparkContext.getConf\nval sparkSqlWareHouse \u003d sparkConf.get(\"spark.sql.warehouse.dir\")\nval sparkSqlCatalogType \u003d sparkConf.get(\"spark.sql.catalogImplementation\")\nval hiveMetaDataVersion \u003d sparkConf.get(\"spark.sql.hive.metastore.version\")\nval hiveMetaStoreDependencies \u003d sparkConf.get(\"spark.sql.hive.metastore.jars\")",
       "user": "anonymous",
-      "dateUpdated": "2021-03-13 22:29:06.903",
+      "dateUpdated": "2021-03-17 20:33:37.395",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -15,7 +16,8 @@
         "editorMode": "ace/mode/scala",
         "fontSize": 9.0,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "title": true
       },
       "settings": {
         "params": {},
@@ -42,7 +44,7 @@
       "title": "Create a Hive Enabled Spark Session",
       "text": "%spark\nimport org.apache.spark.sql._\n\n// create another SparkSession with explicit Hive Support\nval sparkSessionHive \u003d SparkSession.builder\n  .master(spark.conf.get(\"spark.master\"))\n  .config(spark.sparkContext.getConf)\n  .appName(\"hive-support\")\n  .enableHiveSupport()\n  .getOrCreate()",
       "user": "anonymous",
-      "dateUpdated": "2021-03-13 23:39:13.534",
+      "dateUpdated": "2021-03-18 00:49:37.164",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -66,7 +68,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "import org.apache.spark.sql._\n\u001b[1m\u001b[34msparkSessionHive\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.SparkSession\u001b[0m \u003d org.apache.spark.sql.SparkSession@6be3bb04\n"
+            "data": "import org.apache.spark.sql._\n\u001b[1m\u001b[34msparkSessionHive\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.SparkSession\u001b[0m \u003d org.apache.spark.sql.SparkSession@5cc020d\n"
           }
         ]
       },
@@ -76,15 +78,15 @@
       "jobName": "paragraph_1615674546903_1167453598",
       "id": "paragraph_1614033004668_108238026",
       "dateCreated": "2021-03-13 22:29:06.903",
-      "dateStarted": "2021-03-13 22:36:28.818",
-      "dateFinished": "2021-03-13 22:36:29.061",
+      "dateStarted": "2021-03-18 00:49:37.182",
+      "dateFinished": "2021-03-18 00:49:37.709",
       "status": "FINISHED"
     },
     {
       "title": "List the Databases through SQL DQL",
       "text": "%spark\n\nsparkSessionHive\n  .sql(\"show databases;\")\n  .show",
       "user": "anonymous",
-      "dateUpdated": "2021-03-13 23:38:58.583",
+      "dateUpdated": "2021-03-17 22:31:58.109",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -108,7 +110,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "+---------+\n|namespace|\n+---------+\n|  default|\n+---------+\n\n"
+            "data": "+----------------+\n|       namespace|\n+----------------+\n|coffee_co_common|\n|         default|\n+----------------+\n\n"
           }
         ]
       },
@@ -118,15 +120,15 @@
       "jobName": "paragraph_1615674546903_2000036339",
       "id": "paragraph_1614033667916_1671895241",
       "dateCreated": "2021-03-13 22:29:06.903",
-      "dateStarted": "2021-03-13 22:39:51.563",
-      "dateFinished": "2021-03-13 22:39:51.883",
+      "dateStarted": "2021-03-17 22:31:58.126",
+      "dateFinished": "2021-03-17 22:32:06.664",
       "status": "FINISHED"
     },
     {
       "title": "List the Databases via the Catalog",
       "text": "%spark\nsparkSessionHive\n  .catalog\n  .listDatabases\n  .show(false)",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 22:12:01.242",
+      "dateUpdated": "2021-03-17 22:32:23.812",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -160,15 +162,15 @@
       "jobName": "paragraph_1615675195339_937277653",
       "id": "paragraph_1615675195339_937277653",
       "dateCreated": "2021-03-13 22:39:55.339",
-      "dateStarted": "2021-03-14 22:12:01.258",
-      "dateFinished": "2021-03-14 22:12:01.502",
+      "dateStarted": "2021-03-17 22:32:23.828",
+      "dateFinished": "2021-03-17 22:32:24.175",
       "status": "FINISHED"
     },
     {
       "title": "Find the Current Database",
       "text": "%spark\nsparkSessionHive.catalog.currentDatabase",
       "user": "anonymous",
-      "dateUpdated": "2021-03-13 23:38:18.770",
+      "dateUpdated": "2021-03-17 22:32:27.963",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -192,7 +194,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "\u001b[1m\u001b[34mres33\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d default\n"
+            "data": "\u001b[1m\u001b[34mres5\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d default\n"
           }
         ]
       },
@@ -202,15 +204,15 @@
       "jobName": "paragraph_1615677165087_1816080378",
       "id": "paragraph_1615677165087_1816080378",
       "dateCreated": "2021-03-13 23:12:45.087",
-      "dateStarted": "2021-03-13 23:13:04.198",
-      "dateFinished": "2021-03-13 23:13:04.427",
+      "dateStarted": "2021-03-17 22:32:27.978",
+      "dateFinished": "2021-03-17 22:32:28.296",
       "status": "FINISHED"
     },
     {
       "title": "Create a SQL Catalog Database",
       "text": "%spark\n\nval coffeeCoDatabaseName \u003d \"coffee_co_common\"\nval databaseDescription \u003d \"This database stores common information regarding inventory, stores, and customers\"\nval defaultWarehouse \u003d spark.catalog.getDatabase(\"default\").locationUri\nval warehousePrefix \u003d s\"$defaultWarehouse/common\"\nspark.sql(s\"\"\"\nCREATE DATABASE IF NOT EXISTS $coffeeCoDatabaseName \nCOMMENT \u0027$databaseDescription\u0027 \nLOCATION \u0027$warehousePrefix\u0027 \nWITH DBPROPERTIES(TEAM\u003d\u0027core\u0027,LEAD\u003d\u0027scott\u0027,TEAM_SLACK\u003d\u0027#help_coffee_common\u0027);\n\"\"\")",
       "user": "anonymous",
-      "dateUpdated": "2021-03-13 23:39:24.122",
+      "dateUpdated": "2021-03-17 20:59:53.451",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -234,7 +236,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "\u001b[1m\u001b[34mcoffeeCoDatabaseName\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d coffee_co_common\n\u001b[1m\u001b[34mdatabaseDescription\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d This database stores common information regarding inventory, stores, and customers\n\u001b[1m\u001b[34mdefaultWarehouse\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d file:/spark/sql/warehouse\n\u001b[1m\u001b[34mwarehousePrefix\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d file:/spark/sql/warehouse/common\n\u001b[1m\u001b[34mres42\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d []\n"
+            "data": "\u001b[1m\u001b[34mcoffeeCoDatabaseName\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d coffee_co_common\n\u001b[1m\u001b[34mdatabaseDescription\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d This database stores common information regarding inventory, stores, and customers\n\u001b[1m\u001b[34mdefaultWarehouse\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d file:/spark/sql/warehouse\n\u001b[1m\u001b[34mwarehousePrefix\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d file:/spark/sql/warehouse/common\n\u001b[1m\u001b[34mres4\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d []\n"
           }
         ]
       },
@@ -244,15 +246,15 @@
       "jobName": "paragraph_1615677790269_1138712933",
       "id": "paragraph_1615677790269_1138712933",
       "dateCreated": "2021-03-13 23:23:10.269",
-      "dateStarted": "2021-03-13 23:36:27.250",
-      "dateFinished": "2021-03-13 23:36:27.505",
+      "dateStarted": "2021-03-17 20:59:53.468",
+      "dateFinished": "2021-03-17 20:59:54.081",
       "status": "FINISHED"
     },
     {
       "title": "View the Database Metadata Properties of our Database",
       "text": "%spark\nspark\n  .sql(\"describe database extended `coffee_co_common`\")\n  .show(truncate\u003dfalse)",
       "user": "anonymous",
-      "dateUpdated": "2021-03-13 23:41:16.618",
+      "dateUpdated": "2021-03-17 20:59:57.715",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -286,8 +288,8 @@
       "jobName": "paragraph_1615678811282_1194685550",
       "id": "paragraph_1615678811282_1194685550",
       "dateCreated": "2021-03-13 23:40:11.282",
-      "dateStarted": "2021-03-13 23:40:51.957",
-      "dateFinished": "2021-03-13 23:40:52.168",
+      "dateStarted": "2021-03-17 20:59:57.732",
+      "dateFinished": "2021-03-17 20:59:58.148",
       "status": "FINISHED"
     },
     {
@@ -405,7 +407,7 @@
       "title": "Importing Tables using JDBC",
       "text": "%spark\nval jdbcDriver \u003d spark.conf.get(\"spark.jdbc.driver.class\", \"org.mariadb.jdbc.Driver\")\nval dbHost     \u003d spark.conf.get(\"spark.jdbc.host\",\"mysql\")\nval dbPort     \u003d spark.conf.get(\"spark.jdbc.port\", \"3306\")\nval defaultDb  \u003d spark.conf.get(\"spark.jdbc.default.db\", \"default\")\nval dbTable    \u003d spark.conf.get(\"spark.jdbc.table\", \"bettercustomers\")\nval dbUser     \u003d spark.conf.get(\"spark.jdbc.user\", \"dataeng\")\nval dbPass     \u003d spark.conf.get(\"spark.jdbc.password\", \"dataengineering_user\")\n\nval connectionUrl \u003d s\"jdbc:mysql://$dbHost:$dbPort/$defaultDb\"\n\nval betterCustomers \u003d sparkSessionHive.read\n  .format(\"jdbc\")\n  .option(\"url\", connectionUrl)\n  .option(\"driver\", jdbcDriver)\n  .option(\"dbtable\", \"bettercustomers\")\n  .option(\"user\", dbUser)\n  .option(\"password\", dbPass)\n  .load()\n\nbetterCustomers.createOrReplaceTempView(\"customers\")\n\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 00:04:23.135",
+      "dateUpdated": "2021-03-17 21:00:09.528",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -439,8 +441,8 @@
       "jobName": "paragraph_1615674546904_1407765611",
       "id": "paragraph_1614131983761_1528819603",
       "dateCreated": "2021-03-13 22:29:06.904",
-      "dateStarted": "2021-03-14 00:04:23.155",
-      "dateFinished": "2021-03-14 00:04:23.428",
+      "dateStarted": "2021-03-17 21:00:09.542",
+      "dateFinished": "2021-03-17 21:00:10.259",
       "status": "FINISHED"
     },
     {
@@ -519,7 +521,7 @@
     {
       "text": "%spark\nsparkSessionHive.catalog.listTables.show\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-13 23:55:53.351",
+      "dateUpdated": "2021-03-17 21:00:15.358",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -542,7 +544,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "+---------+--------+-----------+---------+-----------+\n|     name|database|description|tableType|isTemporary|\n+---------+--------+-----------+---------+-----------+\n|customers|    null|       null|TEMPORARY|       true|\n| metadata|    null|       null|TEMPORARY|       true|\n+---------+--------+-----------+---------+-----------+\n\n"
+            "data": "+---------+--------+-----------+---------+-----------+\n|     name|database|description|tableType|isTemporary|\n+---------+--------+-----------+---------+-----------+\n|customers| default|       null|  MANAGED|      false|\n|customers|    null|       null|TEMPORARY|       true|\n+---------+--------+-----------+---------+-----------+\n\n"
           }
         ]
       },
@@ -552,15 +554,15 @@
       "jobName": "paragraph_1615674546904_1466047916",
       "id": "paragraph_1615670683362_390169303",
       "dateCreated": "2021-03-13 22:29:06.904",
-      "dateStarted": "2021-03-13 23:55:53.383",
-      "dateFinished": "2021-03-13 23:55:53.666",
+      "dateStarted": "2021-03-17 21:00:15.372",
+      "dateFinished": "2021-03-17 21:00:16.395",
       "status": "FINISHED"
     },
     {
       "title": "Save JDBC Data into the Data Lake",
       "text": "%spark\n\nval coffeeCoDatabaseName \u003d \"coffee_co_common\"\nsparkSessionHive.catalog\n  .setCurrentDatabase(coffeeCoDatabaseName)\nbetterCustomers\n  .write\n  .mode(\"overwrite\")\n  .saveAsTable(\"customers\")",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 00:14:25.832",
+      "dateUpdated": "2021-03-17 21:00:25.077",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -597,7 +599,7 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d11"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d0"
             }
           ],
           "interpreterSettingId": "spark"
@@ -607,14 +609,14 @@
       "jobName": "paragraph_1615674546905_1744766306",
       "id": "paragraph_1614132682783_1946545629",
       "dateCreated": "2021-03-13 22:29:06.905",
-      "dateStarted": "2021-03-14 00:14:06.239",
-      "dateFinished": "2021-03-14 00:14:06.870",
+      "dateStarted": "2021-03-17 21:00:25.093",
+      "dateFinished": "2021-03-17 21:00:29.537",
       "status": "FINISHED"
     },
     {
       "text": "%spark\nsparkSessionHive.catalog.listTables.show",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 21:58:19.507",
+      "dateUpdated": "2021-03-17 21:00:37.401",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -637,7 +639,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "+---------+----------------+--------------------+---------+-----------+\n|     name|        database|         description|tableType|isTemporary|\n+---------+----------------+--------------------+---------+-----------+\n|customers|coffee_co_common|Loyal patrons of ...|  MANAGED|      false|\n|customers|            null|                null|TEMPORARY|       true|\n| metadata|            null|                null|TEMPORARY|       true|\n+---------+----------------+--------------------+---------+-----------+\n\n"
+            "data": "+---------+----------------+-----------+---------+-----------+\n|     name|        database|description|tableType|isTemporary|\n+---------+----------------+-----------+---------+-----------+\n|customers|coffee_co_common|       null|  MANAGED|      false|\n|customers|            null|       null|TEMPORARY|       true|\n+---------+----------------+-----------+---------+-----------+\n\n"
           }
         ]
       },
@@ -647,8 +649,8 @@
       "jobName": "paragraph_1615681148562_253162310",
       "id": "paragraph_1615681148562_253162310",
       "dateCreated": "2021-03-14 00:19:08.562",
-      "dateStarted": "2021-03-14 21:58:19.519",
-      "dateFinished": "2021-03-14 21:58:19.768",
+      "dateStarted": "2021-03-17 21:00:37.417",
+      "dateFinished": "2021-03-17 21:00:37.775",
       "status": "FINISHED"
     },
     {
@@ -781,7 +783,7 @@
       "title": "Loading Tables",
       "text": "%spark\nval dbName \u003d \"coffee_co_common\"\nsparkSessionHive\n  .catalog\n  .setCurrentDatabase(dbName)\n\nsparkSessionHive\n  .table(\"customers\")\n  .show()",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 21:47:12.053",
+      "dateUpdated": "2021-03-17 22:32:51.933",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -818,7 +820,7 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d15"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d0"
             }
           ],
           "interpreterSettingId": "spark"
@@ -828,15 +830,15 @@
       "jobName": "paragraph_1615674546905_1823081747",
       "id": "paragraph_1614134306083_1042728519",
       "dateCreated": "2021-03-13 22:29:06.905",
-      "dateStarted": "2021-03-14 21:47:12.065",
-      "dateFinished": "2021-03-14 21:47:12.384",
+      "dateStarted": "2021-03-17 22:32:51.954",
+      "dateFinished": "2021-03-17 22:32:55.955",
       "status": "FINISHED"
     },
     {
       "title": "Accessing the Hive Metastore Table Parameters from Spark SQL",
       "text": "%spark\n\nval details \u003d sparkSessionHive.read\n  .format(\"jdbc\")\n  .option(\"url\", \"jdbc:mysql://mysql:3306/default\")\n  .option(\"driver\", \"org.mariadb.jdbc.Driver\")\n  .option(\"query\", \"select * from metastore.`TABLE_PARAMS`\")\n  .option(\"user\", \"dataeng\")\n  .option(\"password\", \"dataengineering_user\")\n  .load()\n\ndetails.createOrReplaceTempView(\"metadata\")\n\n\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 22:10:14.852",
+      "dateUpdated": "2021-03-17 21:00:54.409",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -870,15 +872,15 @@
       "jobName": "paragraph_1615674546905_972433833",
       "id": "paragraph_1614296517483_1395430639",
       "dateCreated": "2021-03-13 22:29:06.905",
-      "dateStarted": "2021-03-14 22:10:14.865",
-      "dateFinished": "2021-03-14 22:10:15.115",
+      "dateStarted": "2021-03-17 21:00:54.421",
+      "dateFinished": "2021-03-17 21:00:54.722",
       "status": "FINISHED"
     },
     {
       "title": "Interactively Query the Table Metadata",
       "text": "%sql\nselect * from metadata;",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 22:11:06.693",
+      "dateUpdated": "2021-03-17 21:00:57.148",
       "config": {
         "editorSetting": {
           "language": "sql",
@@ -932,7 +934,7 @@
         "msg": [
           {
             "type": "TABLE",
-            "data": "TBL_ID\tPARAM_KEY\tPARAM_VALUE\n3\tnumFiles\t1\n3\tspark.sql.create.version\t3.1.1\n3\tspark.sql.sources.provider\tparquet\n3\tspark.sql.sources.schema.numParts\t1\n3\tspark.sql.sources.schema.part.0\t{\"type\":\"struct\",\"fields\":[{\"name\":\"id\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}},{\"name\":\"created\",\"type\":\"timestamp\",\"nullable\":true,\"metadata\":{}},{\"name\":\"updated\",\"type\":\"timestamp\",\"nullable\":true,\"metadata\":{}},{\"name\":\"first_name\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"last_name\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"email\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}}]}\n3\ttotalSize\t1896\n3\ttransient_lastDdlTime\t1615680720\n4\tcomment\tLoyal patrons of CoffeeCo\n4\tnumFiles\t1\n4\tspark.sql.create.version\t3.1.1\n4\tspark.sql.partitionProvider\tfilesystem\n4\tspark.sql.sources.provider\tparquet\n4\tspark.sql.sources.schema.numParts\t1\n4\tspark.sql.sources.schema.part.0\t{\"type\":\"struct\",\"fields\":[{\"name\":\"id\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}},{\"name\":\"created\",\"type\":\"timestamp\",\"nullable\":true,\"metadata\":{}},{\"name\":\"updated\",\"type\":\"timestamp\",\"nullable\":true,\"metadata\":{}},{\"name\":\"first_name\",\"type\":\"string\",\"nullable\":true,\"metadata\":{\"comment\":\"Our Friendly Customers First Name\"}},{\"name\":\"last_name\",\"type\":\"string\",\"nullable\":true,\"metadata\":{\"comment\":\"Our Customers Last Name\"}},{\"name\":\"email\",\"type\":\"string\",\"nullable\":true,\"metadata\":{\"comment\":\"Not to be used for Marketing\"}}]}\n4\ttotalSize\t1896\n4\ttransient_lastDdlTime\t1615756742\n"
+            "data": "TBL_ID\tPARAM_KEY\tPARAM_VALUE\n3\tnumFiles\t1\n3\tspark.sql.create.version\t3.1.1\n3\tspark.sql.sources.provider\tparquet\n3\tspark.sql.sources.schema.numParts\t1\n3\tspark.sql.sources.schema.part.0\t{\"type\":\"struct\",\"fields\":[{\"name\":\"id\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}},{\"name\":\"created\",\"type\":\"timestamp\",\"nullable\":true,\"metadata\":{}},{\"name\":\"updated\",\"type\":\"timestamp\",\"nullable\":true,\"metadata\":{}},{\"name\":\"first_name\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"last_name\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"email\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}}]}\n3\ttotalSize\t1896\n3\ttransient_lastDdlTime\t1615680720\n26\tnumFiles\t1\n26\tspark.sql.create.version\t3.1.1\n26\tspark.sql.sources.provider\tparquet\n26\tspark.sql.sources.schema.numParts\t1\n26\tspark.sql.sources.schema.part.0\t{\"type\":\"struct\",\"fields\":[{\"name\":\"id\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}},{\"name\":\"created\",\"type\":\"timestamp\",\"nullable\":true,\"metadata\":{}},{\"name\":\"updated\",\"type\":\"timestamp\",\"nullable\":true,\"metadata\":{}},{\"name\":\"first_name\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"last_name\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"email\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}}]}\n26\ttotalSize\t1896\n26\ttransient_lastDdlTime\t1616014829\n"
           }
         ]
       },
@@ -945,7 +947,7 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d19"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d2"
             }
           ],
           "interpreterSettingId": "spark"
@@ -955,8 +957,8 @@
       "jobName": "paragraph_1615674546905_657126648",
       "id": "paragraph_1614298421314_1321239832",
       "dateCreated": "2021-03-13 22:29:06.905",
-      "dateStarted": "2021-03-14 22:11:06.706",
-      "dateFinished": "2021-03-14 22:11:06.774",
+      "dateStarted": "2021-03-17 21:00:57.163",
+      "dateFinished": "2021-03-17 21:00:57.400",
       "status": "FINISHED"
     },
     {
@@ -1005,7 +1007,7 @@
       "title": "Annotations: Table Level Description",
       "text": "%sql\nALTER TABLE customers SET TBLPROPERTIES (\u0027comment\u0027 \u003d \u0027Production Customers Data\u0027, \u0027active\u0027 \u003d \u0027true\u0027)",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 22:42:43.069",
+      "dateUpdated": "2021-03-17 21:01:05.325",
       "config": {
         "editorSetting": {
           "language": "sql",
@@ -1034,8 +1036,8 @@
       "jobName": "paragraph_1615674546906_777262633",
       "id": "paragraph_1614133174215_1964198111",
       "dateCreated": "2021-03-13 22:29:06.906",
-      "dateStarted": "2021-03-14 22:42:43.084",
-      "dateFinished": "2021-03-14 22:42:43.264",
+      "dateStarted": "2021-03-17 21:01:05.341",
+      "dateFinished": "2021-03-17 21:01:05.715",
       "status": "FINISHED"
     },
     {
@@ -1081,7 +1083,7 @@
     {
       "text": "%spark\nsparkSessionHive\n  .catalog\n  .listTables\n  .where($\"database\".equalTo(\"coffee_co_common\"))\n  .select($\"name\", $\"description\", $\"tableType\")\n  .show(truncate\u003dfalse)\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 22:45:52.745",
+      "dateUpdated": "2021-03-17 21:01:10.458",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -1114,15 +1116,15 @@
       "jobName": "paragraph_1615674546906_1674812491",
       "id": "paragraph_1614133216111_1284185910",
       "dateCreated": "2021-03-13 22:29:06.906",
-      "dateStarted": "2021-03-14 22:45:52.760",
-      "dateFinished": "2021-03-14 22:45:53.225",
+      "dateStarted": "2021-03-17 21:01:10.473",
+      "dateFinished": "2021-03-17 21:01:11.187",
       "status": "FINISHED"
     },
     {
       "title": "Annotations: Column Level Descriptions (comments)",
       "text": "%sql\nuse coffee_co_common;\nALTER TABLE customers ALTER COLUMN id \n  COMMENT \"Unique identifier for our Customer.\";\nALTER TABLE customers ALTER COLUMN created \n  COMMENT \"timestamp when the account became active\";\nALTER TABLE customers ALTER COLUMN updated\n  COMMENT \"timestamp when this record last changed\";\nALTER TABLE customers ALTER COLUMN first_name \n  COMMENT \"The first name on the account\";\nALTER TABLE customers ALTER COLUMN last_name \n  COMMENT \"The last name on the account\";\nALTER TABLE customers ALTER COLUMN email \n  COMMENT \"customers email on file. Unique Constraint. Not to be used for Marketing\";\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 23:38:59.439",
+      "dateUpdated": "2021-03-17 21:01:13.705",
       "config": {
         "editorSetting": {
           "language": "sql",
@@ -1151,14 +1153,14 @@
       "jobName": "paragraph_1615674546906_1710881191",
       "id": "paragraph_1614133599477_2107221871",
       "dateCreated": "2021-03-13 22:29:06.906",
-      "dateStarted": "2021-03-14 23:38:59.517",
-      "dateFinished": "2021-03-14 23:39:00.637",
+      "dateStarted": "2021-03-17 21:01:13.717",
+      "dateFinished": "2021-03-17 21:01:15.005",
       "status": "FINISHED"
     },
     {
       "text": "%spark\nval dbName \u003d \"coffee_co_common\"\nval tableName \u003d \"customers\"\n\nsparkSessionHive\n  .catalog\n  //.listColumns(tableName)\n  .listColumns(dbName, tableName)\n  .select($\"name\", $\"description\", $\"dataType\")\n  .show()\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 23:39:16.554",
+      "dateUpdated": "2021-03-17 21:01:17.594",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -1191,15 +1193,15 @@
       "jobName": "paragraph_1615763190484_892545124",
       "id": "paragraph_1615763190484_892545124",
       "dateCreated": "2021-03-14 23:06:30.484",
-      "dateStarted": "2021-03-14 23:39:16.565",
-      "dateFinished": "2021-03-14 23:39:16.897",
+      "dateStarted": "2021-03-17 21:01:17.617",
+      "dateFinished": "2021-03-17 21:01:18.080",
       "status": "FINISHED"
     },
     {
       "title": "Using an Extended Describe on the customers Table",
       "text": "%spark\nsparkSessionHive\n  .sql(\"describe extended coffee_co_common.`customers`\")\n  .show(40)",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 00:02:42.953",
+      "dateUpdated": "2021-03-17 21:01:22.462",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -1223,7 +1225,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "+--------------------+--------------------+--------------------+\n|            col_name|           data_type|             comment|\n+--------------------+--------------------+--------------------+\n|                  id|                 int|Unique identifier...|\n|             created|           timestamp|The Timestamp whe...|\n|             updated|           timestamp|The Timestamp whe...|\n|          first_name|              string|The First Name on...|\n|           last_name|              string|The Last Name on ...|\n|               email|              string|Our Customers Ema...|\n|                    |                    |                    |\n|# Detailed Table ...|                    |                    |\n|            Database|    coffee_co_common|                    |\n|               Table|           customers|                    |\n|               Owner|            zeppelin|                    |\n|        Created Time|Sun Mar 14 00:14:...|                    |\n|         Last Access|             UNKNOWN|                    |\n|          Created By|         Spark 3.1.1|                    |\n|                Type|             MANAGED|                    |\n|            Provider|             parquet|                    |\n|             Comment|Production Custom...|                    |\n|    Table Properties|       [active\u003dtrue]|                    |\n|          Statistics|          1896 bytes|                    |\n|            Location|file:/spark/sql/w...|                    |\n|       Serde Library|org.apache.hadoop...|                    |\n|         InputFormat|org.apache.hadoop...|                    |\n|        OutputFormat|org.apache.hadoop...|                    |\n+--------------------+--------------------+--------------------+\n\n"
+            "data": "+--------------------+--------------------+--------------------+\n|            col_name|           data_type|             comment|\n+--------------------+--------------------+--------------------+\n|                  id|                 int|Unique identifier...|\n|             created|           timestamp|timestamp when th...|\n|             updated|           timestamp|timestamp when th...|\n|          first_name|              string|The first name on...|\n|           last_name|              string|The last name on ...|\n|               email|              string|customers email o...|\n|                    |                    |                    |\n|# Detailed Table ...|                    |                    |\n|            Database|    coffee_co_common|                    |\n|               Table|           customers|                    |\n|               Owner|            zeppelin|                    |\n|        Created Time|Wed Mar 17 21:00:...|                    |\n|         Last Access|             UNKNOWN|                    |\n|          Created By|         Spark 3.1.1|                    |\n|                Type|             MANAGED|                    |\n|            Provider|             parquet|                    |\n|             Comment|Production Custom...|                    |\n|    Table Properties|       [active\u003dtrue]|                    |\n|          Statistics|          1896 bytes|                    |\n|            Location|file:/spark/sql/w...|                    |\n|       Serde Library|org.apache.hadoop...|                    |\n|         InputFormat|org.apache.hadoop...|                    |\n|        OutputFormat|org.apache.hadoop...|                    |\n+--------------------+--------------------+--------------------+\n\n"
           }
         ]
       },
@@ -1233,15 +1235,15 @@
       "jobName": "paragraph_1615674546906_60838402",
       "id": "paragraph_1614134414307_1504412999",
       "dateCreated": "2021-03-13 22:29:06.906",
-      "dateStarted": "2021-03-14 23:06:15.652",
-      "dateFinished": "2021-03-14 23:06:15.993",
+      "dateStarted": "2021-03-17 21:01:22.478",
+      "dateFinished": "2021-03-17 21:01:22.915",
       "status": "FINISHED"
     },
     {
       "title": "Generate Columnar Statistics for our CoffeeCo Patrons",
-      "text": "%sql\nANALYZE TABLE customers COMPUTE STATISTICS FOR COLUMNS id, first_name, last_name, email",
+      "text": "%sql\nANALYZE TABLE coffee_co_common.`customers` COMPUTE STATISTICS FOR COLUMNS id, first_name, last_name, email",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 21:18:33.205",
+      "dateUpdated": "2021-03-17 21:02:02.741",
       "config": {
         "editorSetting": {
           "language": "sql",
@@ -1273,7 +1275,7 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d13"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d3"
             }
           ],
           "interpreterSettingId": "spark"
@@ -1283,15 +1285,15 @@
       "jobName": "paragraph_1615674546906_145919680",
       "id": "paragraph_1614219841156_2067151231",
       "dateCreated": "2021-03-13 22:29:06.906",
-      "dateStarted": "2021-03-14 21:18:33.224",
-      "dateFinished": "2021-03-14 21:18:34.087",
+      "dateStarted": "2021-03-17 21:02:02.754",
+      "dateFinished": "2021-03-17 21:02:04.768",
       "status": "FINISHED"
     },
     {
       "title": "View Table Level Metadata and Statistics",
-      "text": "%sql\nDESCRIBE EXTENDED customers",
+      "text": "%sql\nDESCRIBE EXTENDED coffee_co_common.`customers`",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 23:04:52.944",
+      "dateUpdated": "2021-03-17 21:02:26.925",
       "config": {
         "editorSetting": {
           "language": "sql",
@@ -1345,7 +1347,7 @@
         "msg": [
           {
             "type": "TABLE",
-            "data": "col_name\tdata_type\tcomment\nid\tint\tnull\ncreated\ttimestamp\tnull\nupdated\ttimestamp\tnull\nfirst_name\tstring\tnull\nlast_name\tstring\tnull\nemail\tstring\tnull\n"
+            "data": "col_name\tdata_type\tcomment\nid\tint\tUnique identifier for our Customer.\ncreated\ttimestamp\ttimestamp when the account became active\nupdated\ttimestamp\ttimestamp when this record last changed\nfirst_name\tstring\tThe first name on the account\nlast_name\tstring\tThe last name on the account\nemail\tstring\tcustomers email on file. Unique Constraint. Not to be used for Marketing\n\t\t\n# Detailed Table Information\t\t\nDatabase\tcoffee_co_common\t\nTable\tcustomers\t\nOwner\tzeppelin\t\nCreated Time\tWed Mar 17 21:00:29 UTC 2021\t\nLast Access\tUNKNOWN\t\nCreated By\tSpark 3.1.1\t\nType\tMANAGED\t\nProvider\tparquet\t\nComment\tProduction Customers Data\t\nTable Properties\t[active\u003dtrue]\t\nStatistics\t1896 bytes, 8 rows\t\nLocation\tfile:/spark/sql/warehouse/common/customers\t\nSerde Library\torg.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe\t\nInputFormat\torg.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat\t\nOutputFormat\torg.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat\t\n"
           }
         ]
       },
@@ -1355,15 +1357,15 @@
       "jobName": "paragraph_1615674546906_535286306",
       "id": "paragraph_1614133431449_1680772555",
       "dateCreated": "2021-03-13 22:29:06.906",
-      "dateStarted": "2021-03-14 23:04:52.965",
-      "dateFinished": "2021-03-14 23:04:53.002",
+      "dateStarted": "2021-03-17 21:02:26.938",
+      "dateFinished": "2021-03-17 21:02:27.097",
       "status": "FINISHED"
     },
     {
       "title": "View the Columnar Statistics for the email Column",
       "text": "%spark\nspark.sql(\"describe extended customers id\").show(truncate\u003dfalse)",
       "user": "anonymous",
-      "dateUpdated": "2021-03-14 21:18:19.624",
+      "dateUpdated": "2021-03-17 21:02:33.374",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -1397,14 +1399,14 @@
       "jobName": "paragraph_1615674546906_288988828",
       "id": "paragraph_1614220468329_216733012",
       "dateCreated": "2021-03-13 22:29:06.906",
-      "dateStarted": "2021-03-14 21:18:19.637",
-      "dateFinished": "2021-03-14 21:18:19.876",
+      "dateStarted": "2021-03-17 21:02:33.395",
+      "dateFinished": "2021-03-17 21:02:33.656",
       "status": "FINISHED"
     },
     {
       "text": "%sh\n\nls -l /spark/sql/warehouse/common/\n\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 01:23:05.855",
+      "dateUpdated": "2021-03-17 21:02:44.693",
       "config": {
         "editorSetting": {
           "language": "sh",
@@ -1427,7 +1429,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "total 0\ndrwxr-xr-x  6 zeppelin root 192 Mar 14 00:14 customers\ndrwxr-xr-x 12 zeppelin root 384 Mar 15 01:22 customers_temp\n"
+            "data": "total 0\ndrwxr-xr-x 6 zeppelin root 192 Mar 17 21:00 customers\n"
           }
         ]
       },
@@ -1437,15 +1439,15 @@
       "jobName": "paragraph_1615674546906_1789628150",
       "id": "paragraph_1614133550814_1372181408",
       "dateCreated": "2021-03-13 22:29:06.907",
-      "dateStarted": "2021-03-15 01:23:05.868",
-      "dateFinished": "2021-03-15 01:23:05.892",
+      "dateStarted": "2021-03-17 21:02:44.715",
+      "dateFinished": "2021-03-17 21:02:45.349",
       "status": "FINISHED"
     },
     {
       "title": "Removing Temp Views from the Spark SQL Catalog",
       "text": "%spark\nsparkSessionHive.catalog.dropTempView(\"customers\")",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 00:08:17.373",
+      "dateUpdated": "2021-03-17 21:02:50.859",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -1469,7 +1471,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "\u001b[1m\u001b[34mres127\u001b[0m: \u001b[1m\u001b[32mBoolean\u001b[0m \u003d false\n"
+            "data": "\u001b[1m\u001b[34mres16\u001b[0m: \u001b[1m\u001b[32mBoolean\u001b[0m \u003d true\n"
           }
         ]
       },
@@ -1479,15 +1481,15 @@
       "jobName": "paragraph_1615766858889_366604295",
       "id": "paragraph_1615766858889_366604295",
       "dateCreated": "2021-03-15 00:07:38.889",
-      "dateStarted": "2021-03-15 00:07:55.614",
-      "dateFinished": "2021-03-15 00:07:55.823",
+      "dateStarted": "2021-03-17 21:02:50.872",
+      "dateFinished": "2021-03-17 21:02:51.103",
       "status": "FINISHED"
     },
     {
       "title": "Sanity Check: We did drop the temp view right",
       "text": "%spark\nsparkSessionHive.catalog.listTables().show",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 02:20:20.207",
+      "dateUpdated": "2021-03-17 22:33:29.988",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -1511,7 +1513,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "+---------+----------------+--------------------+---------+-----------+\n|     name|        database|         description|tableType|isTemporary|\n+---------+----------------+--------------------+---------+-----------+\n|customers|coffee_co_common|Production Custom...|  MANAGED|      false|\n| metadata|            null|                null|TEMPORARY|       true|\n+---------+----------------+--------------------+---------+-----------+\n\n"
+            "data": "+--------------+----------------+--------------------+---------+-----------+\n|          name|        database|         description|tableType|isTemporary|\n+--------------+----------------+--------------------+---------+-----------+\n|     customers|coffee_co_common|Production Custom...|  MANAGED|      false|\n|customers_temp|coffee_co_common|                null|  MANAGED|      false|\n|       unioned|coffee_co_common|                null|  MANAGED|      false|\n+--------------+----------------+--------------------+---------+-----------+\n\n"
           }
         ]
       },
@@ -1521,8 +1523,8 @@
       "jobName": "paragraph_1615766602243_1407661345",
       "id": "paragraph_1615766602243_1407661345",
       "dateCreated": "2021-03-15 00:03:22.243",
-      "dateStarted": "2021-03-15 02:20:20.219",
-      "dateFinished": "2021-03-15 02:20:20.504",
+      "dateStarted": "2021-03-17 22:33:30.006",
+      "dateFinished": "2021-03-17 22:33:30.663",
       "status": "FINISHED"
     },
     {
@@ -1571,7 +1573,7 @@
       "title": "Check that a Table Exists",
       "text": "%spark\nval dbName \u003d \"coffee_co_common\"\nval tableName \u003d \"customers\"\n\nval tableExists \u003d sparkSessionHive.catalog.tableExists(dbName, tableName)\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 01:08:29.217",
+      "dateUpdated": "2021-03-17 21:03:00.792",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -1605,15 +1607,15 @@
       "jobName": "paragraph_1615674546907_1943049197",
       "id": "paragraph_1614191774935_333180712",
       "dateCreated": "2021-03-13 22:29:06.907",
-      "dateStarted": "2021-03-15 01:08:29.231",
-      "dateFinished": "2021-03-15 01:08:29.468",
+      "dateStarted": "2021-03-17 21:03:00.805",
+      "dateFinished": "2021-03-17 21:03:01.040",
       "status": "FINISHED"
     },
     {
       "title": "Cache a Table in Spark Memory",
       "text": "%spark\nval tableName \u003d \"customers\"\nif (!sparkSessionHive.catalog.isCached(tableName)) {\n  sparkSessionHive.catalog.cacheTable(tableName)    \n}\nval isCached \u003d sparkSessionHive.catalog.isCached(tableName)",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 01:08:43.816",
+      "dateUpdated": "2021-03-17 22:33:47.721",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -1647,15 +1649,15 @@
       "jobName": "paragraph_1615674546907_2050849533",
       "id": "paragraph_1614196291105_1977788944",
       "dateCreated": "2021-03-13 22:29:06.907",
-      "dateStarted": "2021-03-15 01:08:43.830",
-      "dateFinished": "2021-03-15 01:08:44.139",
+      "dateStarted": "2021-03-17 22:33:47.743",
+      "dateFinished": "2021-03-17 22:33:48.270",
       "status": "FINISHED"
     },
     {
       "title": "Force the Cache using Show",
       "text": "%spark\nval tableName \u003d \"customers\"\n\nsparkSessionHive.table(tableName).head\n\n/*spark.table(tableName)\n  .select($\"first_name\", $\"email\")\n  .show*/",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 01:08:51.093",
+      "dateUpdated": "2021-03-17 22:33:50.947",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -1679,7 +1681,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "\u001b[1m\u001b[34mtableName\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d customers\n\u001b[1m\u001b[34mres150\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Row\u001b[0m \u003d [1,2021-02-16 00:16:06.0,2021-03-13 21:10:28.0,Scott,Haines,scott@coffeeco.com]\n"
+            "data": "\u001b[1m\u001b[34mtableName\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d customers\n\u001b[1m\u001b[34mres8\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Row\u001b[0m \u003d [1,2021-02-16 00:16:06.0,2021-03-13 21:10:28.0,Scott,Haines,scott@coffeeco.com]\n"
           }
         ]
       },
@@ -1692,7 +1694,7 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d32"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d1"
             }
           ],
           "interpreterSettingId": "spark"
@@ -1702,15 +1704,15 @@
       "jobName": "paragraph_1615769186880_1466680857",
       "id": "paragraph_1615769186880_1466680857",
       "dateCreated": "2021-03-15 00:46:26.880",
-      "dateStarted": "2021-03-15 01:08:51.107",
-      "dateFinished": "2021-03-15 01:08:51.418",
+      "dateStarted": "2021-03-17 22:33:50.962",
+      "dateFinished": "2021-03-17 22:33:52.152",
       "status": "FINISHED"
     },
     {
       "title": "Remove a Cached Table from Spark Memory",
       "text": "%spark\nval tableName \u003d \"customers\"\nsparkSessionHive.catalog.uncacheTable(tableName)",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 01:08:56.466",
+      "dateUpdated": "2021-03-17 22:33:55.936",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -1744,15 +1746,15 @@
       "jobName": "paragraph_1615674546907_982272110",
       "id": "paragraph_1614196564820_1192461591",
       "dateCreated": "2021-03-13 22:29:06.907",
-      "dateStarted": "2021-03-15 01:08:56.477",
-      "dateFinished": "2021-03-15 01:08:56.743",
+      "dateStarted": "2021-03-17 22:33:55.950",
+      "dateFinished": "2021-03-17 22:33:56.294",
       "status": "FINISHED"
     },
     {
       "title": "Clear All Cached Tables",
       "text": "%spark\nspark.catalog.clearCache",
       "user": "anonymous",
-      "dateUpdated": "2021-03-13 22:29:06.907",
+      "dateUpdated": "2021-03-17 22:33:58.894",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -1781,7 +1783,9 @@
       "jobName": "paragraph_1615674546907_698677117",
       "id": "paragraph_1614196588567_1685464875",
       "dateCreated": "2021-03-13 22:29:06.907",
-      "status": "READY"
+      "dateStarted": "2021-03-17 22:33:58.910",
+      "dateFinished": "2021-03-17 22:33:59.098",
+      "status": "FINISHED"
     },
     {
       "text": "%md\n## Testing Automatic Cache Refresh in Spark\nThe following section splits up the process of copying the data from our `customers` table into a new temporary table, so we can experiment witout breaking our source of truth table.\n\n1. Copys the contents of the `customers` table into a new managed table called `customers_temp`\n2. Reads from this new managed table `customers_temp` into a reference variable called `tableCopy`, and then caches the table.\n3. We call `tableCopy.head` in order to cache off the table in local spark memory\n4. We purposefull `union` tableCopy with itself in order to duplicate the data\n5. Then we write out into yet another managed table named `union`\n6. Now we are free to `overwrite` the initial `customers_temp` table without Spark informing us that we are trying to overwrite a table we are currently reading from. (Yeah it is that smart)\n7. We trick the saftey check and now have our `duplicates` loaded in `customers_temp`.\n8. Interestingly enough, if you look at the Storage Tab in the Spark UI (http://localhost:4040/storage/) you will see that Spark has purged its own cache since they are no longer accurate.",
@@ -1827,9 +1831,9 @@
     },
     {
       "title": "Refreshing our Cache",
-      "text": "%spark\nval dbName \u003d \"coffee_co_common\"\nval upstreamTableName \u003d \"customers\"\nval tempTableName \u003d \"customers_temp\"\n\n// set the db context\nsparkSessionHive\n  .catalog\n  .setCurrentDatabase(dbName)\n\n// copy our upstream table\n\nsparkSessionHive\n  .table(upstreamTableName)\n  .write\n  .mode(\"overwrite\")\n  .partitionBy(\"email\")\n  .saveAsTable(tempTableName)\n\n// now we have a table that we can mess around with\nval tableCopy \u003d sparkSessionHive.table(tempTableName)\nsparkSessionHive.catalog.cacheTable(tempTableName)\n\n// force the cache\ntableCopy.head\n\n",
+      "text": "%spark\nval dbName \u003d \"coffee_co_common\"\nval upstreamTableName \u003d \"customers\"\nval tempTableName \u003d \"customers_temp\"\n\n// set the db context\n\nsparkSessionHive\n  .catalog\n  .setCurrentDatabase(dbName)\n\n// copy our upstream table\n\nsparkSessionHive\n  .table(upstreamTableName)\n  .write\n  .mode(\"overwrite\")\n  .partitionBy(\"email\")\n  .saveAsTable(tempTableName)\n\n// now we have a table that we can mess around with\nval tableCopy \u003d sparkSessionHive.table(tempTableName)\nsparkSessionHive.catalog.cacheTable(tempTableName)\n\n// force the cache\ntableCopy.head\n\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 02:18:45.541",
+      "dateUpdated": "2021-03-17 23:16:15.016",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -1849,45 +1853,29 @@
         "forms": {}
       },
       "results": {
-        "code": "SUCCESS",
+        "code": "ERROR",
         "msg": [
           {
             "type": "TEXT",
-            "data": "\u001b[1m\u001b[34mdbName\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d coffee_co_common\n\u001b[1m\u001b[34mupstreamTableName\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d customers\n\u001b[1m\u001b[34mtempTableName\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d customers_temp\n\u001b[1m\u001b[34mtableCopy\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [id: int, created: timestamp ... 4 more fields]\n\u001b[1m\u001b[34mres209\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Row\u001b[0m \u003d [6,2021-02-21 23:00:00.0,2021-03-13 21:10:28.0,Marshal,Haines,paws@coffeeco.com]\n"
+            "data": "org.apache.spark.sql.AnalysisException: org.apache.hadoop.hive.ql.metadata.HiveException: MetaException(message:One or more instances could not be deleted)\n  at org.apache.spark.sql.hive.HiveExternalCatalog.withClient(HiveExternalCatalog.scala:112)\n  at org.apache.spark.sql.hive.HiveExternalCatalog.dropTable(HiveExternalCatalog.scala:517)\n  at org.apache.spark.sql.catalyst.catalog.ExternalCatalogWithListener.dropTable(ExternalCatalogWithListener.scala:104)\n  at org.apache.spark.sql.catalyst.catalog.SessionCatalog.dropTable(SessionCatalog.scala:778)\n  at org.apache.spark.sql.DataFrameWriter.saveAsTable(DataFrameWriter.scala:726)\n  at org.apache.spark.sql.DataFrameWriter.saveAsTable(DataFrameWriter.scala:626)\n  ... 46 elided\nCaused by: org.apache.hadoop.hive.ql.metadata.HiveException: MetaException(message:One or more instances could not be deleted)\n  at org.apache.hadoop.hive.ql.metadata.Hive.dropTable(Hive.java:1200)\n  at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n  at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n  at java.lang.reflect.Method.invoke(Method.java:498)\n  at org.apache.spark.sql.hive.client.Shim_v0_14.dropTable(HiveShim.scala:1015)\n  at org.apache.spark.sql.hive.client.HiveClientImpl.$anonfun$dropTable$1(HiveClientImpl.scala:551)\n  at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)\n  at org.apache.spark.sql.hive.client.HiveClientImpl.$anonfun$withHiveState$1(HiveClientImpl.scala:291)\n  at org.apache.spark.sql.hive.client.HiveClientImpl.liftedTree1$1(HiveClientImpl.scala:224)\n  at org.apache.spark.sql.hive.client.HiveClientImpl.retryLocked(HiveClientImpl.scala:223)\n  at org.apache.spark.sql.hive.client.HiveClientImpl.withHiveState(HiveClientImpl.scala:273)\n  at org.apache.spark.sql.hive.client.HiveClientImpl.dropTable(HiveClientImpl.scala:551)\n  at org.apache.spark.sql.hive.HiveExternalCatalog.$anonfun$dropTable$1(HiveExternalCatalog.scala:519)\n  at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)\n  at org.apache.spark.sql.hive.HiveExternalCatalog.withClient(HiveExternalCatalog.scala:102)\n  ... 51 more\nCaused by: org.apache.hadoop.hive.metastore.api.MetaException: One or more instances could not be deleted\n  at org.apache.hadoop.hive.metastore.RetryingHMSHandler.invokeInternal(RetryingHMSHandler.java:211)\n  at org.apache.hadoop.hive.metastore.RetryingHMSHandler.invoke(RetryingHMSHandler.java:107)\n  at com.sun.proxy.$Proxy21.drop_table_with_environment_context(Unknown Source)\n  at org.apache.hadoop.hive.metastore.HiveMetaStoreClient.drop_table_with_environment_context(HiveMetaStoreClient.java:2411)\n  at org.apache.hadoop.hive.ql.metadata.SessionHiveMetaStoreClient.drop_table_with_environment_context(SessionHiveMetaStoreClient.java:114)\n  at org.apache.hadoop.hive.metastore.HiveMetaStoreClient.dropTable(HiveMetaStoreClient.java:1095)\n  at org.apache.hadoop.hive.metastore.HiveMetaStoreClient.dropTable(HiveMetaStoreClient.java:1031)\n  at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n  at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n  at java.lang.reflect.Method.invoke(Method.java:498)\n  at org.apache.hadoop.hive.metastore.RetryingMetaStoreClient.invoke(RetryingMetaStoreClient.java:173)\n  at com.sun.proxy.$Proxy22.dropTable(Unknown Source)\n  at org.apache.hadoop.hive.ql.metadata.Hive.dropTable(Hive.java:1194)\n  ... 66 more\nCaused by: javax.jdo.JDOUserException: One or more instances could not be deleted\n  at org.datanucleus.api.jdo.JDOPersistenceManager.deletePersistentAll(JDOPersistenceManager.java:848)\n  at org.apache.hadoop.hive.metastore.ObjectStore.dropTable(ObjectStore.java:1065)\n  at sun.reflect.GeneratedMethodAccessor37.invoke(Unknown Source)\n  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n  at java.lang.reflect.Method.invoke(Method.java:498)\n  at org.apache.hadoop.hive.metastore.RawStoreProxy.invoke(RawStoreProxy.java:101)\n  at com.sun.proxy.$Proxy20.dropTable(Unknown Source)\n  at org.apache.hadoop.hive.metastore.HiveMetaStore$HMSHandler.drop_table_core(HiveMetaStore.java:1698)\n  at org.apache.hadoop.hive.metastore.HiveMetaStore$HMSHandler.drop_table_with_environment_context(HiveMetaStore.java:1925)\n  at sun.reflect.GeneratedMethodAccessor33.invoke(Unknown Source)\n  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n  at java.lang.reflect.Method.invoke(Method.java:498)\n  at org.apache.hadoop.hive.metastore.RetryingHMSHandler.invokeInternal(RetryingHMSHandler.java:148)\n  ... 79 more\nCaused by: org.datanucleus.exceptions.NucleusDataStoreException: Fetch of object \"org.apache.hadoop.hive.metastore.model.MTablePrivilege@769c9827\" using statement \"SELECT `B0`.`CREATE_TIME`,`B0`.`LAST_ACCESS_TIME`,`B0`.`OWNER`,`B0`.`RETENTION`,`B0`.`IS_REWRITE_ENABLED`,`B0`.`TBL_NAME`,`B0`.`TBL_TYPE`,`B0`.`TBL_ID` FROM `TBL_PRIVS` `A0` LEFT OUTER JOIN `TBLS` `B0` ON `A0`.`TBL_ID` \u003d `B0`.`TBL_ID` WHERE `A0`.`TBL_GRANT_ID` \u003d ?\" failed : DELETE command denied to user \u0027dataeng\u0027@\u0027172.18.0.3\u0027 for table \u0027tbl_privs\u0027\n  at org.datanucleus.store.rdbms.request.FetchRequest.execute(FetchRequest.java:397)\n  at org.datanucleus.store.rdbms.RDBMSPersistenceHandler.fetchObject(RDBMSPersistenceHandler.java:319)\n  at org.datanucleus.state.AbstractStateManager.loadFieldsFromDatastore(AbstractStateManager.java:1147)\n  at org.datanucleus.state.StateManagerImpl.loadSpecifiedFields(StateManagerImpl.java:2564)\n  at org.datanucleus.state.StateManagerImpl.loadField(StateManagerImpl.java:2581)\n  at org.datanucleus.store.rdbms.mapping.java.PersistableMapping.preDelete(PersistableMapping.java:924)\n  at org.datanucleus.store.rdbms.request.DeleteRequest.execute(DeleteRequest.java:193)\n  at org.datanucleus.store.rdbms.RDBMSPersistenceHandler.deleteObjectFromTable(RDBMSPersistenceHandler.java:499)\n  at org.datanucleus.store.rdbms.RDBMSPersistenceHandler.deleteObject(RDBMSPersistenceHandler.java:470)\n  at org.datanucleus.state.AbstractStateManager.internalDeletePersistent(AbstractStateManager.java:832)\n  at org.datanucleus.state.StateManagerImpl.deletePersistent(StateManagerImpl.java:4244)\n  at org.datanucleus.ExecutionContextImpl.deleteObjectInternal(ExecutionContextImpl.java:2396)\n  at org.datanucleus.ExecutionContextImpl.deleteObjectWork(ExecutionContextImpl.java:2318)\n  at org.datanucleus.ExecutionContextImpl.deleteObjects(ExecutionContextImpl.java:2210)\n  at org.datanucleus.ExecutionContextThreadedImpl.deleteObjects(ExecutionContextThreadedImpl.java:259)\n  at org.datanucleus.api.jdo.JDOPersistenceManager.deletePersistentAll(JDOPersistenceManager.java:843)\n  ... 91 more\nCaused by: java.sql.BatchUpdateException: DELETE command denied to user \u0027dataeng\u0027@\u0027172.18.0.3\u0027 for table \u0027tbl_privs\u0027\n  at sun.reflect.GeneratedConstructorAccessor87.newInstance(Unknown Source)\n  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)\n  at java.lang.reflect.Constructor.newInstance(Constructor.java:423)\n  at com.mysql.cj.util.Util.handleNewInstance(Util.java:192)\n  at com.mysql.cj.util.Util.getInstance(Util.java:167)\n  at com.mysql.cj.util.Util.getInstance(Util.java:174)\n  at com.mysql.cj.jdbc.exceptions.SQLError.createBatchUpdateException(SQLError.java:224)\n  at com.mysql.cj.jdbc.ClientPreparedStatement.executeBatchSerially(ClientPreparedStatement.java:853)\n  at com.mysql.cj.jdbc.ClientPreparedStatement.executeBatchInternal(ClientPreparedStatement.java:435)\n  at com.mysql.cj.jdbc.StatementImpl.executeBatch(StatementImpl.java:794)\n  at com.jolbox.bonecp.StatementHandle.executeBatch(StatementHandle.java:424)\n  at org.datanucleus.store.rdbms.ParamLoggingPreparedStatement.executeBatch(ParamLoggingPreparedStatement.java:366)\n  at org.datanucleus.store.rdbms.SQLController.processConnectionStatement(SQLController.java:676)\n  at org.datanucleus.store.rdbms.SQLController.getStatementForQuery(SQLController.java:319)\n  at org.datanucleus.store.rdbms.SQLController.getStatementForQuery(SQLController.java:295)\n  at org.datanucleus.store.rdbms.request.FetchRequest.execute(FetchRequest.java:318)\n  ... 106 more\nCaused by: java.sql.SQLSyntaxErrorException: DELETE command denied to user \u0027dataeng\u0027@\u0027172.18.0.3\u0027 for table \u0027tbl_privs\u0027\n  at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)\n  at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)\n  at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:953)\n  at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1092)\n  at com.mysql.cj.jdbc.ClientPreparedStatement.executeBatchSerially(ClientPreparedStatement.java:832)\n  ... 114 more\n"
           }
         ]
       },
       "apps": [],
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "SPARK JOB",
-          "tooltip": "View in Spark web UI",
-          "group": "spark",
-          "values": [
-            {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d118"
-            },
-            {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d119"
-            }
-          ],
-          "interpreterSettingId": "spark"
-        }
-      },
+      "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1615770969139_2137540136",
       "id": "paragraph_1615770969139_2137540136",
       "dateCreated": "2021-03-15 01:16:09.139",
-      "dateStarted": "2021-03-15 02:18:45.556",
-      "dateFinished": "2021-03-15 02:18:47.126",
-      "status": "FINISHED"
+      "dateStarted": "2021-03-17 23:16:15.031",
+      "dateFinished": "2021-03-17 23:16:35.983",
+      "status": "ERROR"
     },
     {
       "title": "Purposefully Duplicating Rows using Union",
       "text": "%spark\n\nval unionTable \u003d tableCopy.union(tableCopy)\nunionTable.cache()\nunionTable.show()\nunionTable.write.mode(\"overwrite\").saveAsTable(\"unioned\")\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 02:18:50.987",
+      "dateUpdated": "2021-03-17 21:36:44.226",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -1924,16 +1912,16 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d120"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d6"
             },
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d121"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d7"
             },
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d122"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d8"
             },
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d123"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d9"
             }
           ],
           "interpreterSettingId": "spark"
@@ -1943,8 +1931,8 @@
       "jobName": "paragraph_1615771813317_1262968975",
       "id": "paragraph_1615771813317_1262968975",
       "dateCreated": "2021-03-15 01:30:13.318",
-      "dateStarted": "2021-03-15 02:18:51.003",
-      "dateFinished": "2021-03-15 02:18:52.033",
+      "dateStarted": "2021-03-17 21:36:44.243",
+      "dateFinished": "2021-03-17 21:36:45.650",
       "status": "FINISHED"
     },
     {
@@ -1993,7 +1981,7 @@
       "title": "Overwrite the customers_temp table",
       "text": "%spark\nsparkSessionHive\n  .table(\"unioned\")\n  .write\n  .mode(\"overwrite\")\n  .saveAsTable(tempTableName)",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 02:10:17.195",
+      "dateUpdated": "2021-03-17 21:36:52.817",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -2025,7 +2013,7 @@
           "group": "spark",
           "values": [
             {
-              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d115"
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d10"
             }
           ],
           "interpreterSettingId": "spark"
@@ -2035,8 +2023,8 @@
       "jobName": "paragraph_1615772479783_1053986099",
       "id": "paragraph_1615772479783_1053986099",
       "dateCreated": "2021-03-15 01:41:19.783",
-      "dateStarted": "2021-03-15 02:10:17.211",
-      "dateFinished": "2021-03-15 02:10:18.238",
+      "dateStarted": "2021-03-17 21:36:52.828",
+      "dateFinished": "2021-03-17 21:36:53.913",
       "status": "FINISHED"
     },
     {
@@ -2209,9 +2197,9 @@
       "status": "FINISHED"
     },
     {
-      "text": "%md\n## Removing a Table\nIf you want to remove a table from the hive metastore. All you have to do is use the DROP TABLE command. This will remove everything from the warehouse so **BE CAREFUL**. Always create a backup of a Table before doing this in the real world. There is no *undo*!\n\n**Spark SQLContext**\n~~~\nspark.sql(\"DROP TABLE customers_temp\")\n~~~\n~~~\nspark.sql(\"DROP TABLE unioned\")\n~~~\n\n**Spark SQL: Interpreted**\n~~~\nspark.sql(\"drop table if exists customers_temp\").show\n~~~\n\n**Spark SQL: Via Catalyst Session Catalog**\n~~~\nimport org.apache.spark.sql.catalyst.TableIdentifier\n\nval sessionCatalog \u003d spark.sessionState.catalog\nval tableName \u003d \"customers_temp\"\nval tableId \u003d TableIdentifier(tableName)\nval warehousePath \u003d sessionCatalog.defaultTablePath(tableId)\n// drop the table using the DSL\nsessionCatalog.dropTable(tableId)\n~~~\n",
+      "text": "%md\n## Removing Tables\nIf you want to remove a table from the hive metastore. All you have to do is use the DROP TABLE command. This will remove everything from the warehouse so **BE CAREFUL**. Always create a backup of a Table before doing this in the real world. There is no *undo*!\n\n**Spark SQLContext**\n~~~\nspark.sql(\"DROP TABLE customers_temp\")\n~~~\n~~~\nspark.sql(\"DROP TABLE unioned\")\n~~~\n\n**Spark SQL: Interpreted**\n~~~\nspark.sql(\"drop table if exists customers_temp\").show\n~~~\n\n**Spark SQL: Via Catalyst Session Catalog**\n~~~\nimport org.apache.spark.sql.catalyst.TableIdentifier\n\nval sessionCatalog \u003d spark.sessionState.catalog\nval tableName \u003d \"customers_temp\"\nval tableId \u003d TableIdentifier(tableName)\nval warehousePath \u003d sessionCatalog.defaultTablePath(tableId)\n// drop the table using the DSL\nsessionCatalog.dropTable(tableId)\n~~~\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 02:13:20.801",
+      "dateUpdated": "2021-03-17 20:47:28.671",
       "config": {
         "tableHide": false,
         "editorSetting": {
@@ -2236,7 +2224,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eRemoving a Table\u003c/h2\u003e\n\u003cp\u003eIf you want to remove a table from the hive metastore. All you have to do is use the DROP TABLE command. This will remove everything from the warehouse so \u003cstrong\u003eBE CAREFUL\u003c/strong\u003e. Always create a backup of a Table before doing this in the real world. There is no \u003cem\u003eundo\u003c/em\u003e!\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eSpark SQLContext\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003espark.sql(\u0026quot;DROP TABLE customers_temp\u0026quot;)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cpre\u003e\u003ccode\u003espark.sql(\u0026quot;DROP TABLE unioned\u0026quot;)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eSpark SQL: Interpreted\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003espark.sql(\u0026quot;drop table if exists customers_temp\u0026quot;).show\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eSpark SQL: Via Catalyst Session Catalog\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eimport org.apache.spark.sql.catalyst.TableIdentifier\n\nval sessionCatalog \u003d spark.sessionState.catalog\nval tableName \u003d \u0026quot;customers_temp\u0026quot;\nval tableId \u003d TableIdentifier(tableName)\nval warehousePath \u003d sessionCatalog.defaultTablePath(tableId)\n// drop the table using the DSL\nsessionCatalog.dropTable(tableId)\n\u003c/code\u003e\u003c/pre\u003e\n\n\u003c/div\u003e"
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eRemoving Tables\u003c/h2\u003e\n\u003cp\u003eIf you want to remove a table from the hive metastore. All you have to do is use the DROP TABLE command. This will remove everything from the warehouse so \u003cstrong\u003eBE CAREFUL\u003c/strong\u003e. Always create a backup of a Table before doing this in the real world. There is no \u003cem\u003eundo\u003c/em\u003e!\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eSpark SQLContext\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003espark.sql(\u0026quot;DROP TABLE customers_temp\u0026quot;)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cpre\u003e\u003ccode\u003espark.sql(\u0026quot;DROP TABLE unioned\u0026quot;)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eSpark SQL: Interpreted\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003espark.sql(\u0026quot;drop table if exists customers_temp\u0026quot;).show\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eSpark SQL: Via Catalyst Session Catalog\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eimport org.apache.spark.sql.catalyst.TableIdentifier\n\nval sessionCatalog \u003d spark.sessionState.catalog\nval tableName \u003d \u0026quot;customers_temp\u0026quot;\nval tableId \u003d TableIdentifier(tableName)\nval warehousePath \u003d sessionCatalog.defaultTablePath(tableId)\n// drop the table using the DSL\nsessionCatalog.dropTable(tableId)\n\u003c/code\u003e\u003c/pre\u003e\n\n\u003c/div\u003e"
           }
         ]
       },
@@ -2246,14 +2234,15 @@
       "jobName": "paragraph_1615674546907_285707128",
       "id": "paragraph_1614196170330_548164959",
       "dateCreated": "2021-03-13 22:29:06.907",
-      "dateStarted": "2021-03-15 02:13:20.801",
-      "dateFinished": "2021-03-15 02:13:20.811",
+      "dateStarted": "2021-03-17 20:47:28.672",
+      "dateFinished": "2021-03-17 20:47:29.810",
       "status": "FINISHED"
     },
     {
+      "title": "Conditionally Drop a Table",
       "text": "%sql\nDROP TABLE IF EXISTS customers_temp;\nDROP TABLE IF EXISTS unioned;",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 02:20:06.327",
+      "dateUpdated": "2021-03-17 20:47:52.353",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
@@ -2265,7 +2254,8 @@
           "completionKey": "TAB",
           "completionSupport": true
         },
-        "editorMode": "ace/mode/sql"
+        "editorMode": "ace/mode/sql",
+        "title": true
       },
       "settings": {
         "params": {},
@@ -2286,9 +2276,10 @@
       "status": "FINISHED"
     },
     {
-      "text": "%spark\nimport org.apache.spark.sql.catalyst.TableIdentifier\n\nval catalog \u003d sparkSessionHive.sessionState.catalog\nval tableName \u003d \"customers_temp\"\nval tableId \u003d TableIdentifier(tableName)\nval warehousePath \u003d catalog.defaultTablePath(tableId)\ncatalog.dropTable(tableId,ignoreIfNotExists\u003dtrue,purge\u003dtrue)\n",
+      "title": "Using Catalyst to Locate and Remove a Table",
+      "text": "%spark\nimport org.apache.spark.sql.catalyst.TableIdentifier\n\nval catalog \u003d sparkSessionHive.sessionState.catalog\nval tableName \u003d \"customers_temp\"\nval tableId \u003d TableIdentifier(tableName)\nval warehousePath \u003d catalog.defaultTablePath(tableId)\n\ncatalog\n  .dropTable(\n      tableId,\n      ignoreIfNotExists\u003dtrue,\n      purge\u003dtrue\n  )\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-15 02:22:27.204",
+      "dateUpdated": "2021-03-17 21:36:14.144",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -2300,7 +2291,8 @@
         "editorMode": "ace/mode/scala",
         "fontSize": 9.0,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "title": true
       },
       "settings": {
         "params": {},
@@ -2311,7 +2303,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "import org.apache.spark.sql.catalyst.TableIdentifier\n\u001b[1m\u001b[34mcatalog\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.catalyst.catalog.SessionCatalog\u001b[0m \u003d org.apache.spark.sql.hive.HiveSessionCatalog@6b9ae1c8\n\u001b[1m\u001b[34mtableName\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d customers_temp\n\u001b[1m\u001b[34mtableId\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.catalyst.TableIdentifier\u001b[0m \u003d `customers_temp`\n\u001b[1m\u001b[34mwarehousePath\u001b[0m: \u001b[1m\u001b[32mjava.net.URI\u001b[0m \u003d file:/spark/sql/warehouse/common/customers_temp\n"
+            "data": "import org.apache.spark.sql.catalyst.TableIdentifier\n\u001b[1m\u001b[34mcatalog\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.catalyst.catalog.SessionCatalog\u001b[0m \u003d org.apache.spark.sql.hive.HiveSessionCatalog@55b14230\n\u001b[1m\u001b[34mtableName\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d customers_temp\n\u001b[1m\u001b[34mtableId\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.catalyst.TableIdentifier\u001b[0m \u003d `customers_temp`\n\u001b[1m\u001b[34mwarehousePath\u001b[0m: \u001b[1m\u001b[32mjava.net.URI\u001b[0m \u003d file:/spark/sql/warehouse/common/customers_temp\n"
           }
         ]
       },
@@ -2321,43 +2313,25 @@
       "jobName": "paragraph_1615674546907_874100849",
       "id": "paragraph_1614218526056_321018203",
       "dateCreated": "2021-03-13 22:29:06.907",
-      "dateStarted": "2021-03-15 02:22:27.221",
-      "dateFinished": "2021-03-15 02:22:27.485",
+      "dateStarted": "2021-03-17 21:36:14.156",
+      "dateFinished": "2021-03-17 21:36:14.415",
       "status": "FINISHED"
     },
     {
-      "title": "Remove the Full Warehouse Table",
-      "text": "%sql\n/*DROP TABLE IF EXISTS hive_customers;*/",
+      "text": "%spark\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-13 22:29:06.907",
-      "config": {
-        "editorSetting": {
-          "language": "sql",
-          "editOnDblClick": false,
-          "completionKey": "TAB",
-          "completionSupport": true
-        },
-        "colWidth": 12.0,
-        "editorMode": "ace/mode/sql",
-        "fontSize": 9.0,
-        "title": true,
-        "results": {},
-        "enabled": true
-      },
+      "dateUpdated": "2021-03-17 20:48:43.858",
+      "config": {},
       "settings": {
         "params": {},
         "forms": {}
       },
-      "results": {
-        "code": "SUCCESS",
-        "msg": []
-      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
-      "jobName": "paragraph_1615674546907_1538476420",
-      "id": "paragraph_1614196056451_779761810",
-      "dateCreated": "2021-03-13 22:29:06.907",
+      "jobName": "paragraph_1616014123857_1405518586",
+      "id": "paragraph_1616014123857_1405518586",
+      "dateCreated": "2021-03-17 20:48:43.857",
       "status": "READY"
     }
   ],

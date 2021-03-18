@@ -1,0 +1,295 @@
+{
+  "paragraphs": [
+    {
+      "title": "Create our SparkSession and Customers Table",
+      "text": "%spark\nimport org.apache.spark.sql._\n\n// create another SparkSession with explicit Hive Support\nval sparkSessionHive \u003d SparkSession.builder\n  .master(spark.conf.get(\"spark.master\"))\n  .config(spark.sparkContext.getConf)\n  .appName(\"hive-support\")\n  .enableHiveSupport()\n  .getOrCreate()\n  \nimport sparkSessionHive.implicits._\n\nval dbName \u003d \"coffee_co_common\"\nsparkSessionHive\n  .catalog\n  .setCurrentDatabase(dbName)\n\nval customersTable \u003d sparkSessionHive\n  .table(\"customers\")\n\ncustomersTable.printSchema\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 02:45:02.978",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- id: integer (nullable \u003d true)\n |-- created: timestamp (nullable \u003d true)\n |-- updated: timestamp (nullable \u003d true)\n |-- first_name: string (nullable \u003d true)\n |-- last_name: string (nullable \u003d true)\n |-- email: string (nullable \u003d true)\n\nimport org.apache.spark.sql._\n\u001b[1m\u001b[34msparkSessionHive\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.SparkSession\u001b[0m \u003d org.apache.spark.sql.SparkSession@5cc020d\nimport sparkSessionHive.implicits._\n\u001b[1m\u001b[34mdbName\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d coffee_co_common\n\u001b[1m\u001b[34mcustomersTable\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [id: int, created: timestamp ... 4 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616035413453_222668367",
+      "id": "paragraph_1616035413453_222668367",
+      "dateCreated": "2021-03-18 02:43:33.454",
+      "dateStarted": "2021-03-18 02:45:02.987",
+      "dateFinished": "2021-03-18 02:45:04.084",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Generate the Customers Class",
+      "text": "%spark\nimport java.sql.Timestamp\n\n// create our Customer case class\ncase class Customer(\n  id: Integer,\n  created: Timestamp,\n  updated: Timestamp,\n  first_name: String,\n  last_name: String,\n  email: String)",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 03:35:01.674",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import java.sql.Timestamp\nimport org.apache.spark.sql.Dataset\ndefined class Customer\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616035487468_1602786119",
+      "id": "paragraph_1616035487468_1602786119",
+      "dateCreated": "2021-03-18 02:44:47.468",
+      "dateStarted": "2021-03-18 02:46:28.374",
+      "dateFinished": "2021-03-18 02:46:28.684",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Convert our DataFrame to a Dataset",
+      "text": "%spark\nimport org.apache.spark.sql._\n\nimplicit val customerEnc \u003d Encoders.product[Customer]\n\nval customerData: Dataset[Customer] \u003d customersTable\n  .as[Customer]",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 03:39:36.097",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql._\n\u001b[1m\u001b[34mcustomerEnc\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Encoder[Customer]\u001b[0m \u003d class[id[0]: int, created[0]: timestamp, updated[0]: timestamp, first_name[0]: string, last_name[0]: string, email[0]: string]\n\u001b[1m\u001b[34mcustomerData\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[Customer]\u001b[0m \u003d [id: int, created: timestamp ... 4 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616035551443_1469531756",
+      "id": "paragraph_1616035551443_1469531756",
+      "dateCreated": "2021-03-18 02:45:51.443",
+      "dateStarted": "2021-03-18 03:39:36.105",
+      "dateFinished": "2021-03-18 03:39:36.583",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Using Mixed Catalyst and Scala Functionality",
+      "text": "%spark\ncustomerData\n  .filter(_.email.startsWith(\"scott\"))\n  .explain(\"formatted\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 03:40:07.532",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u003d\u003d Physical Plan \u003d\u003d\n* Filter (3)\n+- * ColumnarToRow (2)\n   +- Scan parquet coffee_co_common.customers (1)\n\n\n(1) Scan parquet coffee_co_common.customers\nOutput [6]: [id#0, created#1, updated#2, first_name#3, last_name#4, email#5]\nBatched: true\nLocation: InMemoryFileIndex [file:/spark/sql/warehouse/common/customers]\nReadSchema: struct\u003cid:int,created:timestamp,updated:timestamp,first_name:string,last_name:string,email:string\u003e\n\n(2) ColumnarToRow [codegen id : 1]\nInput [6]: [id#0, created#1, updated#2, first_name#3, last_name#4, email#5]\n\n(3) Filter [codegen id : 1]\nInput [6]: [id#0, created#1, updated#2, first_name#3, last_name#4, email#5]\nCondition : $line1125694972127.$read$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$$$82b5b23cea489b2712a1db46c77e458$$$$w$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$Lambda$4263/398796157@4b0bfc61.apply\n\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616038780187_953860711",
+      "id": "paragraph_1616038780187_953860711",
+      "dateCreated": "2021-03-18 03:39:40.187",
+      "dateStarted": "2021-03-18 03:40:07.545",
+      "dateFinished": "2021-03-18 03:40:08.002",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Using Typed Catalyst Expressions",
+      "text": "%spark\ncustomerData\n  .filter($\"email\".startsWith(\"scott\"))\n  .explain(\"formatted\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 03:40:46.819",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u003d\u003d Physical Plan \u003d\u003d\n* Filter (3)\n+- * ColumnarToRow (2)\n   +- Scan parquet coffee_co_common.customers (1)\n\n\n(1) Scan parquet coffee_co_common.customers\nOutput [6]: [id#0, created#1, updated#2, first_name#3, last_name#4, email#5]\nBatched: true\nLocation: InMemoryFileIndex [file:/spark/sql/warehouse/common/customers]\nPushedFilters: [IsNotNull(email), StringStartsWith(email,scott)]\nReadSchema: struct\u003cid:int,created:timestamp,updated:timestamp,first_name:string,last_name:string,email:string\u003e\n\n(2) ColumnarToRow [codegen id : 1]\nInput [6]: [id#0, created#1, updated#2, first_name#3, last_name#4, email#5]\n\n(3) Filter [codegen id : 1]\nInput [6]: [id#0, created#1, updated#2, first_name#3, last_name#4, email#5]\nCondition : (isnotnull(email#5) AND StartsWith(email#5, scott))\n\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616038811968_669665276",
+      "id": "paragraph_1616038811968_669665276",
+      "dateCreated": "2021-03-18 03:40:11.968",
+      "dateStarted": "2021-03-18 03:40:46.830",
+      "dateFinished": "2021-03-18 03:40:47.269",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\ncustomerData\n  .where($\"email\".like(\"scott%\"))\n  .show()",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 02:50:45.658",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+---+-------------------+-------------------+----------+---------+------------------+\n| id|            created|            updated|first_name|last_name|             email|\n+---+-------------------+-------------------+----------+---------+------------------+\n|  1|2021-02-16 00:16:06|2021-03-13 21:10:28|     Scott|   Haines|scott@coffeeco.com|\n+---+-------------------+-------------------+----------+---------+------------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d5"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616035630323_1776098362",
+      "id": "paragraph_1616035630323_1776098362",
+      "dateCreated": "2021-03-18 02:47:10.323",
+      "dateStarted": "2021-03-18 02:50:45.667",
+      "dateFinished": "2021-03-18 02:50:46.108",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 02:47:56.750",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616035676750_1510387379",
+      "id": "paragraph_1616035676750_1510387379",
+      "dateCreated": "2021-03-18 02:47:56.750",
+      "status": "READY"
+    }
+  ],
+  "name": "6_4_Datasets",
+  "id": "2G1P5XZ87",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview2",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
