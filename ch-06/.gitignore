@@ -1,0 +1,3 @@
+docker/data/mysqldir/*
+derby.log
+metastore_db

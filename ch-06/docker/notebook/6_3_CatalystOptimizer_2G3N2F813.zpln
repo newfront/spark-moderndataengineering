@@ -1,0 +1,381 @@
+{
+  "paragraphs": [
+    {
+      "title": "Create our SparkSession",
+      "text": "%spark\nimport org.apache.spark.sql._\n\n// create another SparkSession with explicit Hive Support\nval sparkSessionHive \u003d SparkSession.builder\n  .master(spark.conf.get(\"spark.master\"))\n  .config(spark.sparkContext.getConf)\n  .appName(\"hive-support\")\n  .enableHiveSupport()\n  .getOrCreate()",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 00:50:40.457",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql._\n\u001b[1m\u001b[34msparkSessionHive\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.SparkSession\u001b[0m \u003d org.apache.spark.sql.SparkSession@5cc020d\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616028597586_981625513",
+      "id": "paragraph_1616028597586_981625513",
+      "dateCreated": "2021-03-18 00:49:57.587",
+      "dateStarted": "2021-03-18 00:50:40.470",
+      "dateFinished": "2021-03-18 00:50:40.707",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Load our Customers Data",
+      "text": "import sparkSessionHive.implicits._\n\nval dbName \u003d \"coffee_co_common\"\nsparkSessionHive\n  .catalog\n  .setCurrentDatabase(dbName)\n\nval customersTable \u003d sparkSessionHive\n  .table(\"customers\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 00:54:49.712",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import sparkSessionHive.implicits._\n\u001b[1m\u001b[34mdbName\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d coffee_co_common\n\u001b[1m\u001b[34mcustomersTable\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [id: int, created: timestamp ... 4 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616028620640_1319094374",
+      "id": "paragraph_1616028620640_1319094374",
+      "dateCreated": "2021-03-18 00:50:20.640",
+      "dateStarted": "2021-03-18 00:54:49.725",
+      "dateFinished": "2021-03-18 00:54:50.619",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\ncustomersTable.printSchema",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 00:53:55.788",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- id: integer (nullable \u003d true)\n |-- created: timestamp (nullable \u003d true)\n |-- updated: timestamp (nullable \u003d true)\n |-- first_name: string (nullable \u003d true)\n |-- last_name: string (nullable \u003d true)\n |-- email: string (nullable \u003d true)\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616028804901_1239384140",
+      "id": "paragraph_1616028804901_1239384140",
+      "dateCreated": "2021-03-18 00:53:24.901",
+      "dateStarted": "2021-03-18 00:53:55.803",
+      "dateFinished": "2021-03-18 00:53:56.101",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Customers Reference",
+      "text": "%sql\nselect * from coffee_co_common.`customers`;",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 01:03:49.396",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "id": "string",
+                      "created": "string",
+                      "updated": "string",
+                      "first_name": "string",
+                      "last_name": "string",
+                      "email": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "id\tcreated\tupdated\tfirst_name\tlast_name\temail\n1\t2021-02-16 00:16:06.0\t2021-03-13 21:10:28.0\tScott\tHaines\tscott@coffeeco.com\n2\t2021-02-16 00:16:06.0\t2021-03-13 21:10:28.0\tJohn\tHamm\tjohn.hamm@acme.com\n3\t2021-02-16 00:16:06.0\t2021-03-13 21:10:28.0\tMilo\tHaines\tmhaines@coffeeco.com\n4\t2021-02-21 21:00:00.0\t2021-03-13 21:10:28.0\tPenny\tHaines\tpenny@coffeeco.com\n5\t2021-02-21 22:00:00.0\t2021-03-13 21:10:28.0\tCloud\tFast\tcloud.fast@acme.com\n6\t2021-02-21 23:00:00.0\t2021-03-13 21:10:28.0\tMarshal\tHaines\tpaws@coffeeco.com\n7\t2021-02-24 09:00:00.0\t2021-03-13 21:10:28.0\tWillow\tHaines\twillow@coffeeco.com\n8\t2021-02-24 09:00:00.0\t2021-03-13 21:10:28.0\tClover\tHaines\tpup@coffeeco.com\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d1"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616029009492_827989149",
+      "id": "paragraph_1616029009492_827989149",
+      "dateCreated": "2021-03-18 00:56:49.492",
+      "dateStarted": "2021-03-18 00:57:10.253",
+      "dateFinished": "2021-03-18 00:57:11.105",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Catalyst Analysis, Planning and Optimization",
+      "text": "%spark\nimport org.apache.spark.sql.functions._\n\ncustomersTable\n  .select($\"id\", $\"email\", $\"last_name\")\n  .where(col(\"email\").like(\"scott%\"))\n  .explain(\"extended\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 02:19:54.996",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u003d\u003d Parsed Logical Plan \u003d\u003d\n\u0027Filter \u0027email LIKE scott%\n+- Project [id#0, email#5, last_name#4]\n   +- SubqueryAlias spark_catalog.coffee_co_common.customers\n      +- Relation[id#0,created#1,updated#2,first_name#3,last_name#4,email#5] parquet\n\n\u003d\u003d Analyzed Logical Plan \u003d\u003d\nid: int, email: string, last_name: string\nFilter email#5 LIKE scott%\n+- Project [id#0, email#5, last_name#4]\n   +- SubqueryAlias spark_catalog.coffee_co_common.customers\n      +- Relation[id#0,created#1,updated#2,first_name#3,last_name#4,email#5] parquet\n\n\u003d\u003d Optimized Logical Plan \u003d\u003d\nProject [id#0, email#5, last_name#4]\n+- Filter (isnotnull(email#5) AND StartsWith(email#5, scott))\n   +- Relation[id#0,created#1,updated#2,first_name#3,last_name#4,email#5] parquet\n\n\u003d\u003d Physical Plan \u003d\u003d\n*(1) Project [id#0, email#5, last_name#4]\n+- *(1) Filter (isnotnull(email#5) AND StartsWith(email#5, scott))\n   +- *(1) ColumnarToRow\n      +- FileScan parquet coffee_co_common.customers[id#0,last_name#4,email#5] Batched: true, DataFilters: [isnotnull(email#5), StartsWith(email#5, scott)], Format: Parquet, Location: InMemoryFileIndex[file:/spark/sql/warehouse/common/customers], PartitionFilters: [], PushedFilters: [IsNotNull(email), StringStartsWith(email,scott)], ReadSchema: struct\u003cid:int,last_name:string,email:string\u003e\n\nimport org.apache.spark.sql.functions._\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616028835799_61267660",
+      "id": "paragraph_1616028835799_61267660",
+      "dateCreated": "2021-03-18 00:53:55.799",
+      "dateStarted": "2021-03-18 02:19:55.005",
+      "dateFinished": "2021-03-18 02:19:55.355",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Catalyst Planning: SQL ",
+      "text": "%spark\nsparkSessionHive\n  .sql(\"explain extended select id, email, last_name from coffee_co_common.`customers` where email like \u0027scott%\u0027\")\n  .show(false)",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 02:23:15.883",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "plan": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n|plan                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |\n+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n|\u003d\u003d Parsed Logical Plan \u003d\u003d\n\u0027Project [\u0027id, \u0027email, \u0027last_name]\n+- \u0027Filter \u0027email LIKE scott%\n   +- \u0027UnresolvedRelation [coffee_co_common, customers], [], false\n\n\u003d\u003d Analyzed Logical Plan \u003d\u003d\nid: int, email: string, last_name: string\nProject [id#0, email#5, last_name#4]\n+- Filter email#5 LIKE scott%\n   +- SubqueryAlias spark_catalog.coffee_co_common.customers\n      +- Relation[id#0,created#1,updated#2,first_name#3,last_name#4,email#5] parquet\n\n\u003d\u003d Optimized Logical Plan \u003d\u003d\nProject [id#0, email#5, last_name#4]\n+- Filter (isnotnull(email#5) AND StartsWith(email#5, scott))\n   +- Relation[id#0,created#1,updated#2,first_name#3,last_name#4,email#5] parquet\n\n\u003d\u003d Physical Plan \u003d\u003d\n*(1) Project [id#0, email#5, last_name#4]\n+- *(1) Filter (isnotnull(email#5) AND StartsWith(email#5, scott))\n   +- *(1) ColumnarToRow\n      +- FileScan parquet coffee_co_common.customers[id#0,last_name#4,email#5] Batched: true, DataFilters: [isnotnull(email#5), StartsWith(email#5, scott)], Format: Parquet, Location: InMemoryFileIndex[file:/spark/sql/warehouse/common/customers], PartitionFilters: [], PushedFilters: [IsNotNull(email), StringStartsWith(email,scott)], ReadSchema: struct\u003cid:int,last_name:string,email:string\u003e\n|\n+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616029842899_1146799336",
+      "id": "paragraph_1616029842899_1146799336",
+      "dateCreated": "2021-03-18 01:10:42.899",
+      "dateStarted": "2021-03-18 01:35:45.162",
+      "dateFinished": "2021-03-18 01:35:45.537",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Catalyst Code Generation",
+      "text": "%spark\ncustomersTable\n  .select($\"id\", $\"email\", $\"last_name\")\n  .where(col(\"email\").like(\"scott%\"))\n  .explain(\"codegen\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-18 02:23:49.030",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Found 1 WholeStageCodegen subtrees.\n\u003d\u003d Subtree 1 / 1 (maxMethodCodeSize:369; maxConstantPoolSize:142(0.22% used); numInnerClasses:0) \u003d\u003d\n*(1) Project [id#0, email#5, last_name#4]\n+- *(1) Filter (isnotnull(email#5) AND StartsWith(email#5, scott))\n   +- *(1) ColumnarToRow\n      +- FileScan parquet coffee_co_common.customers[id#0,last_name#4,email#5] Batched: true, DataFilters: [isnotnull(email#5), StartsWith(email#5, scott)], Format: Parquet, Location: InMemoryFileIndex[file:/spark/sql/warehouse/common/customers], PartitionFilters: [], PushedFilters: [IsNotNull(email), StringStartsWith(email,scott)], ReadSchema: struct\u003cid:int,last_name:string,email:string\u003e\n\nGenerated code:\n/* 001 */ public Object generate(Object[] references) {\n/* 002 */   return new GeneratedIteratorForCodegenStage1(references);\n/* 003 */ }\n/* 004 */\n/* 005 */ // codegenStageId\u003d1\n/* 006 */ final class GeneratedIteratorForCodegenStage1 extends org.apache.spark.sql.execution.BufferedRowIterator {\n/* 007 */   private Object[] references;\n/* 008 */   private scala.collection.Iterator[] inputs;\n/* 009 */   private int columnartorow_batchIdx_0;\n/* 010 */   private org.apache.spark.sql.execution.vectorized.OnHeapColumnVector[] columnartorow_mutableStateArray_2 \u003d new org.apache.spark.sql.execution.vectorized.OnHeapColumnVector[3];\n/* 011 */   private org.apache.spark.sql.catalyst.expressions.codegen.UnsafeRowWriter[] columnartorow_mutableStateArray_3 \u003d new org.apache.spark.sql.catalyst.expressions.codegen.UnsafeRowWriter[3];\n/* 012 */   private org.apache.spark.sql.vectorized.ColumnarBatch[] columnartorow_mutableStateArray_1 \u003d new org.apache.spark.sql.vectorized.ColumnarBatch[1];\n/* 013 */   private scala.collection.Iterator[] columnartorow_mutableStateArray_0 \u003d new scala.collection.Iterator[1];\n/* 014 */\n/* 015 */   public GeneratedIteratorForCodegenStage1(Object[] references) {\n/* 016 */     this.references \u003d references;\n/* 017 */   }\n/* 018 */\n/* 019 */   public void init(int index, scala.collection.Iterator[] inputs) {\n/* 020 */     partitionIndex \u003d index;\n/* 021 */     this.inputs \u003d inputs;\n/* 022 */     columnartorow_mutableStateArray_0[0] \u003d inputs[0];\n/* 023 */\n/* 024 */     columnartorow_mutableStateArray_3[0] \u003d new org.apache.spark.sql.catalyst.expressions.codegen.UnsafeRowWriter(3, 64);\n/* 025 */     columnartorow_mutableStateArray_3[1] \u003d new org.apache.spark.sql.catalyst.expressions.codegen.UnsafeRowWriter(3, 64);\n/* 026 */     columnartorow_mutableStateArray_3[2] \u003d new org.apache.spark.sql.catalyst.expressions.codegen.UnsafeRowWriter(3, 64);\n/* 027 */\n/* 028 */   }\n/* 029 */\n/* 030 */   private void columnartorow_nextBatch_0() throws java.io.IOException {\n/* 031 */     if (columnartorow_mutableStateArray_0[0].hasNext()) {\n/* 032 */       columnartorow_mutableStateArray_1[0] \u003d (org.apache.spark.sql.vectorized.ColumnarBatch)columnartorow_mutableStateArray_0[0].next();\n/* 033 */       ((org.apache.spark.sql.execution.metric.SQLMetric) references[1] /* numInputBatches */).add(1);\n/* 034 */       ((org.apache.spark.sql.execution.metric.SQLMetric) references[0] /* numOutputRows */).add(columnartorow_mutableStateArray_1[0].numRows());\n/* 035 */       columnartorow_batchIdx_0 \u003d 0;\n/* 036 */       columnartorow_mutableStateArray_2[0] \u003d (org.apache.spark.sql.execution.vectorized.OnHeapColumnVector) columnartorow_mutableStateArray_1[0].column(0);\n/* 037 */       columnartorow_mutableStateArray_2[1] \u003d (org.apache.spark.sql.execution.vectorized.OnHeapColumnVector) columnartorow_mutableStateArray_1[0].column(1);\n/* 038 */       columnartorow_mutableStateArray_2[2] \u003d (org.apache.spark.sql.execution.vectorized.OnHeapColumnVector) columnartorow_mutableStateArray_1[0].column(2);\n/* 039 */\n/* 040 */     }\n/* 041 */   }\n/* 042 */\n/* 043 */   protected void processNext() throws java.io.IOException {\n/* 044 */     if (columnartorow_mutableStateArray_1[0] \u003d\u003d null) {\n/* 045 */       columnartorow_nextBatch_0();\n/* 046 */     }\n/* 047 */     while ( columnartorow_mutableStateArray_1[0] !\u003d null) {\n/* 048 */       int columnartorow_numRows_0 \u003d columnartorow_mutableStateArray_1[0].numRows();\n/* 049 */       int columnartorow_localEnd_0 \u003d columnartorow_numRows_0 - columnartorow_batchIdx_0;\n/* 050 */       for (int columnartorow_localIdx_0 \u003d 0; columnartorow_localIdx_0 \u003c columnartorow_localEnd_0; columnartorow_localIdx_0++) {\n/* 051 */         int columnartorow_rowIdx_0 \u003d columnartorow_batchIdx_0 + columnartorow_localIdx_0;\n/* 052 */         do {\n/* 053 */           boolean columnartorow_isNull_2 \u003d columnartorow_mutableStateArray_2[2].isNullAt(columnartorow_rowIdx_0);\n/* 054 */           UTF8String columnartorow_value_2 \u003d columnartorow_isNull_2 ? null : (columnartorow_mutableStateArray_2[2].getUTF8String(columnartorow_rowIdx_0));\n/* 055 */\n/* 056 */           boolean filter_value_2 \u003d !columnartorow_isNull_2;\n/* 057 */           if (!filter_value_2) continue;\n/* 058 */\n/* 059 */           boolean filter_value_3 \u003d false;\n/* 060 */           filter_value_3 \u003d (columnartorow_value_2).startsWith(((UTF8String) references[3] /* literal */));\n/* 061 */           if (!filter_value_3) continue;\n/* 062 */\n/* 063 */           ((org.apache.spark.sql.execution.metric.SQLMetric) references[2] /* numOutputRows */).add(1);\n/* 064 */\n/* 065 */           // common sub-expressions\n/* 066 */\n/* 067 */           boolean columnartorow_isNull_0 \u003d columnartorow_mutableStateArray_2[0].isNullAt(columnartorow_rowIdx_0);\n/* 068 */           int columnartorow_value_0 \u003d columnartorow_isNull_0 ? -1 : (columnartorow_mutableStateArray_2[0].getInt(columnartorow_rowIdx_0));\n/* 069 */           boolean columnartorow_isNull_1 \u003d columnartorow_mutableStateArray_2[1].isNullAt(columnartorow_rowIdx_0);\n/* 070 */           UTF8String columnartorow_value_1 \u003d columnartorow_isNull_1 ? null : (columnartorow_mutableStateArray_2[1].getUTF8String(columnartorow_rowIdx_0));\n/* 071 */           columnartorow_mutableStateArray_3[2].reset();\n/* 072 */\n/* 073 */           columnartorow_mutableStateArray_3[2].zeroOutNullBytes();\n/* 074 */\n/* 075 */           if (columnartorow_isNull_0) {\n/* 076 */             columnartorow_mutableStateArray_3[2].setNullAt(0);\n/* 077 */           } else {\n/* 078 */             columnartorow_mutableStateArray_3[2].write(0, columnartorow_value_0);\n/* 079 */           }\n/* 080 */\n/* 081 */           if (false) {\n/* 082 */             columnartorow_mutableStateArray_3[2].setNullAt(1);\n/* 083 */           } else {\n/* 084 */             columnartorow_mutableStateArray_3[2].write(1, columnartorow_value_2);\n/* 085 */           }\n/* 086 */\n/* 087 */           if (columnartorow_isNull_1) {\n/* 088 */             columnartorow_mutableStateArray_3[2].setNullAt(2);\n/* 089 */           } else {\n/* 090 */             columnartorow_mutableStateArray_3[2].write(2, columnartorow_value_1);\n/* 091 */           }\n/* 092 */           append((columnartorow_mutableStateArray_3[2].getRow()));\n/* 093 */\n/* 094 */         } while(false);\n/* 095 */         if (shouldStop()) { columnartorow_batchIdx_0 \u003d columnartorow_rowIdx_0 + 1; return; }\n/* 096 */       }\n/* 097 */       columnartorow_batchIdx_0 \u003d columnartorow_numRows_0;\n/* 098 */       columnartorow_mutableStateArray_1[0] \u003d null;\n/* 099 */       columnartorow_nextBatch_0();\n/* 100 */     }\n/* 101 */   }\n/* 102 */\n/* 103 */ }\n\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1616028988535_4258346",
+      "id": "paragraph_1616028988535_4258346",
+      "dateCreated": "2021-03-18 00:56:28.535",
+      "dateStarted": "2021-03-18 02:23:49.039",
+      "dateFinished": "2021-03-18 02:23:49.443",
+      "status": "FINISHED"
+    }
+  ],
+  "name": "6_3_CatalystOptimizer",
+  "id": "2G3N2F813",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview2",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
