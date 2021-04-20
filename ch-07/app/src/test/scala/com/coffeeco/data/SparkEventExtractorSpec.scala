@@ -1,25 +1,27 @@
 package com.coffeeco.data
 
 import com.coffeeco.data.models.{Customer, CustomerEventType, CustomerRatingEventType, Event, Membership, Preferences}
+import com.holdenkarau.spark.testing.Utils
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{DataFrame, Encoder, Encoders, Row, SaveMode, SparkSession}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
+import java.io.File
 import java.sql.Timestamp
 import java.time._
 import java.time.temporal.{ChronoUnit, TemporalUnit}
 
 class SparkEventExtractorSpec extends AnyFlatSpec with SharedSparkSql with Matchers {
 
+  val sparkWarehouseDir: String = new java.io.File(
+    "src/test/resources/spark-warehouse"
+  ).getAbsolutePath
+
   override def conf: SparkConf = {
     val testConfigPath: String = new java.io.File(
       "src/test/resources/application-test.conf"
-    ).getAbsolutePath
-
-    val sparkWarehouseDir: String = new java.io.File(
-      "src/test/resources/spark-warehouse"
     ).getAbsolutePath
 
     // override the location of the config to our testing config
@@ -29,6 +31,16 @@ class SparkEventExtractorSpec extends AnyFlatSpec with SharedSparkSql with Match
       .setMaster("local[*]")
       .set("spark.app.id", appID)
       .set("spark.sql.warehouse.dir", sparkWarehouseDir)
+  }
+
+  override def beforeAll(): Unit = {
+    super.beforeAll()
+    bootstrapTests(SparkEventExtractorApp.sparkSession)
+  }
+
+  override def afterAll(): Unit = {
+    super.afterAll()
+
   }
 
   val customerEncoder: Encoder[Customer] = Encoders.product[Customer]
@@ -109,10 +121,11 @@ class SparkEventExtractorSpec extends AnyFlatSpec with SharedSparkSql with Match
     customerDataset.show(10, 0, vertical = true)
 
     // write as json or parquet or csv (can be used to build your own test data)
+    // this was run once to enable you to have data to work with
     customerDataset.toJSON
       .coalesce(1)
       .write
-      .mode(SaveMode.Overwrite)
+      .mode(SaveMode.Ignore)
       .json(customerJsonPath)
   }
 
@@ -131,7 +144,7 @@ class SparkEventExtractorSpec extends AnyFlatSpec with SharedSparkSql with Match
     if (!spark.catalog.tableExists("default", "customers")) {
       customersDataFrame(spark)
         .write
-        .mode(SaveMode.Ignore)
+        .mode(SaveMode.Overwrite)
         .saveAsTable("customers")
     }
   }
@@ -151,7 +164,6 @@ class SparkEventExtractorSpec extends AnyFlatSpec with SharedSparkSql with Match
   }
 
   def customerRatingsTable(spark: SparkSession): Unit = {
-    bootstrapTests(spark)
     if (!spark.catalog.tableExists("bronze", "customerRatings")) {
       customerRatingsDataFrame(spark)
         .coalesce(1)
@@ -183,6 +195,9 @@ class SparkEventExtractorSpec extends AnyFlatSpec with SharedSparkSql with Match
         WITH
         DBPROPERTIES(TEAM='coffee-core',TEAM_SLACK='#coffeeco-eng-core');
         """)
+
+    customersTable(spark)
+    customerRatingsTable(spark)
   }
 
   "SparkEventExtractor" should " load and test customers " in {
@@ -203,6 +218,7 @@ class SparkEventExtractorSpec extends AnyFlatSpec with SharedSparkSql with Match
   "SparkEventExtractor" should " extract and join customerRating events" in {
 
     val testSession = SparkEventExtractorApp.sparkSession
+    //bootstrapTests(testSession)
     import testSession.implicits._
 
     val ratingEvents = customerRatingsDataFrame(testSession)

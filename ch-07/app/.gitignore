@@ -3,5 +3,6 @@
 *.log
 .DS_Store
 target/
-.metastore_db
+metastore_db
+spark-warehouse
 derby.log
