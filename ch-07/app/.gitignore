@@ -3,3 +3,5 @@
 *.log
 .DS_Store
 target/
+.metastore_db
+derby.log
