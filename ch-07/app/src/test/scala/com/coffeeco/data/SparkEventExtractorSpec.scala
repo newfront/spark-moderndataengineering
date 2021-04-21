@@ -1,17 +1,15 @@
 package com.coffeeco.data
 
-import com.coffeeco.data.models.{Customer, CustomerEventType, CustomerRatingEventType, Event, Membership, Preferences}
-import com.holdenkarau.spark.testing.Utils
+import com.coffeeco.data.models.{Customer, CustomerRatingEventType, Membership, Preferences}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{DataFrame, Encoder, Encoders, Row, SaveMode, SparkSession}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
-import java.io.File
 import java.sql.Timestamp
 import java.time._
-import java.time.temporal.{ChronoUnit, TemporalUnit}
+import java.time.temporal.ChronoUnit
 
 class SparkEventExtractorSpec extends AnyFlatSpec with SharedSparkSql with Matchers {
 
@@ -45,6 +43,7 @@ class SparkEventExtractorSpec extends AnyFlatSpec with SharedSparkSql with Match
 
   val customerEncoder: Encoder[Customer] = Encoders.product[Customer]
   val customerJsonPath: String = "src/test/resources/customers/customers.json"
+  val customerRatingsPath: String = "src/test/resources/customers/customer_ratings.json"
 
   "SparkEventExtractor" should " read and join Customer EventData " in {
 
@@ -161,6 +160,18 @@ class SparkEventExtractorSpec extends AnyFlatSpec with SharedSparkSql with Match
           storeId = Some("STOR123")
         )
       ))
+  }
+
+  def writeCustomerRatingsJson(spark: SparkSession): Unit = {
+    val customersRatingsJson: String = new java.io.File(
+      customerRatingsPath
+    ).getAbsolutePath
+
+    customerRatingsDataFrame(spark)
+      .coalesce(1)
+      .write
+      .mode(SaveMode.Ignore)
+      .json(customersRatingsJson)
   }
 
   def customerRatingsTable(spark: SparkSession): Unit = {

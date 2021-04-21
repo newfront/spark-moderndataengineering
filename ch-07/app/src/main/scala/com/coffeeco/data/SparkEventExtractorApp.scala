@@ -10,6 +10,7 @@ object SparkEventExtractorApp extends SparkApplication {
   object Conf {
     val SourceTableName: String = "spark.event.extractor.source.table"
     val DestinationTableName: String = "spark.event.extractor.destination.table"
+    val SaveModeName: String = "spark.event.extractor.save.mode"
   }
 
   // appName
@@ -23,13 +24,22 @@ object SparkEventExtractorApp extends SparkApplication {
     .conf
     .get(Conf.DestinationTableName, "")
 
+  lazy val saveMode: SaveMode = {
+    sparkSession.conf.get(Conf.SaveModeName, "ErrorIfExists") match {
+      case "Append" => SaveMode.Append
+      case "Ignore" => SaveMode.Ignore
+      case "Overwrite" => SaveMode.Overwrite
+      case _ => SaveMode.ErrorIfExists
+    }
+  }
+
   def validate(): Boolean = {
     sourceTable.nonEmpty &&
       destinationTable.nonEmpty &&
       sparkSession.catalog.tableExists(sourceTable)
   }
 
-  def run(saveMode: SaveMode = SaveMode.ErrorIfExists): Unit = {
+  def run(saveMode: SaveMode = saveMode): Unit = {
     if (!validate()) throw new RuntimeException("sourceTable or destinationTable are empty or the sourceTable is missing from the spark warehouse")
     SparkEventExtractor(sparkSession)
       .process(sparkSession.table(sourceTable))
@@ -38,5 +48,6 @@ object SparkEventExtractorApp extends SparkApplication {
       .saveAsTable(destinationTable)
   }
 
+  run()
 
 }
