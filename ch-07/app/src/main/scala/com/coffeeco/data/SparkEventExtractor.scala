@@ -1,34 +1,28 @@
 package com.coffeeco.data
 
-import org.apache.spark.sql.{DataFrame, RuntimeConfig, SparkSession}
-
-object SparkEventExtractor {
-
-  def apply(spark: SparkSession): SparkEventExtractor = {
-    new SparkEventExtractor(spark)
-  }
-
-}
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 @SerialVersionUID(100L)
-class SparkEventExtractor(spark: SparkSession) extends Serializable {
+case class SparkEventExtractor(spark: SparkSession)
+  extends DataFrameTransformer {
   import spark.implicits._
-  lazy val conf: RuntimeConfig = spark.conf
 
-  def process(df: DataFrame): DataFrame = {
-    df
-      .filter($"eventType".equalTo("CustomerRatingEventType"))
-      .transform(withCustomerData)
-  }
+  // follow up: add configuration for the customers join table
+
+  override def transform(df: DataFrame): DataFrame = df
+    .filter($"eventType".equalTo("CustomerRatingEventType"))
+    .transform(withCustomerData)
 
   def withCustomerData(df: DataFrame): DataFrame = {
     if (spark.catalog.tableExists("customers")) {
       spark.table("customers")
-        .select($"customerId", $"firstName", $"lastName", $"email", $"created".as("joined"))
+        .select($"customerId",
+          $"firstName",
+          $"lastName",
+          $"email",
+          $"created".as("joined")
+        )
         .join(df, usingColumn = "customerId")
     } else throw new RuntimeException("Missing Table: customers")
   }
-
 }
-
-

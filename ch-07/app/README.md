@@ -38,8 +38,8 @@ $SPARK_HOME/bin/spark-submit \
   --class "com.coffeeco.data.SparkEventExtractorApp" \
   --deploy-mode "client" \
   --packages=org.mariadb.jdbc:mariadb-java-client:2.7.2 \
-  --conf "spark.event.extractor.source.table=bronze.customers" \
-  --conf "spark.event.extractor.destination.table=silver.customers" \
+  --conf "spark.event.extractor.source.table=bronze.customerRatings" \
+  --conf "spark.event.extractor.destination.table=silver.customerRatings" \
   --conf "spark.sql.hive.javax.jdo.option.ConnectionDriverName=org.mariadb.jdbc.Driver" \
   --conf "spark.event.extractor.save.mode=ErrorIfExists" \
   --conf "spark.sql.hive.javax.jdo.option.ConnectionPassword=dataengineering_user" \

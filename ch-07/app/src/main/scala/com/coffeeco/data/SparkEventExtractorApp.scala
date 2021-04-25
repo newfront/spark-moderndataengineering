@@ -1,21 +1,18 @@
 package com.coffeeco.data
 
 import org.apache.log4j.Logger
-import org.apache.spark.sql.{DataFrameReader, SaveMode}
+import org.apache.spark.sql.{SaveMode, SparkSession}
 
-object SparkEventExtractorApp extends SparkApplication {
+object SparkEventExtractorApp extends SparkBatchApplication {
 
   val logger: Logger = Logger.getLogger("com.coffeeco.data.SparkEventExtractorApp")
 
   object Conf {
-    val SourceTableName: String = "spark.event.extractor.source.table"
-    val DestinationTableName: String = "spark.event.extractor.destination.table"
-    val SaveModeName: String = "spark.event.extractor.save.mode"
+    final val SourceTableName: String = "spark.event.extractor.source.table"
+    final val DestinationTableName: String = "spark.event.extractor.destination.table"
+    final val SaveModeName: String = "spark.event.extractor.save.mode"
   }
 
-  // appName
-  // sparkConf
-  // sparkSession
   lazy val sourceTable: String = sparkSession
     .conf
     .get(Conf.SourceTableName, "")
@@ -24,7 +21,7 @@ object SparkEventExtractorApp extends SparkApplication {
     .conf
     .get(Conf.DestinationTableName, "")
 
-  lazy val saveMode: SaveMode = {
+  override lazy val saveMode: SaveMode = {
     sparkSession.conf.get(Conf.SaveModeName, "ErrorIfExists") match {
       case "Append" => SaveMode.Append
       case "Ignore" => SaveMode.Ignore
@@ -33,21 +30,29 @@ object SparkEventExtractorApp extends SparkApplication {
     }
   }
 
-  def validate(): Boolean = {
-    sourceTable.nonEmpty &&
+  override def validateConfig()
+    (implicit sparkSession: SparkSession): Boolean = {
+    val isValid = sourceTable.nonEmpty &&
       destinationTable.nonEmpty &&
+      sourceTable != destinationTable &&
       sparkSession.catalog.tableExists(sourceTable)
+    if (!isValid) throw new RuntimeException(
+      s"${Conf.SourceTableName} or ${Conf.DestinationTableName} are empty, " +
+        s"or the $sourceTable is missing from the spark warehouse")
+    true
   }
 
-  def run(saveMode: SaveMode = saveMode): Unit = {
-    if (!validate()) throw new RuntimeException("sourceTable or destinationTable are empty or the sourceTable is missing from the spark warehouse")
+  override def runBatch(saveMode: SaveMode): Unit = {
+    //
     SparkEventExtractor(sparkSession)
-      .process(sparkSession.table(sourceTable))
+      .transform(sparkSession.table(sourceTable))
       .write
       .mode(saveMode)
       .saveAsTable(destinationTable)
   }
 
+  // always use run() to trigger the application.
+  // this enables the config validation to run before triggering the batch
   run()
 
 }

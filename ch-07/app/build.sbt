@@ -18,10 +18,10 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % sparkVersion % "provided",
   "org.apache.spark"%%"spark-hive" % sparkVersion % "provided",
   "org.apache.spark" %% "spark-sql" % sparkVersion % "provided",
-  "org.apache.spark" %% "spark-sql" % sparkVersion % Test classifier "tests",
-  "org.apache.spark" %% "spark-sql" % sparkVersion % Test classifier "test-sources",
   "com.typesafe" % "config" % "1.3.1",
   "org.scalactic" %% "scalactic" % "3.2.0",
+  "org.apache.spark" %% "spark-sql" % sparkVersion % Test classifier "tests",
+  "org.apache.spark" %% "spark-sql" % sparkVersion % Test classifier "test-sources",
   "org.scalatest" %% "scalatest" % "3.2.2" % Test,
   "org.scalamock" %% "scalamock-scalatest-support" % "3.4.2" % Test,
   "com.holdenkarau" %% "spark-testing-base" % "3.0.1_1.0.0" % Test

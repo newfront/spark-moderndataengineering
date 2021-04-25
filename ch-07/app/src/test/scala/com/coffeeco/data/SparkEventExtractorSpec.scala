@@ -1,26 +1,22 @@
 package com.coffeeco.data
 
-import com.coffeeco.data.models.{Customer, CustomerRatingEventType, Membership, Preferences}
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.{DataFrame, Encoder, Encoders, Row, SaveMode, SparkSession}
+import org.apache.spark.sql.{Row, SaveMode}
+import TestHelper.fullPath
+import com.coffeeco.data.SparkEventExtractorApp.Conf.{DestinationTableName, SaveModeName, SourceTableName}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
-import java.sql.Timestamp
-import java.time._
-import java.time.temporal.ChronoUnit
-
-class SparkEventExtractorSpec extends AnyFlatSpec with SharedSparkSql with Matchers {
-
-  val sparkWarehouseDir: String = new java.io.File(
-    "src/test/resources/spark-warehouse"
-  ).getAbsolutePath
+class SparkEventExtractorSpec extends AnyFlatSpec
+  with Matchers with SharedSparkSql {
 
   override def conf: SparkConf = {
-    val testConfigPath: String = new java.io.File(
-      "src/test/resources/application-test.conf"
-    ).getAbsolutePath
+    val sparkWarehouseDir = fullPath(
+      "src/test/resources/spark-warehouse")
+
+    val testConfigPath = fullPath(
+      "src/test/resources/application-test.conf")
 
     // override the location of the config to our testing config
     sys.props += ( ("config.file", testConfigPath ))
@@ -33,70 +29,75 @@ class SparkEventExtractorSpec extends AnyFlatSpec with SharedSparkSql with Match
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    bootstrapTests(SparkEventExtractorApp.sparkSession)
+    TestHelper.bootstrapTests(SparkEventExtractorApp.sparkSession)
   }
 
-  override def afterAll(): Unit = {
-    super.afterAll()
-
-  }
-
-  val customerEncoder: Encoder[Customer] = Encoders.product[Customer]
-  val customerJsonPath: String = "src/test/resources/customers/customers.json"
-  val customerRatingsPath: String = "src/test/resources/customers/customer_ratings.json"
-
-  "SparkEventExtractor" should " read and join Customer EventData " in {
-
+  "SparkEventExtractor" should " load and test customers " in {
     val testSession = SparkEventExtractorApp.sparkSession
-
     import testSession.implicits._
 
-    val custJoin = Timestamp.from(Instant.ofEpochMilli(1618788493198L))
-    val custId = "CUST123"
+    // customers.json
+    val customersDF = TestHelper.customersDataFrame(testSession)
 
-    val cust2Join = Timestamp.from(custJoin.toInstant.plus(4, ChronoUnit.DAYS))
+    val customerRow = customersDF
+      .where($"customerId".equalTo("CUST124"))
+      .select($"nickname",$"membership")
 
-    // generate the Customer Data Model
-    val customer = Customer(
-      active = true,
-      created = custJoin,
-      customerId = custId,
-      firstName = "Scott",
-      lastName  = "Haines",
-      email = "scott@coffeeco.com",
-      nickname = "scaines",
-      membership = Some(
-        Membership(
-          customerId = custId,
-          membershipId = "MEMB123",
-          since = custJoin,
-          points = 200
-        )
-      ),
-      preferences = Some(
-        Preferences(
-          customerId = custId,
-          preferencesId = "PREF123"
-        )
-      )
-    )
+    // test row level equality
+    customerRow.head() shouldEqual Row("milocoffee", null)
+  }
 
-    val customer2 = Customer(
-      active = true,
-      created = cust2Join,
-      customerId = "CUST124",
-      firstName = "Milo",
-      lastName = "Haines",
-      email = "milo@coffeeco.com",
-      nickname = "milocoffee"
-    )
+  "SparkEventExtractor" should
+    "join customerRating events with customers" in {
+    val testSession = SparkEventExtractorApp.sparkSession
+    import testSession.implicits._
 
-    // convert to dataset via Encoder.product
+    val ratingEvents = TestHelper.customerRatingsDataFrame(testSession)
 
-    val customerDataset = testSession.createDataset(
-      Seq(customer,customer2)
-    )
+    SparkEventExtractor(testSession)
+      .transform(ratingEvents)
+      .select(
+        $"firstName",
+        $"lastName",
+        $"rating").head shouldEqual Row("Milo", "Haines", 4)
+  }
 
+  "SparkEventExtractor" should
+    "fails to join customerRating events when customer table is missing" in {
+    val testSession = SparkEventExtractorApp.sparkSession
+    testSession.sql("drop table customers")
+
+    val ratingEvents = TestHelper.customerRatingsDataFrame(testSession)
+
+    assertThrows[RuntimeException](
+      SparkEventExtractor(testSession)
+        .transform(ratingEvents))
+  }
+
+  "SparkEventExtractor" should
+    "handle end to end processing" in {
+    val testSession = SparkEventExtractorApp.sparkSession
+    TestHelper.customersTable(testSession)
+    TestHelper.customerRatingsTable(testSession)
+    val destinationTable = "silver.customerRatings"
+    testSession.conf.set(SourceTableName, "bronze.customerRatings")
+    testSession.conf.set(DestinationTableName, destinationTable)
+    testSession.conf.set(SaveModeName, "Overwrite")
+
+    testSession.sql(s"drop table if exists $destinationTable")
+    // reads from bronze db table -> joins with customer table -> writes joined table to silver db table
+    SparkEventExtractorApp.run()
+
+    testSession.catalog
+      .tableExists(destinationTable) shouldBe true
+    testSession.table(destinationTable).count shouldEqual 1
+  }
+
+  "SparkEventExtractor" should " read and join Customer EventData " in {
+    val testSession = SparkEventExtractorApp.sparkSession
+    import testSession.implicits._
+
+    val customerDataset = testSession.createDataset(TestHelper.customers())
     customerDataset.printSchema()
     /*
     root
@@ -125,136 +126,13 @@ class SparkEventExtractorSpec extends AnyFlatSpec with SharedSparkSql with Match
       .coalesce(1)
       .write
       .mode(SaveMode.Ignore)
-      .json(customerJsonPath)
+      .json(TestHelper.customerJsonPath)
   }
 
-  def customersDataFrame(spark: SparkSession): DataFrame = {
-    val customersJson: String = new java.io.File(
-      customerJsonPath
-    ).getAbsolutePath
-
-    spark.read
-      .option("inferSchema", value = false)
-      .schema(customerEncoder.schema)
-      .json(customersJson)
+  override def afterAll(): Unit = {
+    super.afterAll()
+    // add anything else you may need to clean up or track after the suite is complete
   }
 
-  def customersTable(spark: SparkSession): Unit = {
-    if (!spark.catalog.tableExists("default", "customers")) {
-      customersDataFrame(spark)
-        .write
-        .mode(SaveMode.Overwrite)
-        .saveAsTable("customers")
-    }
-  }
-
-  def customerRatingsDataFrame(spark: SparkSession): DataFrame = {
-    spark
-      .createDataFrame[CustomerRatingEventType](Seq(
-        CustomerRatingEventType(
-          created = Timestamp.from(Instant.ofEpochMilli(1618788493198L)),
-          label = "customer.rating",
-          customerId = "CUST124",
-          rating = 4,
-          ratingType = "rating.store",
-          storeId = Some("STOR123")
-        )
-      ))
-  }
-
-  def writeCustomerRatingsJson(spark: SparkSession): Unit = {
-    val customersRatingsJson: String = new java.io.File(
-      customerRatingsPath
-    ).getAbsolutePath
-
-    customerRatingsDataFrame(spark)
-      .coalesce(1)
-      .write
-      .mode(SaveMode.Ignore)
-      .json(customersRatingsJson)
-  }
-
-  def customerRatingsTable(spark: SparkSession): Unit = {
-    if (!spark.catalog.tableExists("bronze", "customerRatings")) {
-      customerRatingsDataFrame(spark)
-        .coalesce(1)
-        .write
-        .mode(SaveMode.Ignore)
-        .saveAsTable("bronze.customerRatings")
-    }
-  }
-
-  def bootstrapTests(spark: SparkSession): Unit = {
-    val sqlWarehouse = spark.catalog.getDatabase("default").locationUri
-    val bronzeDB = s"$sqlWarehouse/bronze"
-    val silverDB = s"$sqlWarehouse/silver"
-
-    spark.sql(
-      s"""
-        CREATE DATABASE IF NOT EXISTS bronze
-        COMMENT 'raw source data'
-        LOCATION '$bronzeDB'
-        WITH
-        DBPROPERTIES(TEAM='coffee-core',TEAM_SLACK='#coffeeco-eng-core');
-        """)
-
-    spark.sql(
-      s"""
-        CREATE DATABASE IF NOT EXISTS silver
-        COMMENT 'reliable source data'
-        LOCATION '$silverDB'
-        WITH
-        DBPROPERTIES(TEAM='coffee-core',TEAM_SLACK='#coffeeco-eng-core');
-        """)
-
-    customersTable(spark)
-    customerRatingsTable(spark)
-  }
-
-  "SparkEventExtractor" should " load and test customers " in {
-    val testSession = SparkEventExtractorApp.sparkSession
-    import testSession.implicits._
-
-    // customers.json
-    val customersDF = customersDataFrame(testSession)
-
-    val customerRow = customersDF
-      .where($"customerId".equalTo("CUST124"))
-      .select($"nickname",$"membership")
-
-    // test row level equality
-    customerRow.head() shouldEqual Row("milocoffee", null)
-  }
-
-  "SparkEventExtractor" should " extract and join customerRating events" in {
-
-    val testSession = SparkEventExtractorApp.sparkSession
-    //bootstrapTests(testSession)
-    import testSession.implicits._
-
-    val ratingEvents = customerRatingsDataFrame(testSession)
-
-    val extractor = SparkEventExtractor(testSession)
-    // joined with customer table
-    val combinedDf = extractor.process(ratingEvents)
-
-    combinedDf
-      .select($"firstName", $"lastName").head shouldEqual Row("Milo", "Haines")
-  }
-
-  "SparkEventExtractor" should " run full end to end processing" in {
-    val testSession = SparkEventExtractorApp.sparkSession
-    customerRatingsTable(testSession)
-    import testSession.implicits._
-
-    testSession.conf.set(SparkEventExtractorApp.Conf.SourceTableName, "bronze.customerRatings")
-    testSession.conf.set(SparkEventExtractorApp.Conf.DestinationTableName, "silver.customerRatings")
-
-    // reads from bronze db table -> joins with customer table -> writes joined table to silver db table
-    SparkEventExtractorApp.run(SaveMode.Overwrite)
-
-    testSession.catalog.tableExists("silver", "customerRatings") shouldBe true
-
-  }
 
 }
