@@ -1,0 +1,2 @@
+{"active":true,"created":"2021-04-18T16:28:13.198-07:00","customerId":"CUST123","firstName":"Scott","lastName":"Haines","email":"scott@coffeeco.com","nickname":"scaines","membership":{"customerId":"CUST123","membershipId":"MEMB123","since":"2021-04-18T16:28:13.198-07:00","points":200},"preferences":{"customerId":"CUST123","preferencesId":"PREF123"}}
+{"active":true,"created":"2021-04-22T16:28:13.198-07:00","customerId":"CUST124","firstName":"Milo","lastName":"Haines","email":"milo@coffeeco.com","nickname":"milocoffee"}
