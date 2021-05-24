@@ -1,0 +1,4 @@
+airflow/dags
+airflow/logs
+airflow/plugins
+.env
