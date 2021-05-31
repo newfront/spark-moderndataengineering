@@ -31,10 +31,7 @@ customer_ratings_conf = {
     "spark.sql.parquet.filterPushdown": "true",
     "spark.hadoop.parquet.enable.summary-metadata": "false",
     "spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version": "2",
-    #"spark.sql.hive.javax.jdo.option.ConnectionURL": "jdbc:mysql://mysql:3306/metastore",
-    #"spark.sql.hive.javax.jdo.option.ConnectionDriverName": "org.mariadb.jdbc.Driver",
     "spark.sql.hive.javax.jdo.option.ConnectionUserName": "dataeng",
-    "spark.sql.warehouse.dir": "s3a://com.coffeeco.data/warehouse",
     "spark.event.extractor.source.table": "bronze.customerRatings",
     "spark.event.extractor.destination.table": "silver.customerRatings",
     "spark.event.extractor.save.mode": "ErrorIfExists"
