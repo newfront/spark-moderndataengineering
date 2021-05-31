@@ -1,0 +1,28 @@
+version: '3'
+services:
+  minio:
+    image: minio/minio:latest
+    volumes:
+      - ${DATA_ENGINEERING_BASEDIR:-$PWD}/minio/data:/data
+    expose:
+      - "9000"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio_admin
+      #MINIO_DOMAIN: mydomain.com
+    command: server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    ports:
+      - 9000:9000
+    networks:
+      - mde
+    hostname: minio
+
+networks:
+  mde:
+    external: true
+    name: mde

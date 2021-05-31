@@ -1,0 +1,38 @@
+version: '3'
+services:
+  zeppelin:
+    image: apache/zeppelin:0.9.0
+    container_name: zeppelin
+    volumes:
+      - ${PWD}/notebook:/notebook
+      - ${PWD}/logs:/logs
+      - ${SPARK_HOME}:/spark
+      - ${DATA_ENGINEERING_BASEDIR}/spark/conf:/spark/conf
+      - ${DATA_ENGINEERING_BASEDIR}/spark/jars:/spark/user_jars
+    environment:
+      - SPARK_HOME=/spark
+      - SPARK_SUBMIT_OPTIONS=--packages=org.mariadb.jdbc:mariadb-java-client:2.7.2 --jars=/spark/user_jars/mysql-connector-java-8.0.23.jar,/spark/user_jars/hadoop-aws-3.2.0.jar,/spark/user_jars/hadoop-cloud-storage-3.2.0.jar,/spark/user_jars/aws-java-sdk-bundle-1.11.375.jar
+      - ZEPPELIN_LOG_DIR=/logs
+      - ZEPPELIN_NOTEBOOK_DIR=/notebook
+      - ZEPPELIN_ADDR=0.0.0.0
+      - ZEPPELIN_SPARK_MAXRESULT=10000
+      - ZEPPELIN_INTERPRETER_OUTPUT_LIMIT=204800
+      - ZEPPELIN_NOTEBOOK_COLLABORATIVE_MODE_ENABLE=false
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio_admin
+    healthcheck:
+      interval: 5s
+      retries: 10
+    ports:
+      - 8080:8080
+      - 4040:4040
+      - 4041:4041
+    networks:
+      - mde
+    hostname: "zeppelin"
+    restart: always
+
+networks:
+  mde:
+    external:
+      name: mde    

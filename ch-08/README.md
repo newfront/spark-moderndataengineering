@@ -29,4 +29,16 @@ alias airflow2_start="docker compose -f ${DATA_ENGINEERING_BASEDIR}/airflow/dock
 alias airflow2_stop="docker compose -f ${DATA_ENGINEERING_BASEDIR}/airflow/docker-compose.yaml down --remove-orphans"
 ~~~
 
-Now whenever you want to spin up Airflow, you can simply type `airflow2_start`, and likewise when you are done for the day or want to gain system resources back you can run `airflow2_stop`. 
+Now whenever you want to spin up Airflow, you can simply type `airflow2_start`, and likewise when you are done for the day or want to gain system resources back you can run `airflow2_stop`.
+
+### Using MinIO to build up your data warehouse
+The directory `minio` contains a docker-compose.yaml for running the `minio` Amazon S3 compatible file system. You move this directory into `~/dataengineering/minio` and use the `minio_start` or `minio_stop` alias in order to start and stop this shared s3 clone. The directions will help you create the `com.coffeeco.data/` bucket. To use this, you have to do the following: 
+1. Rename the configuration from `spark/conf/spark-defaults_minio.conf` to `spark-defaults.conf`.
+2. Include the required jars `--jars /opt/spark/jars/hadoop-aws-3.2.0.jar,/opt/spark/jars/hadoop-cloud-storage-3.2.0.jar` when running your Spark DAGs
+
+## Add the MinIO hostname to your /etc/hosts
+~~~
+127.0.0.1 minio
+~~~
+
+Now you can locate the MinIO UI in your browser at http://minio:9000

@@ -57,9 +57,7 @@ Update your `.env` to include the
 ~~~
 echo -e "AIRFLOW_IMAGE_NAME=newfrontdocker/apache-airflow-spark:2.1.0" >> .env
 echo -e "SPARK_HOME=${SPARK_HOME}" >> .env
-echo -e "JAVA_HOME=${JAVA_HOME}" >> .env
 ~~~
-
 
 ***
 Note: (MacOS - BigSur)

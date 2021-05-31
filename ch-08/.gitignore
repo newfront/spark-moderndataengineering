@@ -1,4 +1,16 @@
 airflow/dags
 airflow/logs
 airflow/plugins
+
+# don't check in local environment variables
 .env
+
+# ignore the minio system
+minio/data/.minio.sys
+
+.DS_Store
+*/.DS_Store
+minio/.DS_Store/
+
+# ignore the mysql database
+mysql/data/mysqldir

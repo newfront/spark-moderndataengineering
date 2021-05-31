@@ -1,0 +1,263 @@
+{
+  "paragraphs": [
+    {
+      "text": "%spark\nval s3endpoint \u003d spark.conf.get(\"spark.hadoop.fs.s3a.endpoint\")\nval s3access \u003d spark.conf.get(\"spark.hadoop.fs.s3a.access.key\")\nval s3secret \u003d spark.conf.get(\"spark.hadoop.fs.s3a.secret.key\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-05-31 20:58:34.926",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34ms3endpoint\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d http://minio:9000\n\u001b[1m\u001b[34ms3access\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d minio\n\u001b[1m\u001b[34ms3secret\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d minio_admin\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1622494422656_1914552185",
+      "id": "paragraph_1622494422656_1914552185",
+      "dateCreated": "2021-05-31 20:53:42.656",
+      "dateStarted": "2021-05-31 20:58:34.965",
+      "dateFinished": "2021-05-31 20:58:59.305",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Bootstrap the new Hive Metastore",
+      "text": "%spark\nspark.conf.set(\"spark.hadoop.fs.s3a.connection.ssl.enabled\", \"false\")\nval dbName \u003d \"coffee_co_common\"\nval dbDescription \u003d \"This database stores common information regarding inventory, stores, and customers\"\nval defaultWarehouse \u003d spark.catalog.getDatabase(\"default\").locationUri\nval warehousePrefix \u003d s\"$defaultWarehouse/common\"\nval bronzePrefix \u003d s\"$defaultWarehouse/bronze\"\nval silverPrefix \u003d s\"$defaultWarehouse/silver\"\n\n/* create the common DB */\nspark.sql(s\"\"\"\nCREATE DATABASE IF NOT EXISTS $dbName \nCOMMENT \u0027$dbDescription\u0027 \nLOCATION \u0027$warehousePrefix\u0027 \nWITH DBPROPERTIES(TEAM\u003d\u0027core\u0027,LEAD\u003d\u0027scott\u0027,TEAM_SLACK\u003d\u0027#help_coffee_common\u0027);\n\"\"\")\n\n\n/* create the bronze DB */\nspark.sql(s\"\"\"\nCREATE DATABASE IF NOT EXISTS bronze\nCOMMENT \u0027Stores raw data sets\u0027 \nLOCATION \u0027$bronzePrefix\u0027 \nWITH DBPROPERTIES(TEAM\u003d\u0027core\u0027,LEAD\u003d\u0027scott\u0027,TEAM_SLACK\u003d\u0027#help_coffee_common\u0027);\n\"\"\")\n\n/* create the silver DB */\nspark.sql(s\"\"\"\nCREATE DATABASE IF NOT EXISTS silver\nCOMMENT \u0027Stores ETLed data sets\u0027 \nLOCATION \u0027$silverPrefix\u0027 \nWITH DBPROPERTIES(TEAM\u003d\u0027core\u0027,LEAD\u003d\u0027scott\u0027,TEAM_SLACK\u003d\u0027#help_coffee_common\u0027);\n\"\"\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-05-31 21:03:32.141",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mdbName\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d coffee_co_common\n\u001b[1m\u001b[34mdbDescription\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d This database stores common information regarding inventory, stores, and customers\n\u001b[1m\u001b[34mdefaultWarehouse\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d s3a://com.coffeeco.data/warehouse\n\u001b[1m\u001b[34mwarehousePrefix\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d s3a://com.coffeeco.data/warehouse/common\n\u001b[1m\u001b[34mbronzePrefix\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d s3a://com.coffeeco.data/warehouse/bronze\n\u001b[1m\u001b[34msilverPrefix\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d s3a://com.coffeeco.data/warehouse/silver\n\u001b[1m\u001b[34mres5\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d []\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1622494435771_615078256",
+      "id": "paragraph_1622494435771_615078256",
+      "dateCreated": "2021-05-31 20:53:55.771",
+      "dateStarted": "2021-05-31 21:03:22.188",
+      "dateFinished": "2021-05-31 21:03:22.598",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Import the Unmanaged Tables into the MinIO Warehouse",
+      "text": "%spark\nval minioS3Path \u003d \"s3a://com.coffeeco.data\"\nval unmanagedPath \u003d s\"$minioS3Path/unmanaged\"\nval warehousePath \u003d spark.catalog.getDatabase(\"default\").locationUri //s3a://com.coffeeco.data/warehouse\n\nval customersTable \u003d spark.read.parquet(s\"$unmanagedPath/customers/\")\n\n/* If you modified the def withCustomerData in the SparkEventExtractorApp then you can provide the customers table */\ncustomersTable\n  .write\n  .mode(\"ignore\")\n  .saveAsTable(\"coffee_co_common.customers\")\n\n/* or you can use the default database as your join location */\ncustomersTable.write.mode(\"ignore\").saveAsTable(\"customers\")\n\n\n\nval customerRatingsTable \u003d spark.read.parquet(s\"$unmanagedPath/customerratings/\")\n\ncustomerRatingsTable\n  .write\n  .mode(\"ignore\")\n  .saveAsTable(\"bronze.customerRatings\")\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-05-31 21:17:18.404",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mminioS3Path\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d s3a://com.coffeeco.data\n\u001b[1m\u001b[34munmanagedPath\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d s3a://com.coffeeco.data/unmanaged\n\u001b[1m\u001b[34mwarehousePath\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d s3a://com.coffeeco.data/warehouse\n\u001b[1m\u001b[34mcustomersTable\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [active: boolean, created: timestamp ... 7 more fields]\n\u001b[1m\u001b[34mcustomerRatingsTable\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [created: timestamp, eventType: string ... 6 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d6"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d7"
+            },
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d8"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1622495015401_1547592654",
+      "id": "paragraph_1622495015401_1547592654",
+      "dateCreated": "2021-05-31 21:03:35.401",
+      "dateStarted": "2021-05-31 21:17:18.416",
+      "dateFinished": "2021-05-31 21:17:20.648",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\ncustomersTable\n  .write\n  .mode(\"ignore\")\n  .saveAsTable(\"coffee_co_common.customers\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-05-31 21:11:54.668",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin:4040/jobs/job?id\u003d2"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1622495408501_1568305303",
+      "id": "paragraph_1622495408501_1568305303",
+      "dateCreated": "2021-05-31 21:10:08.501",
+      "dateStarted": "2021-05-31 21:11:34.325",
+      "dateFinished": "2021-05-31 21:11:38.312",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nspark.catalog.listDatabases().show()",
+      "user": "anonymous",
+      "dateUpdated": "2021-05-31 20:59:36.145",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----------------+--------------------+--------------------+\n|            name|         description|         locationUri|\n+----------------+--------------------+--------------------+\n|coffee_co_common|This database sto...|s3a://com.coffeec...|\n|         default|Default Hive data...|s3a://com.coffeec...|\n+----------------+--------------------+--------------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1622494470091_1469732939",
+      "id": "paragraph_1622494470091_1469732939",
+      "dateCreated": "2021-05-31 20:54:30.091",
+      "dateStarted": "2021-05-31 20:59:36.158",
+      "dateFinished": "2021-05-31 20:59:37.695",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-05-31 20:59:36.153",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1622494776153_1726721390",
+      "id": "paragraph_1622494776153_1726721390",
+      "dateCreated": "2021-05-31 20:59:36.153",
+      "status": "READY"
+    }
+  ],
+  "name": "8_1_Bootstrap_Hive_MinIO",
+  "id": "2G6C4EH92",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview2",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
