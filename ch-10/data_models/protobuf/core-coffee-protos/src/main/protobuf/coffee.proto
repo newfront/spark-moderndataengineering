@@ -1,0 +1,109 @@
+syntax = "proto3";
+option java_package="com.coffeeco.protocol";
+option java_outer_classname="Common";
+
+/*
+Note: On what not to do
+https://developers.google.com/protocol-buffers/docs/proto3#updating
+*/
+
+message Coffee {
+  string coffee_id = 1; // murmurHash($name.${vendor.
+  string name      = 2; // GuavaYava
+  Vendor vendor    = 3; // vendor.name=Vervish
+
+  enum RoastLevel {
+    unknown_roast_level = 0;
+    ultra_light         = 1;
+    light               = 2;
+    medium_light        = 3;
+    medium              = 4;
+    medium_bold         = 5;
+    bold                = 6;
+    bolder              = 7;
+    burnt               = 8;
+    ruined              = 9;
+    carbon              = 10;
+  }
+
+  RoastLevel boldness = 4;
+  Availability availability = 5;
+}
+
+/*
+ Encapsulates a full Store record
+*/
+message Store {
+  uint32 store_id   = 1; // assume we will
+  string name       = 2; // assume this never changes
+  uint32 capacity   = 3; // how many people can occupy a store
+  Location location = 4;
+  uint32 opens_at   = 5; // daily (24 hour scale)
+  uint32 closes_at  = 6; // daily (24 hour scale)
+  bool open_24hrs   = 7; // is this store open 24 hours a day?
+  string alias      = 15; // is there another friendly name for this store?
+}
+
+/*
+ Customers are actual people, or accounts (say if a Business has a main account).
+ - pii (be careful of the personally identifiable information you pass in your events)
+ - most of the time a simple (customer_id) will due - this is where ETL can come into play
+ - then you can choose (depending on the need) which fields from the main Customer payload
+ - you actually need for your project
+*/
+
+message Customer {
+  uint64 joined      = 1; // utc join date
+  string customer_id = 2; // used to identify the customer (safe - no pii)
+  string first_name = 3; // (pii)
+  string last_name = 4; // (pii)
+  string email = 5; // (pii)
+  string nickname = 6; // customer provided nickname (could-be-pii)
+
+  enum MembershipType {
+    unknown_membership = 0;
+    basic              = 1;
+    premium            = 2;
+    vip                = 3;
+  }
+
+  MembershipType membership = 7; // used to denote customer value
+
+}
+
+/*
+ - a vendor is a supplier of a good (like coffee). We only need an identifier and name
+ - this can be extended by you, the student
+*/
+message Vendor {
+  string vendor_id = 1; // murmur3($.name)
+  string name = 2;
+}
+/*
+ - Enhance an Item with the Availability
+ - some things are hear one moment / gone the next
+ - Some metadata is used only to enhance a few use cases
+ - Like this example, adding availability data to a Coffee won't in real-time
+ - But could be useful when running ad campaigns to notify customers that their favorite
+ - coffee is no longer available
+*/
+message Availability {
+  bool now = 1;
+  uint64 since = 2;
+  uint64 until = 3;
+  bool seasonal = 4;
+}
+
+/*
+ Encapsulates common Location information
+*/
+message Location {
+  string location_id = 1;
+  string city = 2;
+  string state = 3;
+  string country = 4;
+  string zipcode = 5;
+  string timezone = 6;
+  float longitude = 7;
+  float latitude = 8;
+}
