@@ -1,0 +1,63 @@
+syntax = "proto3";
+option java_package="com.coffeeco.protocol";
+option java_outer_classname="Events";
+
+
+/* Passed along in the RatingEvent
+  - Can be used to validate data (depending on the category of the rating)
+  - an associated id (like this coffee (x), or this sandwich (y)
+  - Store ratings are typically solicited to get a general view of collective approval
+  - or disapproval
+*/
+enum RatingCategory {
+    rating_category_unknown = 0;
+    rating_category_product = 1;
+    rating_category_store   = 2;
+}
+
+/*
+ Encapsulates a general rating. Keeps the type as an enumeration (lower byte size)
+*/
+enum Rating {
+  rating_unknown = 0;
+  poor           = 1;
+  fair           = 2;
+  normal         = 3;
+  great          = 4;
+  excellent      = 5;
+
+  thumbs_up      = 6; // is a general (not bad - can be normal - excellent)
+  thumbs_down    = 7; // is a general (not good - can be poor - normal)
+}
+
+message RatingEvent {
+  uint64 created = 1; // utc timestamp
+  RatingCategory category = 2; // used to reduce the ratings by type
+  Rating rating  = 3; // fingers crossed it is a good one
+  string customer_id = 4; // customer who rated (could be anonymous or a real customer)
+  string product_id  = 5; // the product being rated (if rating_type.product_rating)
+  string store_id    = 6; // the store being rated (if rating_type.store_rating)
+}
+
+/*
+ Simple Event that encapsulates customer orders
+ - This event would most likely be emitted after the payment has been made
+ - in an upstream system - delivered to the event stream via the data API gateway server
+*/
+message CustomerOrderEvent {
+    uint64 created = 1; // utc timestamp of the creation of the order
+    string customer_id = 2; // track customer
+    string store_id    = 3; // which store (or online)
+    string order_id    = 4; // the id of the order
+    uint32 items_in_order = 5; // number of items (understand who buys 1 or more)
+    float price        = 6; // for simplicity this will be un US dollars / cents
+}
+
+/*
+ Simple Event that is emitted based on the l
+*/
+message StoreOccupancyEvent {
+  uint64 created = 1; // utc timestamp
+  string store_id = 2; // which store?
+  uint32 occupants = 3; // how many current occupants in the store
+}
