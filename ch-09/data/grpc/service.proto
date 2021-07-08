@@ -1,0 +1,35 @@
+//#service-request-reply
+syntax = "proto3";
+
+service CustomerService {
+    rpc TrackOrder (Order) returns (Response) {}
+    rpc TrackOrderStatus (OrderStatusTracker) returns (Response) {}
+}
+
+message Order {
+    uint64 created      = 1;
+    string orderId      = 2;
+    string userId       = 3;
+    Status status       = 4;
+}
+
+enum Status {
+  unknown    = 0;
+  initalized = 1;
+  started    = 2;
+  progress   = 3;
+  completed  = 4;
+  failed     = 5;
+  canceled   = 6;
+}
+
+message OrderStatusTracker {
+  uint64 timestamp = 1;
+  Status status    = 2;
+  string orderId   = 3;
+}
+
+message Response {
+    uint32 statusCode = 1;
+    string message    = 2;
+}

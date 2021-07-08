@@ -1,0 +1,11 @@
+{
+  "namespace": "com.coffeeco.data",
+  "type": "record",
+  "name": "Coffee",
+  "fields": [
+    ("name": "id", "type: "string"},
+    {"name": "name", "type": "string"},
+    {"name": "boldness", "type": "int", "doc": "from light to bold. 1 to 10"},
+    {"name": "available", "type": "boolean"}
+ ]
+}
