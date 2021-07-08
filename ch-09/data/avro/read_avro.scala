@@ -15,6 +15,7 @@ val coffee = spark.createDataFrame[Coffee](
   Seq(Coffee("co123","verve",3,true),Coffee("co231","folgers",9,true))
 )
 
+/* write the simple dataframe as avro */
 coffee
   .repartition(1)
   .write
@@ -22,9 +23,3 @@ coffee
   .mode("overwrite")
   .save("coffee_list.avro")
 
-/*
-val output = df
-  .select(from_avro('value, jsonFormatSchema) as 'user)
-  .where("user.favorite_color == \"red\"")
-  .select(to_avro($"user.name") as 'value)
-*/
