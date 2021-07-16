@@ -1,7 +1,6 @@
 import sbt.Keys._
 import sbt.Project.projectToLocalProject
 
-
 lazy val root = (project in file(".")).settings(
   version := "0.1-SNAPSHOT",
   organization := "com.coffeeco.protocol",
