@@ -1,6 +1,6 @@
 package com.coffeeco.data
 
-import com.coffeeco.data.SparkRedisStreamsApp.{inputStream, sparkSession}
+import com.coffeeco.data.SparkRedisStreamsApp.{inputStream, inputStreamName, sparkSession}
 import com.coffeeco.data.TestHelper.fullPath
 import org.apache.spark.SparkConf
 import org.scalatest.flatspec.AnyFlatSpec
