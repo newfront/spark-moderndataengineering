@@ -5,15 +5,19 @@ import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.types.{FloatType, IntegerType, LongType, StringType, StructField, StructType}
 import org.apache.spark.sql.streaming.{DataStreamReader, DataStreamWriter, StreamingQuery}
 
-object SparkRedisStreamsApp extends SparkApplication {
-  val logger: Logger = Logger.getLogger("com.coffeeco.data.SparkRedisStreamsApp")
+object StatefulSparkRedisStreamsApp extends SparkApplication {
+  val logger: Logger = Logger.getLogger("com.coffeeco.data.StatefulSparkRedisStreamsApp")
+
+  lazy val inputStreamName: String = sparkConf.get("spark.app.source.stream")
+  lazy val appCheckpointLocation: String = sparkConf.get("spark.app.checkpoint.location")
 
   override def validateConfig()(implicit sparkSession: SparkSession): Boolean = {
-    sparkConf.get("spark.app.source.stream", "").nonEmpty
+    if (inputStreamName.isEmpty || appCheckpointLocation.isEmpty) {
+      throw new RuntimeException("The config settings spark.app.source.stream " +
+        "and spark.app.checkpoint.location can not be empty")
+    }
+    true
   }
-
-  lazy val inputStreamName: String = sparkConf.get(
-    "spark.app.source.stream","com:coffeeco:coffee:v1:orders")
 
   // stream data source format for reading
   lazy val streamStruct: StructType = new StructType()
@@ -23,7 +27,7 @@ object SparkRedisStreamsApp extends SparkApplication {
     .add(StructField("customerId", StringType, nullable = false))
     .add(StructField("numItems", IntegerType, nullable = false))
     .add(StructField("price", FloatType, nullable = false))
-  
+
   // data stream source reader
   lazy val inputStream: DataStreamReader = {
     sparkSession.readStream
@@ -38,11 +42,12 @@ object SparkRedisStreamsApp extends SparkApplication {
    */
   override def run(): Unit = {
     super.run()
-    
+
     val writer: DataStreamWriter[Row] = SparkRedisStreams(sparkSession)
       .transform(inputStream.load())
       .writeStream
       .queryName("orders")
+      .option("checkpointLocation", appCheckpointLocation)
       .format("console")
 
     startAndAwaitApp(writer.start())
@@ -53,5 +58,4 @@ object SparkRedisStreamsApp extends SparkApplication {
   }
 
   run()
-
 }

@@ -98,25 +98,25 @@ This confirms that the key is no longer known.
 ## Redis Streams
 
 ~~~
-127.0.0.1:6379> xadd com:coffeeco:coffee:v1:orders:2021-07-07 MAXLEN ~ 3000 * orderId ord123 customerId ca123 timestamp 1625766472303 numItems 4 price 30.00
+127.0.0.1:6379> xadd com:coffeeco:coffee:v1:orders MAXLEN ~ 3000 * orderId ord123 customerId ca123 timestamp 1625766472303 numItems 4 price 30.00
 "1625766684875-0"
 ~~~
 
 ### Check that the Stream was Generated
 ~~~
 127.0.0.1:6379> keys *
-1) "com:coffeeco:coffee:v1:orders:2021-07-07"
+1) "com:coffeeco:coffee:v1:orders"
 ~~~
 
 ### Finding the Total Stream Items
 ~~~
-127.0.0.1:6379> xlen com:coffeeco:coffee:v1:orders:2021-07-07
+127.0.0.1:6379> xlen com:coffeeco:coffee:v1:orders
 (integer) 1
 ~~~
 
 ### Fetching the first item in the stream
 ~~~
-127.0.0.1:6379> xrange com:coffeeco:coffee:v1:orders:2021-07-07 - + COUNT 1
+127.0.0.1:6379> xrange com:coffeeco:coffee:v1:orders - + COUNT 1
 1) 1) "1625766684875-0"
    2)  1) "orderId"
        2) "ord123"
@@ -128,6 +128,11 @@ This confirms that the key is no longer known.
        8) "4"
        9) "price"
       10) "30.00"
+~~~
+
+### Deleting Stream Items
+~~~
+
 ~~~
 
 ## Listing all Commands and Command Parameters

@@ -8,9 +8,13 @@ trait SparkApplication extends App {
   val appName = Configuration.appName
 
   lazy val sparkConf: SparkConf = {
-    new SparkConf()
+    val coreConf = new SparkConf()
       .setAppName(appName)
-      .setAll(Configuration.Spark.settings)
+    // merge if missing
+    Configuration.Spark.settings.foreach(tuple =>
+      coreConf.setIfMissing(tuple._1, tuple._2)
+    )
+    coreConf
   }
 
   lazy implicit val sparkSession: SparkSession = {

@@ -53,17 +53,16 @@ $SPARK_HOME/bin/spark-submit \
   /opt/spark/app/spark-redis-streams.jar
 ~~~
 
-### Running the Local Structured Streaming App
-As long as you've generated
-
 ## Run the Simple Application (no checkpointing or trigger)
+Exercise 1/2 use the following command to run the application.
+
 ~~~
 docker run \
   -p 4040:4040 \
   --hostname spark-redis-test \
   --network mde \
-  -v /Users/`whoami`/dataengineering/spark/conf:/opt/spark/conf \
-  -v /Users/`whoami`/dataengineering/spark/jars:/opt/spark/user_jars \
+  -v ~/dataengineering/spark/conf:/opt/spark/conf \
+  -v ~/dataengineering/spark/jars:/opt/spark/user_jars \
   -it `whoami`/spark-redis-streams:latest \
   /opt/spark/bin/spark-submit \
   --master "local[*]" \
@@ -71,20 +70,15 @@ docker run \
   --deploy-mode "client" \
   --jars /opt/spark/user_jars/mariadb-java-client-2.7.2.jar \
   --driver-class-path /opt/spark/user_jars/mariadb-java-client-2.7.2.jar \
-  --conf "spark.sql.hive.javax.jdo.option.ConnectionDriverName=org.mariadb.jdbc.Driver" \
   --conf "spark.sql.warehouse.dir=s3a://com.coffeeco.data/warehouse" \
   --conf "spark.app.source.stream=com:coffeeco:coffee:v1:orders" \
   /opt/spark/app/spark-redis-streams.jar
 ~~~
 
-### Run the application: Trigger.Once / checkpoints
-When using the `Trigger.Once` trigger, you will want to have some data in the redis stream.
-`xadd com:coffeeco:coffee:v1:orders  * timestamp 1625766472513 orderId ord126 storeId st1 customerId ca183 numItems 6 price 48.00`
-Just copy and change some of the data here to create some different orders or prices etc
+### Run the Stateful Application: StatefulSparkRedisStreamsApp
+Exercise 3 added checkpointing to the application. Use the following command to fire up the application.
 
-Then when you are ready. Spin up this next app. It is the same application container as the first example.
-The difference here is the application is set to trigger once and stop. 
- 
+Then when you are ready. Spin up this next app.
 ~~~
 docker run \
   -p 4040:4040 \
@@ -95,7 +89,38 @@ docker run \
   -it `whoami`/spark-redis-streams:latest \
   /opt/spark/bin/spark-submit \
   --master "local[*]" \
-  --class "com.coffeeco.data.SparkRedisStreamsApp" \
+  --class "com.coffeeco.data.StatefulSparkRedisStreamsApp" \
+  --deploy-mode "client" \
+  --jars /opt/spark/user_jars/mariadb-java-client-2.7.2.jar \
+  --driver-class-path /opt/spark/user_jars/mariadb-java-client-2.7.2.jar \
+  --conf "spark.sql.warehouse.dir=s3a://com.coffeeco.data/warehouse" \
+  --conf "spark.app.source.stream=com:coffeeco:coffee:v1:orders" \
+  --conf "spark.app.checkpoint.location=s3a://com.coffeeco.data/apps/spark-redis-streams-app/1.0.0/simple" \
+  /opt/spark/app/spark-redis-streams.jar
+~~~
+
+### Triggering: TriggeredStatefulSparkRedisStreamsApp
+Exercise 4 introduced you to the concept of Triggering.
+
+When using the `Trigger.Once` trigger, you will want to have some data in the redis stream.
+`xadd com:coffeeco:coffee:v1:orders  * timestamp 1625766472513 orderId ord126 storeId st1 customerId ca183 numItems 6 price 48.00`
+Just copy and change some of the data here to create some different orders or prices etc
+
+Then when you are ready. Spin up this next app.
+The difference here is the application is set to trigger once and stop.
+
+#### Trigger.Once
+~~~
+docker run \
+  -p 4040:4040 \
+  --hostname spark-redis-test \
+  --network mde \
+  -v /Users/`whoami`/dataengineering/spark/conf:/opt/spark/conf \
+  -v /Users/`whoami`/dataengineering/spark/jars:/opt/spark/user_jars \
+  -it `whoami`/spark-redis-streams:latest \
+  /opt/spark/bin/spark-submit \
+  --master "local[*]" \
+  --class "com.coffeeco.data.TriggeredStatefulSparkRedisStreamsApp" \
   --deploy-mode "client" \
   --jars /opt/spark/user_jars/mariadb-java-client-2.7.2.jar \
   --driver-class-path /opt/spark/user_jars/mariadb-java-client-2.7.2.jar \
@@ -104,10 +129,65 @@ docker run \
   --conf "spark.app.source.stream=com:coffeeco:coffee:v1:orders" \
   --conf "spark.app.stream.trigger.enabled=true" \
   --conf "spark.app.stream.trigger.type=once" \
-  --conf "spark.app.checkpoint.location=s3a://com.coffeeco.data/apps/spark-redis-streams-app/1.0.0/" \
+  --conf "spark.app.checkpoint.location=s3a://com.coffeeco.data/apps/spark-redis-streams-app/canary/" \
+  --conf "spark.app.streaming.sink.path=s3a://com.coffeeco.data/tables/coffee.order.events/" \
+  --conf "spark.app.streaming.table.name=coffee_orders" \
   /opt/spark/app/spark-redis-streams.jar
 ~~~
 
+#### Trigger.ProcessingTime
+~~~
+docker run \
+  -p 4040:4040 \
+  --hostname spark-redis-test \
+  --network mde \
+  -v /Users/`whoami`/dataengineering/spark/conf:/opt/spark/conf \
+  -v /Users/`whoami`/dataengineering/spark/jars:/opt/spark/user_jars \
+  -it `whoami`/spark-redis-streams:latest \
+  /opt/spark/bin/spark-submit \
+  --master "local[*]" \
+  --class "com.coffeeco.data.TriggeredStatefulSparkRedisStreamsApp" \
+  --deploy-mode "client" \
+  --jars /opt/spark/user_jars/mariadb-java-client-2.7.2.jar \
+  --driver-class-path /opt/spark/user_jars/mariadb-java-client-2.7.2.jar \
+  --conf "spark.sql.warehouse.dir=s3a://com.coffeeco.data/warehouse" \
+  --conf "spark.app.source.stream=com:coffeeco:coffee:v1:orders" \
+  --conf "spark.app.stream.trigger.enabled=true" \
+  --conf "spark.app.stream.trigger.type=processing" \
+  --conf "spark.app.checkpoint.location=s3a://com.coffeeco.data/apps/spark-redis-streams-app/canary/" \
+  --conf "spark.app.streaming.sink.path=s3a://com.coffeeco.data/tables/other.coffee.order.events/" \
+  --conf "spark.app.streaming.table.name=other_coffee_orders" \
+  /opt/spark/app/spark-redis-streams.jar
+~~~
+
+#### Trigger.Continuous
+- This won't work unfortunately since continuous mode only works with Kafka as the source.
+- But it can help you learn what exceptions you receive and how to figure out what is needed to get things running.
+~~~
+docker run \
+  -p 4040:4040 \
+  --hostname spark-redis-test \
+  --network mde \
+  -v /Users/`whoami`/dataengineering/spark/conf:/opt/spark/conf \
+  -v /Users/`whoami`/dataengineering/spark/jars:/opt/spark/user_jars \
+  -it `whoami`/spark-redis-streams:latest \
+  /opt/spark/bin/spark-submit \
+  --master "local[*]" \
+  --class "com.coffeeco.data.TriggeredStatefulSparkRedisStreamsApp" \
+  --deploy-mode "client" \
+  --jars /opt/spark/user_jars/mariadb-java-client-2.7.2.jar \
+  --driver-class-path /opt/spark/user_jars/mariadb-java-client-2.7.2.jar \
+  --conf "spark.sql.warehouse.dir=s3a://com.coffeeco.data/warehouse" \
+  --conf "spark.app.source.stream=com:coffeeco:coffee:v1:orders" \
+  --conf "spark.app.stream.trigger.enabled=true" \
+  --conf "spark.app.stream.trigger.type=continuous" \
+  --conf "spark.app.checkpoint.location=s3a://com.coffeeco.data/apps/spark-redis-streams-app/canary/" \
+  --conf "spark.app.streaming.sink.path=s3a://com.coffeeco.data/tables/cont.coffee.order.events/" \
+  --conf "spark.app.streaming.table.name=cont_coffee_orders" \
+  /opt/spark/app/spark-redis-streams.jar
+~~~
+
+#### Streaming Output
 ~~~
 You should see something like this come through in the console
 -------------------------------------------
