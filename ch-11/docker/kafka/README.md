@@ -58,7 +58,8 @@ docker compose -f $KAFKA_DOCKER_COMPOSE_PATH up -d --remove-orphans
 
 then you can use 
 ~~~
-docker compose down -f /path/to/docker-compose.yaml --remove-orphans
+export KAFKA_DOCKER_COMPOSE_PATH=~/dataengineering/kafka/docker-compose.yaml
+docker compose down -f $KAFKA_DOCKER_COMPOSE_PATH --remove-orphans
 ~~~
 
 to turn things back off.

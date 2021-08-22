@@ -100,10 +100,14 @@ networks:
 
 volumes:
   zookeeper_data:
+    name: kafka_zookeeper_data
     driver: local
   kafka_0_data:
+    name: kafka_kafka_0_data
     driver: local
   kafka_1_data:
+    name: kafka_kafka_1_data
     driver: local
   kafka_2_data:
+    name: kafka_kafka_2_data
     driver: local
