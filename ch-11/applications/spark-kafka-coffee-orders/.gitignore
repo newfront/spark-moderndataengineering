@@ -3,3 +3,4 @@ target/
 spark_warehouse
 *.iml
 .bsp
+*.log

@@ -3,10 +3,16 @@ option java_package="com.coffeeco.protocol";
 option java_outer_classname="Common";
 
 message CoffeeOrder {
-  uint64 timestamp  = 1;
-  string order_id = 2;
-  string store_id = 3;
+  uint64 timestamp   = 1;
+  string order_id    = 2;
+  string store_id    = 3;
   string customer_id = 4;
-  uint32 num_items = 5;
-  float  price = 6;
+  uint32 num_items   = 5;
+  float  price       = 6;
+}
+
+message KafkaRecord {
+  bytes  key   = 1;
+  bytes  value = 2;
+  string topic = 3;
 }

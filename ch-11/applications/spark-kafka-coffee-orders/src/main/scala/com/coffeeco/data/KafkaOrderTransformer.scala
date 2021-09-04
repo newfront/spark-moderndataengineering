@@ -1,7 +1,6 @@
 package com.coffeeco.data
 
 import org.apache.spark.sql.{DataFrame, Dataset, Encoder, Encoders, SparkSession}
-import com.coffeeco.protocol.coffee.common._
 
 object KafkaOrderTransformer {
   def apply(spark: SparkSession): KafkaOrderTransformer = {

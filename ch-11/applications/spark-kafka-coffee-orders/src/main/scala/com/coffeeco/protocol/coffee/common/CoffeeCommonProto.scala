@@ -9,15 +9,17 @@ object CoffeeCommonProto extends _root_.scalapb.GeneratedFileObject {
   lazy val dependencies: Seq[_root_.scalapb.GeneratedFileObject] = Seq.empty
   lazy val messagesCompanions: Seq[_root_.scalapb.GeneratedMessageCompanion[_ <: _root_.scalapb.GeneratedMessage]] =
     Seq[_root_.scalapb.GeneratedMessageCompanion[_ <: _root_.scalapb.GeneratedMessage]](
-      com.coffeeco.protocol.coffee.common.CoffeeOrder
+      com.coffeeco.protocol.coffee.common.CoffeeOrder,
+      com.coffeeco.protocol.coffee.common.KafkaRecord
     )
   private lazy val ProtoBytes: _root_.scala.Array[Byte] =
       scalapb.Encoding.fromBase64(scala.collection.immutable.Seq(
   """ChNjb2ZmZWUuY29tbW9uLnByb3RvIo0CCgtDb2ZmZWVPcmRlchIsCgl0aW1lc3RhbXAYASABKARCDuI/CxIJdGltZXN0YW1wU
   gl0aW1lc3RhbXASJwoIb3JkZXJfaWQYAiABKAlCDOI/CRIHb3JkZXJJZFIHb3JkZXJJZBInCghzdG9yZV9pZBgDIAEoCUIM4j8JE
   gdzdG9yZUlkUgdzdG9yZUlkEjAKC2N1c3RvbWVyX2lkGAQgASgJQg/iPwwSCmN1c3RvbWVySWRSCmN1c3RvbWVySWQSKgoJbnVtX
-  2l0ZW1zGAUgASgNQg3iPwoSCG51bUl0ZW1zUghudW1JdGVtcxIgCgVwcmljZRgGIAEoAkIK4j8HEgVwcmljZVIFcHJpY2VCHwoVY
-  29tLmNvZmZlZWNvLnByb3RvY29sQgZDb21tb25iBnByb3RvMw=="""
+  2l0ZW1zGAUgASgNQg3iPwoSCG51bUl0ZW1zUghudW1JdGVtcxIgCgVwcmljZRgGIAEoAkIK4j8HEgVwcmljZVIFcHJpY2UibQoLS
+  2Fma2FSZWNvcmQSGgoDa2V5GAEgASgMQgjiPwUSA2tleVIDa2V5EiAKBXZhbHVlGAIgASgMQgriPwcSBXZhbHVlUgV2YWx1ZRIgC
+  gV0b3BpYxgDIAEoCUIK4j8HEgV0b3BpY1IFdG9waWNCHwoVY29tLmNvZmZlZWNvLnByb3RvY29sQgZDb21tb25iBnByb3RvMw=="""
       ).mkString)
   lazy val scalaDescriptor: _root_.scalapb.descriptors.FileDescriptor = {
     val scalaProto = com.google.protobuf.descriptor.FileDescriptorProto.parseFrom(ProtoBytes)

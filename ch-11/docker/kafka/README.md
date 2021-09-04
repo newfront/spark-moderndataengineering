@@ -80,3 +80,50 @@ Next, for any volume you want to remove, just go ahead and stop and remove the a
 ~~~
 docker volume rm kafka_kafka_0_data
 ~~~
+
+## Security
+The `docker-compose-acls.yaml` turns on Authorization controls using the broker config `KAFKA_CFG_AUTHORIZER_CLASS_NAME=kafka.security.authorizer.AclAuthorizer`. This will enable you to turn on or off access to individual Topics and to restrict the commands available for connected clients of your cluster. It is worth noting that the configuration `KAFKA_CFG_ALLOW_EVERYONE_IF_NO_ACL_FOUND=true` enables ACLs to be ignored for the Kafka cluster while you are adding rules. You can turn ACL enforcement back on `KAFKA_CFG_ALLOW_EVERYONE_IF_NO_ACL_FOUND=false` after creating `Read` and `Write` controls.
+
+### Add Read and Write Controls
+It is in your best interest to govern read and write access from within your Kafka cluster. The following commands show how to add `read`, `write` ACLs for the User's `kafka` and `dataengineering` for the **topic** `com.coffeeco.coffee.v1.orders`.
+
+**Command**
+~~~
+docker exec -it kafka_kafka-0_1 \
+  /opt/bitnami/kafka/bin/kafka-acls.sh \
+  --bootstrap-server :9092 \
+  --add \
+  --allow-principal User:dataengineering \
+  --allow-principal User:kafka \
+  --operation read \
+  --operation write \
+  --topic com.coffeeco.coffee.v1.orders
+~~~
+
+**Response**
+~~~
+Adding ACLs for resource `ResourcePattern(resourceType=TOPIC, name=com.coffeeco.coffee.v1.orders, patternType=LITERAL)`: 
+ 	(principal=User:dataengineering, host=*, operation=WRITE, permissionType=ALLOW)
+	(principal=User:dataengineering, host=*, operation=READ, permissionType=ALLOW)
+	(principal=User:kafka, host=*, operation=WRITE, permissionType=ALLOW)
+	(principal=User:kafka, host=*, operation=READ, permissionType=ALLOW)
+~~~
+
+### List Topic ACLs
+**List Command**
+~~~
+docker exec -it kafka_kafka-0_1 \
+  /opt/bitnami/kafka/bin/kafka-acls.sh \
+  --bootstrap-server :9092 \
+  --list \
+  --topic com.coffeeco.coffee.v1.orders
+~~~
+
+**Response**
+~~~
+Current ACLs for resource `ResourcePattern(resourceType=TOPIC, name=com.coffeeco.coffee.v1.orders, patternType=LITERAL)`: 
+ 	(principal=User:kafka, host=*, operation=WRITE, permissionType=ALLOW)
+	(principal=User:kafka, host=*, operation=READ, permissionType=ALLOW)
+	(principal=User:dataengineering, host=*, operation=WRITE, permissionType=ALLOW)
+	(principal=User:dataengineering, host=*, operation=READ, permissionType=ALLOW) 
+~~~

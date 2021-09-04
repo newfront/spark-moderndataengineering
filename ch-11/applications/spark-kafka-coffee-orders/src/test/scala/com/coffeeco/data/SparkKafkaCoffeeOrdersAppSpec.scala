@@ -37,7 +37,6 @@ class SparkKafkaCoffeeOrdersAppSpec extends AnyFlatSpec
   "SparkKafkaCoffeeOrdersApp" should " generate CoffeeOrder data and produce kafka records" in {
     val testSession = SparkKafkaCoffeeOrdersApp.sparkSession
     import scalapb.spark.Implicits._
-    import testSession.implicits.StringToColumn
     import scalapb.json4s.JsonFormat
     import com.coffeeco.protocol.coffee.common._
 
@@ -51,7 +50,9 @@ class SparkKafkaCoffeeOrdersAppSpec extends AnyFlatSpec
     )
 
     val orderJson: String = JsonFormat.toJsonString(order)
-    val jsonOrderToProto: CoffeeOrder = JsonFormat.fromJsonString[CoffeeOrder](orderJson)
+    val jsonToCoffeeOrderProto: CoffeeOrder = JsonFormat.fromJsonString[CoffeeOrder](orderJson)
+
+    jsonToCoffeeOrderProto shouldEqual order
 
     val memoryStream = new MemoryStream[MockKafkaDataFrame](
       id = 1,
