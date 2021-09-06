@@ -64,7 +64,6 @@ class SparkKafkaCoffeeOrdersAppSpec extends AnyFlatSpec
 
     val streamingQuery = orderTransformer
       .transform(memoryStream.toDF())
-      .map(CoffeeOrder.parseFrom)
       .writeStream
       .format("memory")
       .queryName("coffee_orders")

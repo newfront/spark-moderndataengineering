@@ -33,6 +33,11 @@ object CoffeeOrderGenerator extends SparkApplication {
     true
   }
 
+  lazy val BoundRandom = {
+    val seed: Int = 300
+    new Random(seed)
+  }
+
   // we want to use the command line arguments to modify and randomize the values in the
   // CoffeeOrder data objects
   def generateCoffeeOrder(
@@ -45,52 +50,47 @@ object CoffeeOrderGenerator extends SparkApplication {
     // totalSales can help us achieve a time granularity between sales
 
     val random = new Random(totalRecords)
-
     val stepSize = (to.toEpochMilli - from.toEpochMilli)/1000
     // calculate the time for each coffee order
     (0 to totalRecords).map { index =>
       CoffeeOrder(
         timestamp = from.plusMillis(index*stepSize).toEpochMilli,
         orderId = s"orderId${indexOffset+index+1}",
-        storeId = s"store${random.nextInt(4)}",
-        customerId = s"cust${random.nextInt(100)}",
-        numItems = new Random(230).nextInt(20),
-        price = new Random(230).nextFloat()
+        storeId = s"store${random.nextInt(4)+1}",
+        customerId = s"cust${random.nextInt(100)+1}",
+        numItems = BoundRandom.nextInt(20)+1,
+        price = BoundRandom.nextFloat()+1.0f
       )
     }
   }
 
   override def run(): Unit = {
+    import sparkSession.implicits.StringToColumn
     // generate the data
     val until = LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC)
     // generate
     val orders: Seq[CoffeeOrder] = CoffeeOrderGenerator
       .generateCoffeeOrder(
         from = until.minusHours(8).toInstant(ZoneOffset.UTC),
-        to = until.toInstant(ZoneOffset.UTC),
-        totalRecords = 6000
+        to = until.toInstant(ZoneOffset.UTC)
     )
 
-    sparkSession.createDataset[CoffeeOrder](orders).map {
-      order =>
-        KafkaRecord(ByteString.copyFrom(order.orderId.getBytes),
+    val orderEvents = sparkSession.createDataset[CoffeeOrder](orders).map { order =>
+      KafkaRecord(ByteString.copyFrom(order.orderId.getBytes),
         order.toByteString, KafkaTopic)
     }
-      .toDF("key", "value", "topic")
+
+    orderEvents
+      .select($"key",$"value",$"topic")
       .write
       .format("kafka")
       .option("kafka.bootstrap.servers", KafkaBootstrapServers)
       .save()
 
     /*
-    // alternative writer declares the Kafka topic using the DataFrameWriter properties `topic`
-    sparkSession.createDataset[CoffeeOrder](orders).map {
-      order =>
-        KafkaRecord(ByteString.copyFrom(order.orderId.getBytes),
-        order.toByteString, kafkaSink)
-    }
-      .toDF("key", "value", "topic")
-      .drop("topic")
+    // alternative writer declares the Kafka topic using the DataFrameWriter properties `topic` on the Kafka DataSource
+    orderEvents
+      .select($"key",$"value")
       .write
       .format("kafka")
       .option("kafka.bootstrap.servers", KafkaBootstrapServers)

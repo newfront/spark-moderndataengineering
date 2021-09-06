@@ -1,6 +1,7 @@
 package com.coffeeco.data
 
-import org.apache.spark.sql.{DataFrame, Dataset, Encoder, Encoders, SparkSession}
+import com.coffeeco.protocol.coffee.common.CoffeeOrder
+import org.apache.spark.sql.{DataFrame, Dataset, Encoder, SparkSession}
 
 object KafkaOrderTransformer {
   def apply(spark: SparkSession): KafkaOrderTransformer = {
@@ -10,14 +11,16 @@ object KafkaOrderTransformer {
 
 @SerialVersionUID(100L)
 class KafkaOrderTransformer(spark: SparkSession)
-  extends DatasetTransformer[Array[Byte]]
+  extends DatasetTransformer[CoffeeOrder]
     with Serializable {
+  import scalapb.spark.Implicits._
 
-  override val encoder: Encoder[Array[Byte]] = Encoders.BINARY
-
-  override def transform(df: DataFrame): Dataset[Array[Byte]] = {
+  override val encoder: Encoder[CoffeeOrder] = typedEncoderToEncoder[CoffeeOrder]
+  override def transform(df: DataFrame): Dataset[CoffeeOrder] = {
     df.printSchema()
-    df.select("value")
-      .map(_.getAs[Array[Byte]]("value"))(encoder)
+    df
+      .map(_.getAs[Array[Byte]]("value"))
+      .map(CoffeeOrder.parseFrom)
+      .as[CoffeeOrder]
   }
 }
