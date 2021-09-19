@@ -1,0 +1,254 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n## Common SparkSQL Functions for DataFrames\nThere is a wide collection of functions available for use from the `org.apache.spark.sql.functions._` collection. These functions can be used to help make much of the work you do easier. The full list of all [Spark SQL Functions can be found here](https://spark.apache.org/docs/latest/api/sql/index.html). We will be marrying these functions alongside simple `withColumn` method on the DataFrame.\n\n## Working with Dates and Times\nThis section provides an example of using common Date and Time helper functions.\n\n### Working with Timestamps, Date Helpers, and Date Math\nThis section will cover most of the use cases you\u0027ll ever see when it comes to date and time in Apache Spark.\n\n* Spark SQL time utilities: `current_timestamp`, `current_timezone`, `current_date`\n* Using the `timestamp` constants `yesterday`, `today`, `tomorrow`\n* Applying `spark.sql.functions._` to generate derived DataFrame columns: `lit`, `to_date`, `date_sub`, `date_add`, `year`, `month`, `day`, and `cast` to change column types.\n\n### Working with Timezones\nThis section showcases how to get and set the timezone for your Spark Session.\n* Using `SET TIME ZONE` to update the Spark SQL Session settings.\n* Using `spark.sql.session.timeZone` to observe the dynamic change in time using the SparkSQL DSL\n\n### Filling Null Values\nData is messy. Null values can mess up aggregations and break machine learning models. Ensuring that null values are replaced with a useful value other than Null can be done simply using `df.na.fill`. You\u0027ll see how to create and fix null issues in this simple example.\n\n### Conditionally Adding Values using Case Statements\nCase Statements in SQL allow you to use conditional statements to add specific values to your derived data. This operation will be applied to your DataFrame using an iterator which can make it easy to do complex transformations over your data while helping to shape it for final output and use. ",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-10 21:40:35.167",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCommon SparkSQL Functions for DataFrames\u003c/h2\u003e\n\u003cp\u003eThere is a wide collection of functions available for use from the \u003ccode\u003eorg.apache.spark.sql.functions._\u003c/code\u003e collection. These functions can be used to help make much of the work you do easier. The full list of all \u003ca href\u003d\"https://spark.apache.org/docs/latest/api/sql/index.html\"\u003eSpark SQL Functions can be found here\u003c/a\u003e. We will be marrying these functions alongside simple \u003ccode\u003ewithColumn\u003c/code\u003e method on the DataFrame.\u003c/p\u003e\n\u003ch2\u003eWorking with Dates and Times\u003c/h2\u003e\n\u003cp\u003eThis section provides an example of using common Date and Time helper functions.\u003c/p\u003e\n\u003ch3\u003eWorking with Timestamps, Date Helpers, and Date Math\u003c/h3\u003e\n\u003cp\u003eThis section will cover most of the use cases you\u0026rsquo;ll ever see when it comes to date and time in Apache Spark.\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eSpark SQL time utilities: \u003ccode\u003ecurrent_timestamp\u003c/code\u003e, \u003ccode\u003ecurrent_timezone\u003c/code\u003e, \u003ccode\u003ecurrent_date\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003eUsing the \u003ccode\u003etimestamp\u003c/code\u003e constants \u003ccode\u003eyesterday\u003c/code\u003e, \u003ccode\u003etoday\u003c/code\u003e, \u003ccode\u003etomorrow\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003eApplying \u003ccode\u003espark.sql.functions._\u003c/code\u003e to generate derived DataFrame columns: \u003ccode\u003elit\u003c/code\u003e, \u003ccode\u003eto_date\u003c/code\u003e, \u003ccode\u003edate_sub\u003c/code\u003e, \u003ccode\u003edate_add\u003c/code\u003e, \u003ccode\u003eyear\u003c/code\u003e, \u003ccode\u003emonth\u003c/code\u003e, \u003ccode\u003eday\u003c/code\u003e, and \u003ccode\u003ecast\u003c/code\u003e to change column types.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3\u003eWorking with Timezones\u003c/h3\u003e\n\u003cp\u003eThis section showcases how to get and set the timezone for your Spark Session.\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eUsing \u003ccode\u003eSET TIME ZONE\u003c/code\u003e to update the Spark SQL Session settings.\u003c/li\u003e\n\u003cli\u003eUsing \u003ccode\u003espark.sql.session.timeZone\u003c/code\u003e to observe the dynamic change in time using the SparkSQL DSL\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3\u003eFilling Null Values\u003c/h3\u003e\n\u003cp\u003eData is messy. Null values can mess up aggregations and break machine learning models. Ensuring that null values are replaced with a useful value other than Null can be done simply using \u003ccode\u003edf.na.fill\u003c/code\u003e. You\u0026rsquo;ll see how to create and fix null issues in this simple example.\u003c/p\u003e\n\u003ch3\u003eConditionally Adding Values using Case Statements\u003c/h3\u003e\n\u003cp\u003eCase Statements in SQL allow you to use conditional statements to add specific values to your derived data. This operation will be applied to your DataFrame using an iterator which can make it easy to do complex transformations over your data while helping to shape it for final output and use.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1631307247010_135211586",
+      "id": "paragraph_1631307247010_135211586",
+      "dateCreated": "2021-09-10 20:54:07.010",
+      "dateStarted": "2021-09-10 21:40:35.168",
+      "dateFinished": "2021-09-10 21:40:35.180",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Working with Timestamps, Date Helpers and Date Math",
+      "text": "%spark\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.types._\n\n\n/* SQL */\nspark.sql(\"\"\"\nselect current_timestamp() as ts,\ncurrent_timezone() as tz,\ncurrent_date() as date,\ntimestamp \u0027yesterday\u0027 as yesterday,\ntimestamp \u0027today\u0027 as today,\ntimestamp \u0027tomorrow\u0027 as tomorrow\n\"\"\")\n.show(6,0,true)\n\n// Note: Using an Empty DataFrame seems like a natural place to begin\nval dateTimeDF \u003d spark.emptyDataFrame\n  .withColumn(\"ts\", current_timestamp)\ndateTimeDF.show()\n// However, this strategy won\u0027t work because there is nothing to iterate within the DataFrame itself. The withColumn method applies a function to all rows in the underlying DataFrame. So let\u0027s start with something instead and get going.\n\n// Create a single column DataFrame (ts) from the current time\n// then \nval tsDf \u003d Seq(Instant.now).toDF(\"ts\")\n\nval dateTimeInformation \u003d tsDf\n  .withColumn(\"tz\", lit(spark.conf.get(\"spark.sql.session.timeZone\")))\n  .withColumn(\"date\", to_date($\"ts\"))\n  .withColumn(\"yesterday\", date_sub($\"date\", 1).cast(TimestampType))\n  .withColumn(\"today\", $\"date\".cast(TimestampType))\n  .withColumn(\"tomorrow\", date_add($\"date\", 1).cast(TimestampType))\n  .withColumn(\"year\", year($\"date\"))\n  .withColumn(\"month\", month($\"date\"))\n  .withColumn(\"day\", dayofmonth($\"date\"))\n  .withColumn(\"day_of_week\", dayofweek($\"date\"))\n  .withColumn(\"day_of_year\", dayofyear($\"date\"))\n\ndateTimeInformation.show(20,0,true)",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-10 20:55:22.804",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "-RECORD 0------------------------------\n ts        | 2021-09-10 20:55:14.23326 \n tz        | UTC                       \n date      | 2021-09-10                \n yesterday | 2021-09-09 00:00:00       \n today     | 2021-09-10 00:00:00       \n tomorrow  | 2021-09-11 00:00:00       \n\n+---+\n| ts|\n+---+\n+---+\n\n-RECORD 0---------------------------------\n ts          | 2021-09-10 20:55:14.286206 \n tz          | UTC                        \n date        | 2021-09-10                 \n yesterday   | 2021-09-09 00:00:00        \n today       | 2021-09-10 00:00:00        \n tomorrow    | 2021-09-11 00:00:00        \n year        | 2021                       \n month       | 9                          \n day         | 10                         \n day_of_week | 6                          \n day_of_year | 253                        \n\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.types._\n\u001b[1m\u001b[34mdateTimeDF\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [ts: timestamp]\n\u001b[1m\u001b[34mtsDf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [ts: timestamp]\n\u001b[1m\u001b[34mdateTimeInformation\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [ts: timestamp, tz: string ... 9 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin-spark:4040/jobs/job?id\u003d42"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1631307281263_1905896329",
+      "id": "paragraph_1631307281263_1905896329",
+      "dateCreated": "2021-09-10 20:54:41.264",
+      "dateStarted": "2021-09-10 20:55:13.307",
+      "dateFinished": "2021-09-10 20:55:14.351",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Modifying the Spark SQL Session Timezone",
+      "text": "%spark\nimport java.time._\n\n// get now\nval now \u003d Instant.now\nval timestamps \u003d Seq(now).toDF(\"ts\")\n\n// set and get the timezone\nspark.conf.set(\"spark.sql.session.timeZone\", \"UTC\") // maps to ZoneOffset.UTC / ZoneId\nval sparkTimeZone \u003d spark.conf.get(\"spark.sql.session.timeZone\") // UTC\n\n// shows now as UTC\ntimestamps.show(truncate\u003dfalse)\n\n// Set the timezone to America/Los_Angeles\nspark.conf.set(\"spark.sql.session.timeZone\", \"America/Los_Angeles\")\n\n// shows now as Pacific Standard Time (America/Los_Angeles)\ntimestamps.show(truncate\u003dfalse)\n\n// reset the timezone to UTC\nspark.conf.set(\"spark.sql.session.timeZone\", \"UTC\")\n\n// Spark SQL TimeZones\nspark.sql(\"SET TIME ZONE \u0027America/Los_Angeles\u0027\")\nspark.sql(\"select timestamp \u0027now\u0027 as now_pst\").show(truncate\u003dfalse)\nspark.sql(\"SET TIME ZONE \u0027UTC\u0027\")\nspark.sql(\"select timestamp \u0027now\u0027 as now_utc\").show(truncate\u003dfalse)",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-10 20:56:07.726",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------------------------+\n|ts                        |\n+--------------------------+\n|2021-09-10 20:56:08.677388|\n+--------------------------+\n\n+--------------------------+\n|ts                        |\n+--------------------------+\n|2021-09-10 13:56:08.677388|\n+--------------------------+\n\n+--------------------------+\n|now_pst                   |\n+--------------------------+\n|2021-09-10 13:56:08.715215|\n+--------------------------+\n\n+--------------------------+\n|now_utc                   |\n+--------------------------+\n|2021-09-10 20:56:08.746635|\n+--------------------------+\n\nimport java.time._\n\u001b[1m\u001b[34mnow\u001b[0m: \u001b[1m\u001b[32mjava.time.Instant\u001b[0m \u003d 2021-09-10T20:56:08.677388Z\n\u001b[1m\u001b[34mtimestamps\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [ts: timestamp]\n\u001b[1m\u001b[34msparkTimeZone\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d UTC\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin-spark:4040/jobs/job?id\u003d43"
+            },
+            {
+              "jobUrl": "http://zeppelin-spark:4040/jobs/job?id\u003d44"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1631307313306_217634949",
+      "id": "paragraph_1631307313306_217634949",
+      "dateCreated": "2021-09-10 20:55:13.306",
+      "dateStarted": "2021-09-10 20:56:07.734",
+      "dateFinished": "2021-09-10 20:56:08.774",
+      "status": "FINISHED"
+    },
+    {
+      "title": "What to Do With Null Values",
+      "text": "%spark\nval nullOrdersDF \u003d Seq(\n  (1, null, \"decafe\", 3.12),\n  (2, \"cust123\", \"pour_over\", 5.15),\n  (3, \"cust234\", \"latte\", 3.89),\n  (4, \"cust345\", \"special_pour_over\", 6.99)\n)\n.toDF(\"order_id\", \"customer_id\", \"item_name\", \"price\")\n\nval nonNullOrdersDF \u003d nullOrdersDF\n  .na.fill(\"unknown\", Seq(\"customer_id\"))\n\nnullOrdersDF.show(truncate\u003dfalse)\nnonNullOrdersDF.show(truncate\u003dfalse)",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-10 21:08:09.788",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+-----------+-----------------+-----+\n|order_id|customer_id|item_name        |price|\n+--------+-----------+-----------------+-----+\n|1       |null       |decafe           |3.12 |\n|2       |cust123    |pour_over        |5.15 |\n|3       |cust234    |latte            |3.89 |\n|4       |cust345    |special_pour_over|6.99 |\n+--------+-----------+-----------------+-----+\n\n+--------+-----------+-----------------+-----+\n|order_id|customer_id|item_name        |price|\n+--------+-----------+-----------------+-----+\n|1       |unknown    |decafe           |3.12 |\n|2       |cust123    |pour_over        |5.15 |\n|3       |cust234    |latte            |3.89 |\n|4       |cust345    |special_pour_over|6.99 |\n+--------+-----------+-----------------+-----+\n\n\u001b[1m\u001b[34mnullOrdersDF\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [order_id: int, customer_id: string ... 2 more fields]\n\u001b[1m\u001b[34mnonNullOrdersDF\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [order_id: int, customer_id: string ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1631307367733_869983790",
+      "id": "paragraph_1631307367733_869983790",
+      "dateCreated": "2021-09-10 20:56:07.736",
+      "dateStarted": "2021-09-10 21:08:09.798",
+      "dateFinished": "2021-09-10 21:08:10.763",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Using Case Statements",
+      "text": "%spark\nnonNullOrdersDF\n  .withColumn(\"is_registered\",\n    when(col(\"customer_id\").notEqual(\"unknown\"), true)\n    .otherwise(false)\n  )\n  .withColumn(\"order_type\",\n    when(col(\"is_registered\").equalTo(true).and(col(\"price\") \u003e 6.00), \"vip\")\n    .when(col(\"is_registered\").equalTo(true).and(col(\"price\") \u003e 4.00), \"rush\").otherwise(\"normal\")\n  )\n  .show(truncate\u003dfalse)\n\n// Create Same Function using SQL\nnonNullOrdersDF.createOrReplaceTempView(\"order_nonnull\")\n\nspark.sql(\"\"\"\n  select *,\n    case\n      when x.is_registered \u003d TRUE and x.price \u003e 6.00 then \u0027vip\u0027\n      when x.is_registered \u003d TRUE and x.price \u003e 4.00 then \u0027rush\u0027\n      else \u0027normal\u0027\n    end as order_type\n    from (\n    select *,\n    case\n      when customer_id !\u003d \u0027unknown\u0027\n      then TRUE\n      else FALSE\n    end as is_registered\n    from order_nonnull\n ) x\n\"\"\").show(true)\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-10 21:34:46.538",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+-----------+-----------------+-----+-------------+----------+\n|order_id|customer_id|item_name        |price|is_registered|order_type|\n+--------+-----------+-----------------+-----+-------------+----------+\n|1       |unknown    |decafe           |3.12 |false        |normal    |\n|2       |cust123    |pour_over        |5.15 |true         |rush      |\n|3       |cust234    |latte            |3.89 |true         |normal    |\n|4       |cust345    |special_pour_over|6.99 |true         |vip       |\n+--------+-----------+-----------------+-----+-------------+----------+\n\n+--------+-----------+-----------------+-----+-------------+----------+\n|order_id|customer_id|        item_name|price|is_registered|order_type|\n+--------+-----------+-----------------+-----+-------------+----------+\n|       1|    unknown|           decafe| 3.12|        false|    normal|\n|       2|    cust123|        pour_over| 5.15|         true|      rush|\n|       3|    cust234|            latte| 3.89|         true|    normal|\n|       4|    cust345|special_pour_over| 6.99|         true|       vip|\n+--------+-----------+-----------------+-----+-------------+----------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1631307564507_2135299253",
+      "id": "paragraph_1631307564507_2135299253",
+      "dateCreated": "2021-09-10 20:59:24.508",
+      "dateStarted": "2021-09-10 21:33:10.681",
+      "dateFinished": "2021-09-10 21:33:11.599",
+      "status": "FINISHED"
+    }
+  ],
+  "name": "01_common_dateframe_functions",
+  "id": "2GHUXV7G7",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview2",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

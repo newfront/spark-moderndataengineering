@@ -6,3 +6,5 @@
 ## spark hive ignore
 derby.log
 metastore_db
+
+.vscode
