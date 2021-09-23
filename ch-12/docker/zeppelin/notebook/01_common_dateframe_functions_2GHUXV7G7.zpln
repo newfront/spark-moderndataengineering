@@ -1,0 +1,1023 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n## Common SparkSQL Functions for DataFrames\nThere is a wide collection of functions available for use from the `org.apache.spark.sql.functions._` collection. These functions can be used to help make much of the work you do easier. The full list of all [Spark SQL Functions can be found here](https://spark.apache.org/docs/latest/api/sql/index.html). We will be marrying these functions alongside simple `withColumn` method on the DataFrame.\n\n## Working with Dates and Times\nThis section provides an example of using common Date and Time helper functions.\n\n### Working with Timestamps, Date Helpers, and Date Math\nThis section will cover most of the use cases you\u0027ll ever see when it comes to date and time in Apache Spark.\n\n* Spark SQL time utilities: `current_timestamp`, `current_timezone`, `current_date`\n* Using the `timestamp` constants `yesterday`, `today`, `tomorrow`\n* Applying `spark.sql.functions._` to generate derived DataFrame columns: `lit`, `to_date`, `date_sub`, `date_add`, `year`, `month`, `day`, and `cast` to change column types.\n\n### Working with Timezones\nThis section showcases how to get and set the timezone for your Spark Session.\n* Using `SET TIME ZONE` to update the Spark SQL Session settings.\n* Using `spark.sql.session.timeZone` to observe the dynamic change in time using the SparkSQL DSL\n\n### Filling Null Values\nData is messy. Null values can mess up aggregations and break machine learning models. Ensuring that null values are replaced with a useful value other than Null can be done simply using `df.na.fill`. You\u0027ll see how to create and fix null issues in this simple example.\n\n### Conditionally Adding Values using Case Statements\nCase Statements in SQL allow you to use conditional statements to add specific values to your derived data. This operation will be applied to your DataFrame using an iterator which can make it easy to do complex transformations over your data while helping to shape it for final output and use. \n\n### Creating and Using `User Defined Functions` (udfs)\nudfs enable you to encode a function that can be dropped into your Spark applications that is interoperable with the DataFrame / Dataset Structured APIs.",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:02.180",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCommon SparkSQL Functions for DataFrames\u003c/h2\u003e\n\u003cp\u003eThere is a wide collection of functions available for use from the \u003ccode\u003eorg.apache.spark.sql.functions._\u003c/code\u003e collection. These functions can be used to help make much of the work you do easier. The full list of all \u003ca href\u003d\"https://spark.apache.org/docs/latest/api/sql/index.html\"\u003eSpark SQL Functions can be found here\u003c/a\u003e. We will be marrying these functions alongside simple \u003ccode\u003ewithColumn\u003c/code\u003e method on the DataFrame.\u003c/p\u003e\n\u003ch2\u003eWorking with Dates and Times\u003c/h2\u003e\n\u003cp\u003eThis section provides an example of using common Date and Time helper functions.\u003c/p\u003e\n\u003ch3\u003eWorking with Timestamps, Date Helpers, and Date Math\u003c/h3\u003e\n\u003cp\u003eThis section will cover most of the use cases you\u0026rsquo;ll ever see when it comes to date and time in Apache Spark.\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eSpark SQL time utilities: \u003ccode\u003ecurrent_timestamp\u003c/code\u003e, \u003ccode\u003ecurrent_timezone\u003c/code\u003e, \u003ccode\u003ecurrent_date\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003eUsing the \u003ccode\u003etimestamp\u003c/code\u003e constants \u003ccode\u003eyesterday\u003c/code\u003e, \u003ccode\u003etoday\u003c/code\u003e, \u003ccode\u003etomorrow\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003eApplying \u003ccode\u003espark.sql.functions._\u003c/code\u003e to generate derived DataFrame columns: \u003ccode\u003elit\u003c/code\u003e, \u003ccode\u003eto_date\u003c/code\u003e, \u003ccode\u003edate_sub\u003c/code\u003e, \u003ccode\u003edate_add\u003c/code\u003e, \u003ccode\u003eyear\u003c/code\u003e, \u003ccode\u003emonth\u003c/code\u003e, \u003ccode\u003eday\u003c/code\u003e, and \u003ccode\u003ecast\u003c/code\u003e to change column types.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3\u003eWorking with Timezones\u003c/h3\u003e\n\u003cp\u003eThis section showcases how to get and set the timezone for your Spark Session.\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eUsing \u003ccode\u003eSET TIME ZONE\u003c/code\u003e to update the Spark SQL Session settings.\u003c/li\u003e\n\u003cli\u003eUsing \u003ccode\u003espark.sql.session.timeZone\u003c/code\u003e to observe the dynamic change in time using the SparkSQL DSL\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3\u003eFilling Null Values\u003c/h3\u003e\n\u003cp\u003eData is messy. Null values can mess up aggregations and break machine learning models. Ensuring that null values are replaced with a useful value other than Null can be done simply using \u003ccode\u003edf.na.fill\u003c/code\u003e. You\u0026rsquo;ll see how to create and fix null issues in this simple example.\u003c/p\u003e\n\u003ch3\u003eConditionally Adding Values using Case Statements\u003c/h3\u003e\n\u003cp\u003eCase Statements in SQL allow you to use conditional statements to add specific values to your derived data. This operation will be applied to your DataFrame using an iterator which can make it easy to do complex transformations over your data while helping to shape it for final output and use.\u003c/p\u003e\n\u003ch3\u003eCreating and Using \u003ccode\u003eUser Defined Functions\u003c/code\u003e (udfs)\u003c/h3\u003e\n\u003cp\u003eudfs enable you to encode a function that can be dropped into your Spark applications that is interoperable with the DataFrame / Dataset Structured APIs.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1631307247010_135211586",
+      "id": "paragraph_1631307247010_135211586",
+      "dateCreated": "2021-09-10 20:54:07.010",
+      "dateStarted": "2021-09-21 19:49:02.191",
+      "dateFinished": "2021-09-21 19:49:02.222",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Working with Timestamps, Date Helpers and Date Math",
+      "text": "%spark\nimport java.time._\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.types._\n\n\n/* SQL */\nspark.sql(\"\"\"\nselect current_timestamp() as ts,\ncurrent_timezone() as tz,\ncurrent_date() as date,\ntimestamp \u0027yesterday\u0027 as yesterday,\ntimestamp \u0027today\u0027 as today,\ntimestamp \u0027tomorrow\u0027 as tomorrow\n\"\"\")\n.show(6,0,true)\n\n// Note: Using an Empty DataFrame seems like a natural place to begin\nval dateTimeDF \u003d spark.emptyDataFrame\n  .withColumn(\"ts\", current_timestamp)\ndateTimeDF.show()\n// However, this strategy won\u0027t work because there is nothing to iterate within the DataFrame itself. The withColumn method applies a function to all rows in the underlying DataFrame. So let\u0027s start with something instead and get going.\n\n// Create a single column DataFrame (ts) from the current time\n// then \nval tsDf \u003d Seq(Instant.now).toDF(\"ts\")\n\nval dtInfoDf \u003d tsDf\n  .withColumn(\"tz\", lit(spark.conf.get(\"spark.sql.session.timeZone\")))\n  .withColumn(\"date\", to_date($\"ts\"))\n  .withColumn(\"yesterday\", date_sub($\"date\", 1).cast(TimestampType))\n  .withColumn(\"today\", $\"date\".cast(TimestampType))\n  .withColumn(\"tomorrow\", date_add($\"date\", 1).cast(TimestampType))\n  .withColumn(\"year\", year($\"date\"))\n  .withColumn(\"month\", month($\"date\"))\n  .withColumn(\"day\", dayofmonth($\"date\"))\n  .withColumn(\"day_of_week\", dayofweek($\"date\"))\n  .withColumn(\"day_of_year\", dayofyear($\"date\"))\n\ndtInfoDf.show(20,0,true)",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-22 20:31:00.974",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "-RECORD 0-------------------------------\n ts        | 2021-09-22 20:31:01.494592 \n tz        | Etc/UTC                    \n date      | 2021-09-22                 \n yesterday | 2021-09-21 00:00:00        \n today     | 2021-09-22 00:00:00        \n tomorrow  | 2021-09-23 00:00:00        \n\n+---+\n| ts|\n+---+\n+---+\n\n-RECORD 0---------------------------------\n ts          | 2021-09-22 20:31:01.637063 \n tz          | Etc/UTC                    \n date        | 2021-09-22                 \n yesterday   | 2021-09-21 00:00:00        \n today       | 2021-09-22 00:00:00        \n tomorrow    | 2021-09-23 00:00:00        \n year        | 2021                       \n month       | 9                          \n day         | 22                         \n day_of_week | 4                          \n day_of_year | 265                        \n\nimport java.time._\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.types._\n\u001b[1m\u001b[34mdateTimeDF\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [ts: timestamp]\n\u001b[1m\u001b[34mtsDf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [ts: timestamp]\n\u001b[1m\u001b[34mdtInfoDf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [ts: timestamp, tz: string ... 9 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin-spark:4040/jobs/job?id\u003d68"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1631307281263_1905896329",
+      "id": "paragraph_1631307281263_1905896329",
+      "dateCreated": "2021-09-10 20:54:41.264",
+      "dateStarted": "2021-09-22 20:31:00.989",
+      "dateFinished": "2021-09-22 20:31:01.914",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Time Zones and the Spark SQL Session",
+      "text": "%spark\nimport java.time._\nval ts \u003d Seq(Instant.now).toDF(\"ts\")\n\n// set and get the timezone\nspark.conf.set(\"spark.sql.session.timeZone\", \"UTC\") // maps to ZoneOffset.UTC / ZoneId\n// shows now as UTC\nts.show(truncate\u003dfalse)\n// Set the timezone to America/Los_Angeles\nspark.conf.set(\"spark.sql.session.timeZone\", \"America/Los_Angeles\")\n// shows now as Pacific Standard Time (America/Los_Angeles)\nts.show(truncate\u003dfalse)\n\n// reset the timezone to UTC\nspark.conf.set(\"spark.sql.session.timeZone\", \"UTC\")\n\n// Spark SQL TimeZones\nspark.sql(\"SET TIME ZONE \u0027America/Los_Angeles\u0027\")\nspark.sql(\"select timestamp \u0027now\u0027 as now_pst\").show(truncate\u003dfalse)\nspark.sql(\"SET TIME ZONE \u0027UTC\u0027\")\nspark.sql(\"select timestamp \u0027now\u0027 as now_utc\").show(truncate\u003dfalse)",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:05.225",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------------------------+\n|ts                        |\n+--------------------------+\n|2021-09-21 19:49:06.796744|\n+--------------------------+\n\n+--------------------------+\n|ts                        |\n+--------------------------+\n|2021-09-21 12:49:06.796744|\n+--------------------------+\n\n+--------------------------+\n|now_pst                   |\n+--------------------------+\n|2021-09-21 12:49:06.867711|\n+--------------------------+\n\n+--------------------------+\n|now_utc                   |\n+--------------------------+\n|2021-09-21 19:49:06.963005|\n+--------------------------+\n\nimport java.time._\n\u001b[1m\u001b[34mts\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [ts: timestamp]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin-spark:4040/jobs/job?id\u003d53"
+            },
+            {
+              "jobUrl": "http://zeppelin-spark:4040/jobs/job?id\u003d54"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1631307313306_217634949",
+      "id": "paragraph_1631307313306_217634949",
+      "dateCreated": "2021-09-10 20:55:13.306",
+      "dateStarted": "2021-09-21 19:49:05.326",
+      "dateFinished": "2021-09-21 19:49:07.020",
+      "status": "FINISHED"
+    },
+    {
+      "title": "What to Do With Null Values",
+      "text": "%spark\nval nullOrdersDF \u003d Seq(\n  (1, null, \"decafe\", 3.12),\n  (2, \"cust123\", \"pour_over\", 5.15),\n  (3, \"cust234\", \"latte\", 3.89),\n  (4, \"cust345\", \"special_pour_over\", 6.99)\n)\n.toDF(\"order_id\", \"customer_id\", \"item_name\", \"price\")\n\nval nonNullOrdersDF \u003d nullOrdersDF\n  .na.fill(\"unknown\", Seq(\"customer_id\"))\n  \nnonNullOrdersDF.createOrReplaceTempView(\"order_nonnull\")\n\nnullOrdersDF.show(truncate\u003dfalse)\nnonNullOrdersDF.show(truncate\u003dfalse)",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:07.043",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+-----------+-----------------+-----+\n|order_id|customer_id|item_name        |price|\n+--------+-----------+-----------------+-----+\n|1       |null       |decafe           |3.12 |\n|2       |cust123    |pour_over        |5.15 |\n|3       |cust234    |latte            |3.89 |\n|4       |cust345    |special_pour_over|6.99 |\n+--------+-----------+-----------------+-----+\n\n+--------+-----------+-----------------+-----+\n|order_id|customer_id|item_name        |price|\n+--------+-----------+-----------------+-----+\n|1       |unknown    |decafe           |3.12 |\n|2       |cust123    |pour_over        |5.15 |\n|3       |cust234    |latte            |3.89 |\n|4       |cust345    |special_pour_over|6.99 |\n+--------+-----------+-----------------+-----+\n\n\u001b[1m\u001b[34mnullOrdersDF\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [order_id: int, customer_id: string ... 2 more fields]\n\u001b[1m\u001b[34mnonNullOrdersDF\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [order_id: int, customer_id: string ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1631307367733_869983790",
+      "id": "paragraph_1631307367733_869983790",
+      "dateCreated": "2021-09-10 20:56:07.736",
+      "dateStarted": "2021-09-21 19:49:07.168",
+      "dateFinished": "2021-09-21 19:49:09.225",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Using Case Statements",
+      "text": "%spark\nnonNullOrdersDF\n  .withColumn(\"is_registered\",\n    when(col(\"customer_id\").notEqual(\"unknown\"), true)\n    .otherwise(false)\n  )\n  .withColumn(\"order_label\",\n    when(col(\"is_registered\").equalTo(true).and(col(\"price\") \u003e 6.00), \"vip\")\n    .when(col(\"is_registered\").equalTo(true).and(col(\"price\") \u003e 4.00), \"rush\").otherwise(\"normal\")\n  )\n  .show(truncate\u003dfalse)",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:09.260",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+-----------+-----------------+-----+-------------+-----------+\n|order_id|customer_id|item_name        |price|is_registered|order_label|\n+--------+-----------+-----------------+-----+-------------+-----------+\n|1       |unknown    |decafe           |3.12 |false        |normal     |\n|2       |cust123    |pour_over        |5.15 |true         |rush       |\n|3       |cust234    |latte            |3.89 |true         |normal     |\n|4       |cust345    |special_pour_over|6.99 |true         |vip        |\n+--------+-----------+-----------------+-----+-------------+-----------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1631307564507_2135299253",
+      "id": "paragraph_1631307564507_2135299253",
+      "dateCreated": "2021-09-10 20:59:24.508",
+      "dateStarted": "2021-09-21 19:49:09.374",
+      "dateFinished": "2021-09-21 19:49:09.814",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%sql\nSELECT *,\n  CASE\n    WHEN x.is_registered \u003d TRUE and x.price \u003e 6.00 THEN \u0027vip\u0027\n    WHEN x.is_registered \u003d TRUE and x.price \u003e 4.00 THEN \u0027rush\u0027\n    ELSE \u0027normal\u0027\n  END as order_label\n  FROM (\n    SELECT *,\n    CASE\n      WHEN customer_id !\u003d \u0027unknown\u0027 THEN TRUE\n      ELSE FALSE\n    END as is_registered\n  FROM order_nonnull\n ) x",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:09.875",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "order_id": "string",
+                      "customer_id": "string",
+                      "item_name": "string",
+                      "price": "string",
+                      "is_registered": "string",
+                      "order_label": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "order_id\tcustomer_id\titem_name\tprice\tis_registered\torder_label\n1\tunknown\tdecafe\t3.12\tfalse\tnormal\n2\tcust123\tpour_over\t5.15\ttrue\trush\n3\tcust234\tlatte\t3.89\ttrue\tnormal\n4\tcust345\tspecial_pour_over\t6.99\ttrue\tvip\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1631418021113_1359775161",
+      "id": "paragraph_1631418021113_1359775161",
+      "dateCreated": "2021-09-12 03:40:21.113",
+      "dateStarted": "2021-09-21 19:49:09.987",
+      "dateFinished": "2021-09-21 19:49:10.147",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nval coffeeOrderLabelerFunc: ((String, Double) \u003d\u003e String) \u003d \n(customer_id: String, price: Double) \u003d\u003e {\n  if (customer_id !\u003d \"unknown\") {\n    if (price \u003e 6.0) \"vip\" else \"rush\"\n  } else \"normal\"\n}\ncoffeeOrderLabelerFunc.apply(\"customer_1234\", 39.49)\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:10.192",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mcoffeeOrderLabelerFunc\u001b[0m: \u001b[1m\u001b[32m(String, Double) \u003d\u003e String\u001b[0m \u003d $Lambda$5825/0x00000008420b7040@64e72966\n\u001b[1m\u001b[34mres44\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d vip\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1632084214072_1010289132",
+      "id": "paragraph_1632084214072_1010289132",
+      "dateCreated": "2021-09-19 20:43:34.073",
+      "dateStarted": "2021-09-21 19:49:10.209",
+      "dateFinished": "2021-09-21 19:49:10.847",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Create and Register the Coffee Order Labeler User Defined Function",
+      "text": "%spark\nimport org.apache.spark.sql.functions.udf\n\n/*\n// udfs can wrap explicit functions\ndef labeler(customerId: String, price: Double): String \u003d {\n  if (customerId !\u003d \"unknown\") {\n    if (price \u003e 6.0) \"vip\" else \"rush\"\n  } else \"normal\"    \n}\nval coffeeOrderLabeler \u003d udf(labeler(_,_))\n*/\n\n/*\n// udfs can use function literals\nval coffeeOrderLabelerFunc: ((String, Double) \u003d\u003e String) \u003d \n(customer_id: String, price: Double) \u003d\u003e {\n  if (customer_id !\u003d \"unknown\") {\n    if (price \u003e 6.0) \"vip\" else \"rush\"\n  } else \"normal\"\n}\nval coffeeOrderLabeler \u003d udf(coffeeOrderLabelerFunc)\n*/\n\n// udfs can wrap inline lambda functions\n// encodes a function that will be applied on a Row\nval coffeeOrderLabeler \u003d udf((customer_id: String, price: Double) \u003d\u003e {\n  if (customer_id !\u003d null \u0026\u0026 customer_id !\u003d \"unknown\") {\n    if (price \u003e 6.0) \"vip\" else \"rush\"\n  } else \"normal\"\n})\n\n// registers the udf for use with Spark SQL \n// the additional asNonNullable marks the udf function as always having a non null return type.\n\nspark.udf.register(\"coffee_order_label\", coffeeOrderLabeler.asNonNullable())",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:10.907",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.functions.udf\n\u001b[1m\u001b[34mcoffeeOrderLabeler\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.expressions.UserDefinedFunction\u001b[0m \u003d SparkUserDefinedFunction($Lambda$5831/0x00000008420c5040@39dd184b,StringType,List(Some(class[value[0]: string]), Some(class[value[0]: double])),Some(class[value[0]: string]),None,true,true)\n\u001b[1m\u001b[34mres45\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.expressions.UserDefinedFunction\u001b[0m \u003d SparkUserDefinedFunction($Lambda$5831/0x00000008420c5040@39dd184b,StringType,List(Some(class[value[0]: string]), Some(class[value[0]: double])),Some(class[value[0]: string]),None,false,true)\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1631418133058_1559516209",
+      "id": "paragraph_1631418133058_1559516209",
+      "dateCreated": "2021-09-12 03:42:13.058",
+      "dateStarted": "2021-09-21 19:49:10.921",
+      "dateFinished": "2021-09-21 19:49:11.285",
+      "status": "FINISHED"
+    },
+    {
+      "title": "List out the available Spark SQL Functions",
+      "text": "%spark\nspark.catalog.listFunctions.where($\"name\".like(\"%coffee%\")).show",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:11.321",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+------------------+--------+-----------+--------------------+-----------+\n|              name|database|description|           className|isTemporary|\n+------------------+--------+-----------+--------------------+-----------+\n|coffee_order_label|    null|       null|org.apache.spark....|       true|\n+------------------+--------+-----------+--------------------+-----------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1632088480994_1624235429",
+      "id": "paragraph_1632088480994_1624235429",
+      "dateCreated": "2021-09-19 21:54:40.995",
+      "dateStarted": "2021-09-21 19:49:11.423",
+      "dateFinished": "2021-09-21 19:49:12.675",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%sql\nselect coffee_order_label(null, 36.99) as label",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:46.893",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "label": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "label\nnormal\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://zeppelin-spark:4040/jobs/job?id\u003d89"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1632086381465_950144004",
+      "id": "paragraph_1632086381465_950144004",
+      "dateCreated": "2021-09-19 21:19:41.465",
+      "dateStarted": "2021-09-21 19:49:46.907",
+      "dateFinished": "2021-09-21 19:49:47.072",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Example 12-17: UDFs and the DataFrame API",
+      "text": "%spark\n// use the udf function to replace the case statements from earlier\nnonNullOrdersDF\n  .withColumn(\"is_registered\",\n    when(col(\"customer_id\").notEqual(\"unknown\"), true)\n    .otherwise(false)\n  )\n  .withColumn(\"order_label\", coffeeOrderLabeler($\"customer_id\", $\"price\"))\n  .show(truncate\u003dfalse)",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:50:18.746",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------+-----------+-----------------+-----+-------------+-----------+\n|order_id|customer_id|item_name        |price|is_registered|order_label|\n+--------+-----------+-----------------+-----+-------------+-----------+\n|1       |unknown    |decafe           |3.12 |false        |normal     |\n|2       |cust123    |pour_over        |5.15 |true         |rush       |\n|3       |cust234    |latte            |3.89 |true         |rush       |\n|4       |cust345    |special_pour_over|6.99 |true         |vip        |\n+--------+-----------+-----------------+-----+-------------+-----------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1632082275119_1087825309",
+      "id": "paragraph_1632082275119_1087825309",
+      "dateCreated": "2021-09-19 20:11:15.119",
+      "dateStarted": "2021-09-21 19:49:54.303",
+      "dateFinished": "2021-09-21 19:49:54.565",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Registered UDFs and Spark SQL",
+      "text": "%sql\nSELECT *,\n  coffee_order_label(customer_id, price) as order_label\n  FROM (\n    SELECT *,\n    CASE\n      WHEN customer_id !\u003d \u0027unknown\u0027 THEN TRUE\n      ELSE FALSE\n    END as is_registered\n  FROM order_nonnull\n ) x",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:14.377",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "order_id": "string",
+                      "customer_id": "string",
+                      "item_name": "string",
+                      "price": "string",
+                      "is_registered": "string",
+                      "order_label": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "order_id\tcustomer_id\titem_name\tprice\tis_registered\torder_label\n1\tunknown\tdecafe\t3.12\tfalse\tnormal\n2\tcust123\tpour_over\t5.15\ttrue\trush\n3\tcust234\tlatte\t3.89\ttrue\trush\n4\tcust345\tspecial_pour_over\t6.99\ttrue\tvip\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1632080338113_1691800980",
+      "id": "paragraph_1632080338113_1691800980",
+      "dateCreated": "2021-09-19 19:38:58.113",
+      "dateStarted": "2021-09-21 19:49:14.405",
+      "dateFinished": "2021-09-21 19:49:14.541",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nspark.catalog.listFunctions\n  .where($\"name\".equalTo(\"coffee_order_label\"))\n  .show(1, 0, true)",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:14.589",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "-RECORD 0---------------------------------------------------------------------------\n name        | coffee_order_label                                                   \n database    | null                                                                 \n description | null                                                                 \n className   | org.apache.spark.sql.UDFRegistration$$Lambda$5838/0x00000008420c7840 \n isTemporary | true                                                                 \n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1632082200828_802663282",
+      "id": "paragraph_1632082200828_802663282",
+      "dateCreated": "2021-09-19 20:10:00.829",
+      "dateStarted": "2021-09-21 19:49:14.608",
+      "dateFinished": "2021-09-21 19:49:15.476",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Check that a Spark SQL Function exists",
+      "text": "%spark\nspark.catalog.functionExists(\"coffee_order_label\")",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:15.501",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mres51\u001b[0m: \u001b[1m\u001b[32mBoolean\u001b[0m \u003d true\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1632087502765_958361729",
+      "id": "paragraph_1632087502765_958361729",
+      "dateCreated": "2021-09-19 21:38:22.765",
+      "dateStarted": "2021-09-21 19:49:15.513",
+      "dateFinished": "2021-09-21 19:49:16.088",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Create a Permanent Function in the Spark SQL Catalog ",
+      "text": "%md\n## Creating Distributable UDFs \nYou can create `UDFs` that can be packaged and shared using traditional JARs.\n\n~~~scala\nimport org.apache.hadoop.hive.ql.exec.UDF\nclass CoffeeOrderLabeler extends UDF {\n  def evaluate(customerId: String, price: Double): String \u003d {\n    if (customerId !\u003d null \u0026\u0026 customerId !\u003d \"unknown\") {\n      if (price \u003e 6.0) \"vip\" else \"rush\"\n    } else \"normal\"\n  }    \n}\n~~~\n\nRegister the UDF Globally using the Spark SQL DDL\n~~~\nspark.sql(\"\"\"\nCREATE FUNCTION IF NOT EXISTS native_coffee_order_label\nAS \u0027CoffeeOrderLabeler\u0027\nUSING JAR \u0027/opt/spark/user_jars/udfs.jar\u0027\n\"\"\")\n~~~\n\nFor more details take a look at the official [Spark SQL UDF Documentation](// Additional Reference: https://spark.apache.org/docs/latest/sql-ref-syntax-ddl-create-function.html)",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:55:13.787",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "title": true,
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eCreating Distributable UDFs\u003c/h2\u003e\n\u003cp\u003eYou can create \u003ccode\u003eUDFs\u003c/code\u003e that can be packaged and shared using traditional JARs.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class\u003d\"language-scala\"\u003eimport org.apache.hadoop.hive.ql.exec.UDF\nclass CoffeeOrderLabeler extends UDF {\n  def evaluate(customerId: String, price: Double): String \u003d {\n    if (customerId !\u003d null \u0026amp;\u0026amp; customerId !\u003d \u0026quot;unknown\u0026quot;) {\n      if (price \u0026gt; 6.0) \u0026quot;vip\u0026quot; else \u0026quot;rush\u0026quot;\n    } else \u0026quot;normal\u0026quot;\n  }    \n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eRegister the UDF Globally using the Spark SQL DDL\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003espark.sql(\u0026quot;\u0026quot;\u0026quot;\nCREATE FUNCTION IF NOT EXISTS native_coffee_order_label\nAS \u0027CoffeeOrderLabeler\u0027\nUSING JAR \u0027/opt/spark/user_jars/udfs.jar\u0027\n\u0026quot;\u0026quot;\u0026quot;)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eFor more details take a look at the official [Spark SQL UDF Documentation](// Additional Reference: \u003ca href\u003d\"https://spark.apache.org/docs/latest/sql-ref-syntax-ddl-create-function.html\"\u003ehttps://spark.apache.org/docs/latest/sql-ref-syntax-ddl-create-function.html\u003c/a\u003e)\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1632090820955_1025078720",
+      "id": "paragraph_1632090820955_1025078720",
+      "dateCreated": "2021-09-19 22:33:40.955",
+      "dateStarted": "2021-09-21 19:55:13.787",
+      "dateFinished": "2021-09-21 19:55:13.795",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Show all User Functions",
+      "text": "%sql\nSHOW USER FUNCTIONS",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:16.225",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "function": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "function\ncoffee_order_label\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1632091524392_1805699616",
+      "id": "paragraph_1632091524392_1805699616",
+      "dateCreated": "2021-09-19 22:45:24.392",
+      "dateStarted": "2021-09-21 19:49:16.396",
+      "dateFinished": "2021-09-21 19:49:16.729",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Remove a Spark SQL Function from the Catalog",
+      "text": "%sql\nDROP FUNCTION IF EXISTS default.native_coffee_order_label",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:16.736",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1632093094475_1549251520",
+      "id": "paragraph_1632093094475_1549251520",
+      "dateCreated": "2021-09-19 23:11:34.475",
+      "dateStarted": "2021-09-21 19:49:16.772",
+      "dateFinished": "2021-09-21 19:49:16.983",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Describe a Spark SQL Function",
+      "text": "%sql\nDESCRIBE FUNCTION coffee_order_label",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:17.062",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "function_desc": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "function_desc\nFunction: coffee_order_label\nClass: org.apache.spark.sql.UDFRegistration$$Lambda$5838/0x00000008420c7840\nUsage: N/A.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1632091616737_1191381496",
+      "id": "paragraph_1632091616737_1191381496",
+      "dateCreated": "2021-09-19 22:46:56.738",
+      "dateStarted": "2021-09-21 19:49:17.083",
+      "dateFinished": "2021-09-21 19:49:17.225",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Temporary Functions won\u0027t be loaded globally",
+      "text": "%spark\nval newSession \u003d spark.newSession\nval tempExists \u003d newSession.catalog.functionExists(\"coffee_order_label\") // false",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:17.276",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mnewSession\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.SparkSession\u001b[0m \u003d org.apache.spark.sql.SparkSession@262c4080\n\u001b[1m\u001b[34mtempExists\u001b[0m: \u001b[1m\u001b[32mBoolean\u001b[0m \u003d false\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1632087854502_958006688",
+      "id": "paragraph_1632087854502_958006688",
+      "dateCreated": "2021-09-19 21:44:14.502",
+      "dateStarted": "2021-09-21 19:49:17.296",
+      "dateFinished": "2021-09-21 19:49:17.876",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-09-21 19:49:17.895",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1632090944494_1873225537",
+      "id": "paragraph_1632090944494_1873225537",
+      "dateCreated": "2021-09-19 22:35:44.494",
+      "status": "FINISHED"
+    }
+  ],
+  "name": "01_common_dateframe_functions",
+  "id": "2GHUXV7G7",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview2",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
