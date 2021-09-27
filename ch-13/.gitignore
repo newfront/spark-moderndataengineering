@@ -1,0 +1,6 @@
+*.log
+.idea
+.idea/*
+.bsp
+target/
+.dockerignore
