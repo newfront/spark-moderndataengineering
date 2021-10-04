@@ -1,9 +1,9 @@
-package com.coffeeco.data
+package com.coffeeco.data.processors
 
-import com.coffeeco.data.traits.{DataFrameProcessor, DataFrameTransformer, WindowedDataFrameProcessor, WindowedProcessor}
-import org.apache.spark.sql.{Column, DataFrame, SparkSession}
-import org.apache.spark.sql.functions.{avg, col, count, lit, sum, to_timestamp, window}
+import com.coffeeco.data.traits.{DataFrameTransformer, WindowedDataFrameProcessor}
+import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.TimestampType
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 object StoreRevenueAggregates {
   def apply(spark: SparkSession): StoreRevenueAggregates = {
@@ -13,10 +13,10 @@ object StoreRevenueAggregates {
 
 @SerialVersionUID(100L)
 class StoreRevenueAggregates(val spark: SparkSession)
-  extends DataFrameTransformer with WindowedDataFrameProcessor with Serializable {
+  extends DataFrameTransformer with WindowedDataFrameProcessor
+    with Serializable {
 
   override def transform(df: DataFrame): DataFrame = {
-    import spark.implicits._
     // the timestamp column is a BigInteger column
     // we need to transform this so it can be changed to TimestampType from BigInt
     df
@@ -37,7 +37,9 @@ class StoreRevenueAggregates(val spark: SparkSession)
       .agg(
         count($"orderId") as "totalOrders",
         sum($"numItems") as "totalItems",
-        sum($"price") as "totalRevenue",
+        bround(sum($"price"), 2) as "totalRevenue",
+        percentile_approx($"numItems", lit(0.95), lit(95))
+          as "numItemsP95",
         avg($"numItems") as "averageNumItems"
       )
   }

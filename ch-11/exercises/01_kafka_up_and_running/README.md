@@ -9,7 +9,7 @@ docker exec \
   /opt/bitnami/kafka/bin/kafka-topics.sh \
   --create \
   --if-not-exists \
-  --topic com.coffeeco.coffee.v1.orders \
+  --topic VoiceInsights.CallSummary \
   --bootstrap-server kafka_0:9092,kafka_1:9092,kafka_2:9092 \
   --partitions 4 \
   --replication-factor 2
