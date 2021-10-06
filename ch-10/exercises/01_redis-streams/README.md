@@ -13,6 +13,26 @@ docker compose \
   --remove-orphans
 ~~~
 
+## Copy the Spark Conf and Jars directories
+If you don't have the `~/dataengineering/spark/conf` or `~/dataengineering/spark/jars` directories, you can copy the contents of `/ch-10/exercises/common/spark` into your local data engineering directory.
+
+`ls -l ~/dataengineering/spark`
+
+> `tree ~/dataengineering/spark`
+~~~
+├── conf
+│   ├── hive-site.xml
+│   └── spark-defaults.conf
+└── jars
+    ├── aws-java-sdk-bundle-1.11.375.jar
+    ├── hadoop-aws-3.2.0.jar
+    ├── hadoop-cloud-storage-3.2.0.jar
+    ├── mariadb-java-client-2.7.2.jar
+    ├── mysql-connector-java-8.0.23.jar
+    ├── spark-event-extractor.jar
+    └── spark-redis_2.12-3.1.2.jar
+~~~
+
 ## Step 2: Using the Redis Cli / Monitor
 Open two new console windows. The first will attach to the redis container and act as the redis-cli (redis command line). This will be used for adding new event data into our Redis Stream. The other window will be used for monitoring redis. This is for observation reasons only to provide a glimpse into what is happening behind the scenes!
 
