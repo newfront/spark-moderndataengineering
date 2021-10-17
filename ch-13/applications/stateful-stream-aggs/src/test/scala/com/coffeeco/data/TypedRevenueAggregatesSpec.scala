@@ -1,14 +1,15 @@
 package com.coffeeco.data
 
-import com.coffeeco.data.TestHelper.{firstOrder, tenMinutes}
+import com.coffeeco.data.TestHelper.firstOrder
 import com.coffeeco.data.config.AppConfig
 import com.coffeeco.data.format.CoffeeOrder
+import com.coffeeco.data.processors.TypedRevenueAggregates
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.execution.streaming.MemoryStream
 import org.apache.spark.sql.streaming.StreamingQueryStatus
+import java.time.temporal.ChronoUnit.{HOURS, MINUTES}
 
-import collection.JavaConverters._
 
 class TypedRevenueAggregatesSpec extends StreamingAggregateTestBase {
   val outputQueryName = "typed_order_aggs"
@@ -26,68 +27,65 @@ class TypedRevenueAggregatesSpec extends StreamingAggregateTestBase {
     implicit val sqlContext: SQLContext = testSession.sqlContext
     // set the override output table name
     testSession.conf.set(AppConfig.sinkQueryName, outputQueryName)
+    testSession.conf.set(AppConfig.sinkOutputMode, "append")
 
-    val coffeeOrders = TestHelper.coffeeOrderData().grouped(6)
+    val coffeeOrders = TestHelper.coffeeOrderData()
+      .grouped(6) // split the sequence by sets of 6 orders
+
     val coffeeOrderStream = MemoryStream[CoffeeOrder]
     coffeeOrderStream.addData(coffeeOrders.next())
 
     // use the config to drive the output stream
     val processor = TypedRevenueAggregates(testSession)
     val aggregationPipeline = coffeeOrderStream
-      .toDF()
-      .as[CoffeeOrder]
+      .toDS()
       .transform(processor.transform)
       .transform(processor.process)
 
     val streamingQuery = SparkTypedStatefulAggregationsApp
-      .outputStream(aggregationPipeline.writeStream)(testSession).start()
+      .outputStream(aggregationPipeline.writeStream)(testSession)
+      .start()
 
-    // queue up all the data for processing
-    coffeeOrders.foreach(orders =>
+    // queue the data for processing
+    // and manually trigger spark
+    coffeeOrders.foreach(orders => {
       coffeeOrderStream.addData(orders)
-    )
-    // tell Spark to trigger everything available
-    streamingQuery.processAllAvailable()
+    })
+    //streamingQuery.processAllAvailable() // force next micro-batch
 
     val currentProgress = streamingQuery.lastProgress
-    val queryDetails = currentProgress.eventTime.asScala
+    //val queryDetails = currentProgress.eventTime.asScala
 
     // "watermark" : "2021-09-25T06:16:00.000Z"
     // push two more items into batch 3
     coffeeOrderStream.addData(
       Seq(
-        CoffeeOrder(firstOrder.plusSeconds(tenMinutes*3).toEpochMilli, "orderN1", "storeG", "custbc1", 2, 6.89f),
-        CoffeeOrder(firstOrder.plusSeconds(tenMinutes*3+60).toEpochMilli, "orderN2", "storeG", "custbc2", 1, 4.89f)
+        CoffeeOrder(firstOrder.plus(26, MINUTES).toEpochMilli, "orderN1", "storeG", "custbc1", 2, 6.89f),
+        CoffeeOrder(firstOrder.plus(27, MINUTES).toEpochMilli, "orderN2", "storeG", "custbc2", 1, 4.89f),
+        CoffeeOrder(firstOrder.plus(35, MINUTES).toEpochMilli, "orderN3", "storeA", "custbc3", 2, 9.99f),
+        CoffeeOrder(firstOrder.plus(50, MINUTES).toEpochMilli, "orderN4", "storeA", "custbc6", 3, 19.99f),
+        CoffeeOrder(firstOrder.minus(12, HOURS).toEpochMilli, "orderA23aa", "storeBB", "cust626", 1, 29.99f),
+        CoffeeOrder(firstOrder.plus(1, HOURS).toEpochMilli, "orderN3", "storeA", "custB2b", 5, 22.44f)
       )
     )
     // we will now kick off batch 3
     streamingQuery.processAllAvailable()
 
-    coffeeOrderStream.addData(
-      Seq(
-        // take a record from a day ago
-        CoffeeOrder(firstOrder.minusSeconds(86400L).toEpochMilli, "orderA23aa", "storeBB", "cust626", 1, 29.99f),
-        CoffeeOrder(firstOrder.plusSeconds(tenMinutes*4).toEpochMilli, "orderN3", "storeA", "custB2b", 5, 22.44f)
-      )
-    )
-
     // adding listeners to the queries gives you a way of monitoring application progress / metrics
-    val progress = streamingQuery.lastProgress
-    // print the final queryProgress
-    println(progress.toString())
-    // pushed the "watermark" : "2021-09-25T06:26:00.000Z"
-    // what is this end to end query doing?
+    //val progress = streamingQuery.lastProgress
+    //println(progress.toString())
+
     streamingQuery.explain()
 
     val status: StreamingQueryStatus = streamingQuery.status
     //status.message Waiting for data to arrive
-    //status.isTriggerActive true
-    //status.isDataAvailable false
+    //status.isTriggerActive
+    //status.isDataAvailable
     val result = testSession.sql(s"select * from $outputQueryName order by window.start, storeId asc")
-    result.show(truncate = false)
 
-    // Now you can test the assumptions about your DataFrame
-    // -
+    val jsonResults = result.toJSON.collect
+
+
     streamingQuery.stop()
   }
 

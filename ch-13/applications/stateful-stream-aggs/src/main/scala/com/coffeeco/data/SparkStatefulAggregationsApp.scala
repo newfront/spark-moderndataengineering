@@ -1,78 +1,65 @@
 package com.coffeeco.data
 
 import com.coffeeco.data.config.AppConfig
+import com.coffeeco.data.format.CoffeeOrder
+import com.coffeeco.data.processors.StoreRevenueAggregates
 import com.coffeeco.data.traits.SparkStructuredStreamingApplication
 import org.apache.log4j.Logger
-import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
-import org.apache.spark.sql.types.{FloatType, IntegerType, LongType, StringType, StructField, StructType}
-import org.apache.spark.sql.streaming.DataStreamReader
+import org.apache.spark.sql.{DataFrame, Dataset, Encoders, Row, SparkSession}
+import org.apache.spark.sql.streaming.{DataStreamReader, DataStreamWriter, StreamingQuery}
 
 object SparkStatefulAggregationsApp extends SparkStructuredStreamingApplication[DataFrame, Row] {
-  import org.apache.spark.sql.functions._
+  import AppConfig._
   val logger: Logger = Logger.getLogger("com.coffeeco.data.SparkStatefulAggregationsApp")
 
-  override def validateConfig()(implicit sparkSession: SparkSession): Boolean = {
-    super.validateConfig()
-    // add any additional checks (could check for source, sink formats)
-  }
-
-  // inputDF
-  // stream data source format for reading
-  lazy val streamStruct: StructType = new StructType()
-    .add(StructField("timestamp", LongType, nullable = false))
-    .add(StructField("orderId", StringType, nullable = false))
-    .add(StructField("storeId", StringType, nullable = false))
-    .add(StructField("customerId", StringType, nullable = false))
-    .add(StructField("numItems", IntegerType, nullable = false))
-    .add(StructField("price", FloatType, nullable = false))
-
-  // add additional sup
   override lazy val inputStream: DataStreamReader = {
+    val conf = sparkSession.conf
+    val SourceSchemaDDL = conf.get(sourceSchemaDDL, "").trim
     // fold additional DataStreamReader options into the mix
     Seq("schema").foldLeft[DataStreamReader](streamReader)( (reader, config) => {
       config match {
-        case "schema" if sparkSession.conf.get(AppConfig.sourceSchemaDDL, "").nonEmpty =>
-          reader.schema(sparkSession.conf.get(AppConfig.sourceSchemaDDL))
+        case "schema" if SourceSchemaDDL.nonEmpty =>
+          // result of calling schema.toDDL
+          reader.schema(SourceSchemaDDL)
         case "schema" =>
-          reader.schema(streamStruct)
+          reader.schema(Encoders.product[CoffeeOrder].schema)
         case _ => reader
       }
     })
   }
 
   /**
-   * Simple Streaming App: Connects and process as soon as data is available
-   * - output will be written to the distributed data lake in parquet
+   * Run the main Spark application
+   * @return a StreamingQuery that can be used for application introspection
    */
-  override def run(): Unit = {
-    import sparkSession.implicits._
-    super.run()
-
+  override def runApp(): StreamingQuery = {
+    val conf = sparkSession.conf
     // 1. generates a new inputStream (DataStreamReader)
     // that uses MicroBatch processing to pass micro-batches as DataFrames
     // 2. The StoreRevenueAggregates process method
     // uses groupBy with a Window column to bucket CoffeeOrders by storeId
     // to emit periodic time-series aggregations
 
-    val processor = StoreRevenueAggregates(sparkSession)
-    val aggregationPipeline: Dataset[Row] = processor
-      .transform(inputStream.load())
-      .transform(processor.process)
+    val processor: StoreRevenueAggregates = StoreRevenueAggregates(sparkSession)
+    val pipeline: Dataset[Row] = processor
+      .transform(inputStream.load()) // DataFrame
+      .transform(processor.process) // DataFrame == Dataset[Row]
 
     // 3. that are then emitted as an append or update stream
     // to a StreamingSink using a DataStreamWriter
-    val writer = outputStream(aggregationPipeline.writeStream)
+    val writer = outputStream(pipeline.writeStream)
 
     // 4. which conditionally outputs data to a Streaming Table or simply starts
     // the StreamingQuery
-    val streamingQuery = sparkSession.conf.get(AppConfig.sinkToTableName, "") match {
-      case tableName if tableName.nonEmpty =>
-        writer.toTable(tableName)
-      case _ =>
-        writer.start()
+    conf.get(sinkToTableName, "") match {
+      case tableName if tableName.nonEmpty => writer.toTable(tableName)
+      case _ => writer.start()
     }
+  }
 
-    startAndAwaitApp(streamingQuery)
+  override def validateConfig()(implicit sparkSession: SparkSession): Boolean = {
+    super.validateConfig()
+    // add any additional checks (could check for source, sink formats)
   }
 
   run()

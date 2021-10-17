@@ -2,7 +2,8 @@ package com.coffeeco.data
 
 import com.coffeeco.data.config.AppConfig
 import com.coffeeco.data.format.CoffeeOrder
-import org.apache.spark.sql.{SQLContext, SparkSession}
+import com.coffeeco.data.processors.StoreRevenueAggregates
+import org.apache.spark.sql.{Row, SQLContext, SparkSession}
 import org.apache.spark.sql.execution.streaming.MemoryStream
 
 class SparkStatefulAggregationsAppSpec extends StreamingAggregateTestBase {
@@ -13,10 +14,13 @@ class SparkStatefulAggregationsAppSpec extends StreamingAggregateTestBase {
     val outputQueryName = "order_aggs"
     testSession.conf.set(AppConfig.sinkQueryName, outputQueryName)
     import testSession.implicits._
+    import org.apache.spark.sql.functions._
     implicit val sqlContext: SQLContext = testSession.sqlContext
 
     // Split into 6 groups (acting like 6 micro-batches)
     val coffeeOrders = TestHelper.coffeeOrderData().grouped(6)
+
+
     /*
       val coffeeOrderStream = new MemoryStream[CoffeeOrder](
       id=0,testSession.sqlContext, numPartitions = Some(2))(coffeeOrderItemEncoder)
@@ -57,18 +61,14 @@ class SparkStatefulAggregationsAppSpec extends StreamingAggregateTestBase {
     /*
     // As an alternative, you can trigger individual batches to watch
     // the aggregations get built up
-
     coffeeOrderStream.addData(coffeeOrders.next())
     streamingQuery.processAllAvailable()
-
     // batch 2
     coffeeOrderStream.addData(coffeeOrders.next())
     streamingQuery.processAllAvailable()
-
     // batch 3
     coffeeOrderStream.addData(coffeeOrders.next())
     streamingQuery.processAllAvailable()
-
     // batch 4
     */
     //streamingQuery.explain(extended = true)
@@ -77,9 +77,21 @@ class SparkStatefulAggregationsAppSpec extends StreamingAggregateTestBase {
     val progress = streamingQuery.lastProgress
     // print the final queryProgress
     println(progress.toString())
-    val result = testSession.sql(s"select * from $outputQueryName order by window.start, storeId asc")
-    result.show(100, truncate = false)
-    //
+    val result = testSession
+      .sql(s"select * from $outputQueryName order by window.start, storeId asc")
+      .toDF("store_id","window","orders","items","revenue","p95_items","avg_items")
+    result.show()
+
+    val resultDDL = "`store_id` STRING,`window` STRUCT<`start`: TIMESTAMP, `end`: TIMESTAMP>,`orders` BIGINT,`items` BIGINT,`revenue` DOUBLE,`p95_items` INT,`avg_items` DOUBLE"
+    val row = result
+      .where(col("store_id").equalTo("storeA"))
+      .sort(desc("orders"))
+      .collect().head
+
+    row.getDouble(row.fieldIndex("avg_items")) shouldBe 2.0d
+    row.getInt(row.fieldIndex("p95_items")) shouldBe 4
+    row.getDouble(row.fieldIndex("revenue")) shouldBe 36.96d
+
     streamingQuery.stop()
   }
 
