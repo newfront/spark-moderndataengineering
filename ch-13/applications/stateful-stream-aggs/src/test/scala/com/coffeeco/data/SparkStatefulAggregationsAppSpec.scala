@@ -61,18 +61,14 @@ class SparkStatefulAggregationsAppSpec extends StreamingAggregateTestBase {
     /*
     // As an alternative, you can trigger individual batches to watch
     // the aggregations get built up
-
     coffeeOrderStream.addData(coffeeOrders.next())
     streamingQuery.processAllAvailable()
-
     // batch 2
     coffeeOrderStream.addData(coffeeOrders.next())
     streamingQuery.processAllAvailable()
-
     // batch 3
     coffeeOrderStream.addData(coffeeOrders.next())
     streamingQuery.processAllAvailable()
-
     // batch 4
     */
     //streamingQuery.explain(extended = true)

@@ -39,15 +39,6 @@ record (per grouping set (`store_id`, `window(start.time,end.time)`)) when the `
 have been met. In this case, the `StreamingQuery` is monitoring the `timestamp` column across
 each new record as it is being `read` into `Spark` through the `DataStreamReader`.
 
-~~~
-
-~~~
-
-After building
-
-
-
-
 
 # Make Changes and Rebuild the App
 When you are working on a new application you will be working in cycles. 

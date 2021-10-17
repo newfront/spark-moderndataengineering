@@ -4,3 +4,4 @@
 .bsp
 target/
 .dockerignore
+project/target
