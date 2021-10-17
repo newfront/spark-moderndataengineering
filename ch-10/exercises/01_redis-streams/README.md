@@ -19,6 +19,7 @@ If you don't have the `~/dataengineering/spark/conf` or `~/dataengineering/spark
 `ls -l ~/dataengineering/spark`
 
 > `tree ~/dataengineering/spark`
+
 ~~~
 ├── conf
 │   ├── hive-site.xml
