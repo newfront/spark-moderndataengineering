@@ -17,8 +17,9 @@ abstract class StreamingAggregateTestBase extends AnyFlatSpec with Matchers with
     sys.props += ( ("config.file", testConfigPath ))
 
     SparkStatefulAggregationsApp.sparkConf
-      .setMaster("local[*]")
+      .setMaster("local[8]")
       .set("spark.app.id", appID)
+      .set("spark.driver.cores", "2")
       .set("spark.sql.warehouse.dir", sparkWarehouseDir)
   }
 

@@ -1,0 +1,10 @@
+Log file created at: 2021/10/17 16:39:44
+Running on machine: C02C71BVMD6V
+Binary: Built with gc go1.17.1 for darwin/amd64
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I1017 16:39:44.401174   55163 init.go:73] init command started
+Log file created at: 2021/10/17 16:40:48
+Running on machine: C02C71BVMD6V
+Binary: Built with gc go1.17.1 for darwin/amd64
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I1017 16:40:48.961671   55202 proxy.go:64] proxy command started
