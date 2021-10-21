@@ -3,15 +3,20 @@ package com.coffeeco.data
 import com.coffeeco.data.TestHelper.firstOrder
 import com.coffeeco.data.config.AppConfig
 import com.coffeeco.data.format.CoffeeOrder
-import com.coffeeco.data.processors.TypedRevenueAggregates
+import com.coffeeco.data.listeners.{QueryListener, SparkApplicationListener}
+import org.apache.log4j.Logger
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.{Dataset, SQLContext, SaveMode, SparkSession}
 import org.apache.spark.sql.execution.streaming.MemoryStream
 import org.apache.spark.sql.streaming.StreamingQueryStatus
+
+import java.lang
 import java.time.temporal.ChronoUnit.{HOURS, MINUTES}
 
-
 class TypedRevenueAggregatesSpec extends StreamingAggregateTestBase {
+
+  val logger: Logger = Logger.getLogger(classOf[TypedRevenueAggregatesSpec])
+
   val outputQueryName = "typed_order_aggs"
   override def conf: SparkConf = {
     super.conf.set("spark.app.sink.queryName", outputQueryName)
@@ -22,6 +27,22 @@ class TypedRevenueAggregatesSpec extends StreamingAggregateTestBase {
     val testSession = SparkTypedStatefulAggregationsApp
       .sparkSession
       .newSession()
+
+    // Enable the SparkListener to add breakpoints via the SparkApplicationListener class
+    // This listener can be used to tap into Spark's control flow and operational metrics events programmatically
+    
+    // testSession.sparkContext.addSparkListener(SparkApplicationListener())
+
+    // Enable the StreamingQueryListener to add breakpoints via the QueryListener case class
+    // This will simply log values by default, but you can use these events (on the Spark driver)
+    // to add intelligence layers over your Spark applications, send custom metrics, or integrate with Slack or
+    // PagerDuty
+
+    //testSession.streams.addListener(QueryListener())
+
+    // switch between default and queued to use the FAIR vs FIFO scheduler
+    testSession.sparkContext.setLocalProperty("spark.scheduler.pool", "default")
+
 
     import testSession.implicits._
     implicit val sqlContext: SQLContext = testSession.sqlContext
@@ -45,6 +66,15 @@ class TypedRevenueAggregatesSpec extends StreamingAggregateTestBase {
     val streamingQuery = SparkTypedStatefulAggregationsApp
       .outputStream(aggregationPipeline.writeStream)(testSession)
       .start()
+
+    new Thread {
+      val secondSession: SparkSession = testSession.newSession()
+      secondSession.sparkContext.setLocalProperty("spark.scheduler.pool", "queued")
+      secondSession.sparkContext.setJobGroup("batch.job", "runs in thread", true)
+      val df: Dataset[lang.Long] = secondSession.range(100)
+      df.write.mode(SaveMode.Overwrite).format(source = "console").save()
+      secondSession.sparkContext.setLocalProperty("spark.scheduler.pool", null)
+    }
 
     // queue the data for processing
     // and manually trigger spark
@@ -82,9 +112,8 @@ class TypedRevenueAggregatesSpec extends StreamingAggregateTestBase {
     //status.isTriggerActive
     //status.isDataAvailable
     val result = testSession.sql(s"select * from $outputQueryName order by window.start, storeId asc")
-
-    val jsonResults = result.toJSON.collect
-
+    result.show()
+    //val jsonResults = result.toJSON.collect
 
     streamingQuery.stop()
   }
