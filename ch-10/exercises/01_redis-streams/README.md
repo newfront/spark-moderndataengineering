@@ -8,9 +8,7 @@ Start up the docker environment. This will spin up redis, minio and mysql.
 ~~~
 docker compose \
   -f docker-compose.yaml \
-  up \
-  -d \
-  --remove-orphans
+  up -d
 ~~~
 
 ## Copy the Spark Conf and Jars directories
@@ -119,8 +117,8 @@ This confirms that the key is no longer known.
 ## Redis Streams
 
 ~~~
-127.0.0.1:6379> xadd com:coffeeco:coffee:v1:orders MAXLEN ~ 3000 * orderId ord123 customerId ca123 timestamp 1625766472303 numItems 4 price 30.00
-"1625766684875-0"
+127.0.0.1:6379> xadd com:coffeeco:coffee:v1:orders  * timestamp 1625766472513 orderId ord126 storeId st1 customerId ca183 numItems 6 price 48.00
+"1625766472513-0"
 ~~~
 
 ### Check that the Stream was Generated
