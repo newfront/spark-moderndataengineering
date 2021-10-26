@@ -30,15 +30,15 @@ class TypedRevenueAggregatesSpec extends StreamingAggregateTestBase {
 
     // Enable the SparkListener to add breakpoints via the SparkApplicationListener class
     // This listener can be used to tap into Spark's control flow and operational metrics events programmatically
-    
-    // testSession.sparkContext.addSparkListener(SparkApplicationListener())
+
+    testSession.sparkContext.addSparkListener(SparkApplicationListener())
 
     // Enable the StreamingQueryListener to add breakpoints via the QueryListener case class
     // This will simply log values by default, but you can use these events (on the Spark driver)
     // to add intelligence layers over your Spark applications, send custom metrics, or integrate with Slack or
     // PagerDuty
 
-    //testSession.streams.addListener(QueryListener())
+    testSession.streams.addListener(QueryListener())
 
     // switch between default and queued to use the FAIR vs FIFO scheduler
     testSession.sparkContext.setLocalProperty("spark.scheduler.pool", "default")

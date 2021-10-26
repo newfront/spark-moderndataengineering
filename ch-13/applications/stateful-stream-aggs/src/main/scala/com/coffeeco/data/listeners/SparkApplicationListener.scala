@@ -10,7 +10,7 @@ import java.util.Properties
 
 case class SparkApplicationListener() extends SparkListener {
   val logger: Logger = Logger.getLogger(classOf[SparkApplicationListener])
-  val session: SparkSession = SparkSession.getDefaultSession.getOrElse {
+  lazy val session: SparkSession = SparkSession.getDefaultSession.getOrElse {
     throw new RuntimeException("There is no SparkSession")
   }
 

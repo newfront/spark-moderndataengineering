@@ -1,8 +1,12 @@
+package com.coffeeco.data.listeners
+
 import org.apache.log4j.Logger
 import org.apache.spark.TaskEndReason
 import org.apache.spark.executor.{ExecutorMetrics, TaskMetrics}
-import org.apache.spark.scheduler.{SparkListener, SparkListenerApplicationEnd, SparkListenerApplicationStart, SparkListenerEnvironmentUpdate, SparkListenerEvent, SparkListenerExecutorAdded, SparkListenerExecutorExcluded, SparkListenerExecutorMetricsUpdate, SparkListenerExecutorRemoved, SparkListenerExecutorUnexcluded, SparkListenerJobEnd, SparkListenerJobStart, SparkListenerStageCompleted, SparkListenerStageExecutorMetrics, SparkListenerStageSubmitted, SparkListenerTaskEnd, SparkListenerTaskGettingResult, SparkListenerTaskStart, TaskInfo}
+import org.apache.spark.scheduler.{SparkListener, SparkListenerApplicationEnd, SparkListenerApplicationStart, SparkListenerEnvironmentUpdate, SparkListenerEvent, SparkListenerExecutorAdded, SparkListenerExecutorExcluded, SparkListenerExecutorMetricsUpdate, SparkListenerExecutorRemoved, SparkListenerExecutorUnexcluded, SparkListenerJobEnd, SparkListenerJobStart, SparkListenerStageCompleted, SparkListenerStageExecutorMetrics, SparkListenerStageSubmitted, SparkListenerTaskEnd, SparkListenerTaskGettingResult, SparkListenerTaskStart, StageInfo, TaskInfo}
 import org.apache.spark.sql.SparkSession
+
+import java.util.Properties
 
 case class SparkApplicationListener() extends SparkListener {
   val logger: Logger = Logger.getLogger(classOf[SparkApplicationListener])
@@ -17,27 +21,27 @@ case class SparkApplicationListener() extends SparkListener {
 
   override def onJobStart(jobStart: SparkListenerJobStart): Unit = {
     super.onJobStart(jobStart)
-    val jobProps = jobStart.properties
+    //val jobProps: Properties = jobStart.properties
     logger.info(s"job.start jobId=${jobStart.jobId} jobStart.time=${jobStart.time}")
   }
 
   override def onStageSubmitted(stageSubmitted: SparkListenerStageSubmitted): Unit = {
     super.onStageSubmitted(stageSubmitted)
-    val stageInfo = stageSubmitted.stageInfo
-    val stageProperties = stageSubmitted.properties
+    val stageInfo: StageInfo = stageSubmitted.stageInfo
+    //val stageProperties: Properties = stageSubmitted.properties
     logger.info(s"stage.submitted stage.id=${stageInfo.stageId}")
   }
 
   override def onStageExecutorMetrics(executorMetrics: SparkListenerStageExecutorMetrics): Unit = {
     super.onStageExecutorMetrics(executorMetrics)
-    val em = executorMetrics
+    val em: SparkListenerStageExecutorMetrics = executorMetrics
     logger.info(s"stage.executor.metrics stageId=${em.stageId} stage.attempt.id=${em.stageAttemptId} exec.id=${em.execId}")
   }
 
   override def onTaskStart(taskStart: SparkListenerTaskStart): Unit = {
     super.onTaskStart(taskStart)
     val ts = taskStart
-    val taskInfo = ts.taskInfo
+    val taskInfo: TaskInfo = ts.taskInfo
     // taskInfo has a wealth of status and timing details
     logger.info(s"task.start " +
       s"task.id=${taskInfo.taskId} task.status=${taskInfo.status} task.attempt.number=${taskInfo.attemptNumber} " +
@@ -55,7 +59,7 @@ case class SparkApplicationListener() extends SparkListener {
     val te = taskEnd
     val taskInfo: TaskInfo = te.taskInfo
     val taskEndReason: TaskEndReason = te.reason
-    val taskExecutorMetrics: ExecutorMetrics = te.taskExecutorMetrics
+    //val taskExecutorMetrics: ExecutorMetrics = te.taskExecutorMetrics
     val taskMetrics: TaskMetrics = te.taskMetrics
     /*
     taskMetrics.inputMetrics
@@ -73,17 +77,15 @@ case class SparkApplicationListener() extends SparkListener {
     taskMetrics.executorDeserializeTime
     */
 
-    logger.info(s"task.end task.type=${taskEnd.taskType} end.reason=${taskEndReason.toString} " +
+    logger.info(s"task.end task.type=${taskEnd.taskType} end.reason=${taskEndReason.toString} task.id=${taskInfo.taskId}" +
       s"executor.cpu.time=${taskMetrics.executorCpuTime}")
   }
 
   override def onStageCompleted(stageCompleted: SparkListenerStageCompleted): Unit = {
     super.onStageCompleted(stageCompleted)
     val stc = stageCompleted
-    val stageInfo = stc.stageInfo
-    stageInfo.stageId
-    stageInfo.details
-    val stm = stageInfo.taskMetrics
+    val stageInfo: StageInfo = stc.stageInfo
+    //val stm: TaskMetrics = stageInfo.taskMetrics
     logger.info(s"stage.completed stage.id=${stageInfo.stageId} stage.completion.time=${stageInfo.completionTime.getOrElse(0)}")
   }
 
