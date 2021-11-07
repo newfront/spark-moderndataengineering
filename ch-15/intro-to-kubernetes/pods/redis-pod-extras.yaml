@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-pod
+  namespace: data-services
+  labels:
+    app: redis
+    type: memory
+spec:
+  containers:
+  - name: redis
+    image: redis:6.2
+    volumeMounts:
+    - name: redis-storage
+      mountPath: /data/redis
+    imagePullPolicy: Always
+    ports:
+    - containerPort: 6379
+      protocol: TCP
+    resources:
+      limits:
+        memory: "1G"
+        cpu: "2000m"
+      requests:
+        memory: "500Mi"
+        cpu: "1000m"
+  restartPolicy: OnFailure
+  volumes:
+  - name: redis-storage
+    emptyDir:
+      medium: Memory
+  
