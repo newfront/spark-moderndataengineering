@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: spark-base-app
+  namespace: spark-apps
+  labels:
+    app: spark-base-app
+    type: canary
+spec:
+  restartPolicy: OnFailure
+  containers:
+    - name: spark-base
+      image: newfrontdocker/apache-spark-base:spark-3.2.0-jre-11-scala-2.12
+      imagePullPolicy: Always
+      command: ["tail", "-f", "/dev/null"]
+      resources:
+        limits:
+          memory: "2000Mi"
+          cpu: "750m"
+        requests:
+          memory: "1000Mi"
+          cpu: "500m"

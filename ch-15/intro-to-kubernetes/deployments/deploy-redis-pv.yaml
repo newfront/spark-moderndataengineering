@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment-pv
+  namespace: data-services
+  labels:
+    app: redis-pv
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-pv
+  template:
+    metadata:
+      labels:
+        app: redis-pv
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+      - name: redis
+        image: redis:6.2
+        volumeMounts:
+        - name: redis-storage
+          mountPath: /data
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 6379
+          name: tcp-port
+          protocol: TCP
+        resources:
+          limits:
+            memory: "1G"
+            cpu: "2000m"
+          requests:
+            memory: "500Mi"
+            cpu: "1000m"
+      volumes:
+      - name: redis-storage
+        persistentVolumeClaim:
+          claimName: redis-pv-claim

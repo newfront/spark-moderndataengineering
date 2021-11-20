@@ -1,0 +1,7 @@
+spec:
+  template:
+    spec:
+      volumes:
+      - name: redis-storage
+        persistentVolumeClaim:
+          claimName: redis-pv-claim

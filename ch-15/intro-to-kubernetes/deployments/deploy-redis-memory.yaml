@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-memory
+  namespace: data-services
+  labels:
+    app: redis-memory
+    type: canary
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 100%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: redis
+      type: memory
+  template:
+    metadata:
+      labels:
+        app: redis
+        type: memory
+    spec:
+      containers:
+      - name: redis
+        image: redis:6.2
+        volumeMounts:
+        - name: redis-storage
+          mountPath: /data
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+        resources:
+          limits:
+            memory: "1G"
+            cpu: "2000m"
+          requests:
+            memory: "500Mi"
+            cpu: "500m"
+      volumes:
+      - name: redis-storage
+        emptyDir:
+          medium: Memory
