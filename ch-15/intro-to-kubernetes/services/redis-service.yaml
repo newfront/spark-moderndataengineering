@@ -5,7 +5,7 @@ metadata:
   namespace: data-services
 spec:
   selector:
-    app: redis
+    app: redis-pv
   type: ClusterIP
   ports:
     - name: tcp-port

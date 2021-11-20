@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis-service
+  namespace: spark-apps
+spec:
+  type: ExternalName
+  externalName: redis-service.data-services.svc.cluster.local
+  ports:
+  - port: 6379

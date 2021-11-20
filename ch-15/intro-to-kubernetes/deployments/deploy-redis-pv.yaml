@@ -15,6 +15,9 @@ spec:
       labels:
         app: redis-pv
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
       containers:
       - name: redis
         image: redis:6.2
@@ -24,6 +27,7 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 6379
+          name: tcp-port
           protocol: TCP
         resources:
           limits:

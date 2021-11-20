@@ -1,6 +1,24 @@
 # Chapter 15: Deploying Mission Critical Spark Applications on Kubernetes
 This is the final chapter of the book, where all your other efforts have led to. This is `Day One`, and I hope you've been enjoying the journey here.
 
+# Install the Kubernetes Command Line `kubectl`
+The Kubernetes command line tool (the kubetcl) will be your friend in your journey to K8s greatness.
+
+https://kubernetes.io/docs/tasks/tools/#kubectl
+
+## View the Commands
+View the available helpers.
+~~~
+kubectl --help
+~~~
+
+## Adding Type-Ahead to your Kubectl (`zsh`)
+This can help when you are learning the Kuberetes verbs and resources
+
+https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-zsh/
+
+
+
 # Local Kubernetes via MiniKube
 Installation instructions are available at https://minikube.sigs.k8s.io/docs/start/, or you can use `brew install minikube` if you are running on MacOS.
 

@@ -3,4 +3,5 @@ kind: Namespace
 metadata:
   labels:
     kubernetes.io/metadata.name: data-services
+    rbac.coffeeco.service: data
   name: data-services

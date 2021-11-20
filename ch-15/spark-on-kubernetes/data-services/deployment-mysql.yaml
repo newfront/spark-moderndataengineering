@@ -1,0 +1,122 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv-volume
+  labels:
+    type: local
+  namespace: data-services
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/mysql"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  namespace: data-services
+spec:
+  storageClassName: "manual"
+  accessModes:
+    - ReadWriteOnce
+  volumeName: mysql-pv-volume
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  namespace: data-services
+spec:
+  selector:
+    app: mysql-pv
+    type: production
+  type: ClusterIP
+  ports:
+    - name: tcp-port
+      port: 3306
+      targetPort: 3306
+      protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql-service
+  namespace: spark-apps
+spec:
+  type: ExternalName
+  externalName: mysql-service.data-services.svc.cluster.local
+  ports:
+  - port: 3306
+    name: tcp-port
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+  namespace: data-services
+data:
+  MYSQL_DATABASE: default
+  MYSQL_USER: dataeng
+  MYSQL_PASSWORD: dataengineering_user
+  MYSQL_ROOT_PASSWORD: dataengineering
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-pv
+  namespace: data-services
+  labels:
+    app: mysql-pv
+    type: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-pv
+      type: production
+  template:
+    metadata:
+      labels:
+        app: mysql-pv
+        type: production
+    spec:
+      containers:
+      - name: mysql
+        envFrom:
+        - configMapRef:
+            name: mysql-config
+        image: mysql:8.0.23
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+        imagePullPolicy: Always
+        args: ["--default-authentication-plugin=mysql_native_password"]
+        #command: ["minio", "server", "--console-address", ":9001", "/data"]
+        #readinessProbe:
+        #  httpGet:
+        #    path: /minio/health/live
+        #    port: 9000
+        #  initialDelaySeconds: 5
+        #  failureThreshold: 6
+        #  periodSeconds: 30
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+        resources:
+          limits:
+            memory: "4G"
+            cpu: "1000m"
+          requests:
+            memory: "2G"
+            cpu: "500m"
+      volumes:
+      - name: mysql-data
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim

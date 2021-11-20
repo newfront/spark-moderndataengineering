@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis-memory-deployment
+  name: redis-memory
   namespace: data-services
   labels:
-    app: redis
-    type: memory
+    app: redis-memory
+    type: canary
 spec:
   replicas: 1
   strategy:
@@ -27,7 +27,7 @@ spec:
         image: redis:6.2
         volumeMounts:
         - name: redis-storage
-          mountPath: /data/redis
+          mountPath: /data
         imagePullPolicy: Always
         ports:
         - containerPort: 6379

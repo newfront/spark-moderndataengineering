@@ -1,0 +1,127 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: minio-pv-volume
+  labels:
+    type: local
+  namespace: data-services
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/minio"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-pv-claim
+  namespace: data-services
+spec:
+  storageClassName: "manual"
+  accessModes:
+    - ReadWriteOnce
+  volumeName: minio-pv-volume
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-service
+  namespace: data-services
+spec:
+  selector:
+    app: minio-pv
+    type: production
+  type: ClusterIP
+  ports:
+    - name: tcp-port
+      port: 9000
+      targetPort: 9000
+      protocol: TCP
+    - name: ui-port
+      port: 9001
+      targetPort: 9001
+      protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: minio-service
+  namespace: spark-apps
+spec:
+  type: ExternalName
+  externalName: minio-service.data-services.svc.cluster.local
+  ports:
+  - port: 9000
+    name: tcp-port
+  - port: 9001
+    name: ui-port
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: minio-service-config
+  namespace: data-services
+data:
+  MINIO_ROOT_USER: minio
+  MINIO_ROOT_PASSWORD: minio_admin
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-pv
+  namespace: data-services
+  labels:
+    app: minio-pv
+    type: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio-pv
+      type: production
+  template:
+    metadata:
+      labels:
+        app: minio-pv
+        type: production
+    spec:
+      containers:
+      - name: minio
+        envFrom:
+        - configMapRef:
+            name: minio-service-config
+        image: minio/minio:RELEASE.2021-09-24T00-24-24Z
+        volumeMounts:
+        - name: minio-data
+          mountPath: /data
+        imagePullPolicy: Always
+        command: ["minio", "server", "--console-address", ":9001", "/data"]
+        readinessProbe:
+          httpGet:
+            path: /minio/health/live
+            port: 9000
+          initialDelaySeconds: 5
+          failureThreshold: 6
+          periodSeconds: 30
+        ports:
+        - containerPort: 9000
+          protocol: TCP
+        - containerPort: 9001
+          protocol: TCP
+        resources:
+          limits:
+            memory: "2G"
+            cpu: "1000m"
+          requests:
+            memory: "1G"
+            cpu: "500m"
+      volumes:
+      - name: minio-data
+        persistentVolumeClaim:
+          claimName: minio-pv-claim
