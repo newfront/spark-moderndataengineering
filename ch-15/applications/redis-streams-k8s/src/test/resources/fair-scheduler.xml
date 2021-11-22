@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<allocations>
+    <pool name="default">
+        <schedulingMode>FAIR</schedulingMode>
+        <weight>10</weight>
+        <minShare>4</minShare>
+    </pool>
+    <pool name="queued">
+        <schedulingMode>FIFO</schedulingMode>
+        <weight>1</weight>
+    </pool>
+</allocations>
