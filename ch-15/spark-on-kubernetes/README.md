@@ -24,6 +24,7 @@ kubectl apply -f spark-controller.yaml
 
 **Response**
 ~~~
+serviceaccount/spark-controller created
 role.rbac.authorization.k8s.io/spark-app-controller created
 rolebinding.rbac.authorization.k8s.io/spark-app-controller-binding created
 ~~~

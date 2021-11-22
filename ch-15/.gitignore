@@ -1,3 +1,5 @@
 .idea/
 target/
-
+metastore_db/
+.bsp
+*.log
