@@ -4,7 +4,17 @@ All of the files in the `config` directory can be stored in the Kubernetes confi
 kubectl create configmap spark-redis-streams-conf --from-file=config -n spark-apps
 ~~~
 > `configmap/spark-redis-streams-conf created`
-> Delete: `kubectl delete configmap/spark-redis-streams-conf -n spark-apps`
+
+## Dump the Contents of a ConfigMap
+~~~
+kubectl get configmap/spark-redis-streams-conf -n spark-apps -o yaml
+~~~
+> You can use the output YAML to define resources. Just remove the creationTimestamp, resourceVersion, uid from the metadata.
+
+## Delete a ConfigMap
+~~~
+kubectl delete configmap/spark-redis-streams-conf -n spark-apps
+~~~
 
 ## Create the Hive Metastore Secret
 Given secrets can live on the Kubernetes cluster itself. You can add your hive-site.xml directly to the secrets for a given namespace. 
@@ -73,14 +83,24 @@ kubectl exec --stdin --tty pod/spark-redis-streams-app -n spark-apps -- bash
 ~~~
 
 3. Run the Spark Application
-> In the below example, I have added the local minikube `k8s` control plane url. `kubectl cluster-info`. This will be different on your local setup.
-
+The following command provides some 
 ~~~
+export K8S_MASTER=k8s://https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT_HTTPS}
+export K8S_NAMESPACE=spark-apps
+export K8S_SERVICE_ACCOUNT_NAME=spark-controller
+export SPARK_APP_NAME=redis-streams-app
+export SPARK_APP_VERSION=1.0.0
+export SPARK_CONTAINER_IMAGE=mde/redis-streams-k8s:1.0.0
+export SPARK_MAIN_CLASS=com.coffeeco.data.SparkStatefulAggregationsApp
+export SPARK_JAR=local:///opt/spark/app/jars/redis-streams-k8s.jar
+export S3_BASE_PATH=s3a://com.coffeeco.data
+export SPARK_USER=redis
+
 $SPARK_HOME/bin/spark-submit \
-  --master k8s://https://192.168.64.9:8443 \
+  --master ${K8S_MASTER} \
   --name redis-streams-k8s \
   --deploy-mode cluster \
-  --packages org.mariadb.jdbc:mariadb-java-client:2.7.2 \
+  --jars "local:///opt/spark/app/user_jars/mariadb-java-client-2.7.2.jar" \
   --class "com.coffeeco.data.SparkStatefulAggregationsApp" \
   --verbose \
   --conf "spark.driver.extraClassPath=/opt/spark/app/user_jars/mariadb-java-client-2.7.2.jar" \
@@ -101,7 +121,7 @@ $SPARK_HOME/bin/spark-submit \
   --conf "spark.hadoop.fs.s3a.secret.key=${MINIO_SECRET_KEY}" \
   --conf "spark.hadoop.fs.s3a.block.size=512M" \
   --conf "spark.hadoop.fs.s3a.connection.ssl.enabled=false" \
-  --conf "spark.kubernetes.container.image=mde/redis-streams-k8s:1.0.4" \
+  --conf "spark.kubernetes.container.image=${SPARK_CONTAINER_IMAGE}" \
   --conf "spark.kubernetes.container.image.pullPolicy=Never" \
   --conf "spark.dynamicAllocation.enabled=false" \
   --conf "spark.kubernetes.driver.request.cores=500m" \
@@ -111,16 +131,16 @@ $SPARK_HOME/bin/spark-submit \
   --conf "spark.kubernetes.executor.limit.cores=1" \
   --conf "spark.executor.memory=2g" \
   --conf "spark.executor.instances=4" \
-  --conf "spark.sql.warehouse.dir=s3a://com.coffeeco.data/warehouse" \
+  --conf "spark.sql.warehouse.dir=${S3_BASE_PATH}/warehouse" \
   --conf "spark.app.sink.format=parquet" \
   --conf "spark.app.sink.queryName=coffee_orders_aggs" \
   --conf "spark.app.sink.trigger.enabled=true" \
   --conf "spark.app.sink.trigger.type=process" \
   --conf "spark.app.sink.processing.interval=30 seconds" \
   --conf "spark.app.sink.outputMode=append" \
-  --conf "spark.sql.streaming.checkpointLocation=s3a://com.coffeeco.data/apps/spark-redis-streams-app/1.0.0" \
-  --conf "spark.app.sink.options.checkpointLocation=s3a://com.coffeeco.data/apps/spark-redis-streams-app/1.0.0" \
-  --conf "spark.app.sink.options.path=s3a://com.coffeeco.data/warehouse/silver/coffee_order_aggs" \
+  --conf "spark.sql.streaming.checkpointLocation=${S3_BASE_PATH}/apps/spark-redis-streams-app/1.0.0" \
+  --conf "spark.app.sink.options.checkpointLocation=${S3_BASE_PATH}/apps/spark-redis-streams-app/1.0.0" \
+  --conf "spark.app.sink.options.path=${S3_BASE_PATH}/warehouse/silver/coffee_order_aggs" \
   --conf "spark.app.sink.output.tableName=silver.coffee_order_aggs" \
   local:///opt/spark/app/jars/redis-streams-k8s.jar
 ~~~
@@ -153,10 +173,42 @@ kubectl -n spark-apps logs spark-redis-streams-app-driver -f
 
 ### View the Spark UI on the Driver Pod
 ~~~
-kubectl -n spark-apps port-forward spark-redis-streams-app-driver 4040:4040
+kubectl -n spark-apps port-forward redis-streams-app-driver 4040:4040
 ~~~
 > Now you'll have the local Spark Driver UI running on your local machine
 
+## FINAL: Automating the Deployment
+~~~
+kubectl apply -f deployment-redis-streams.yaml
+~~~
+
+~~~
+kubectl apply -f deployment-redis-streams.yaml
+~~~
+
+```
+service/redis-service unchanged
+configmap/spark-redis-streams-conf unchanged
+secret/hivesite-admin configured
+secret/minio-access configured
+deployment.apps/spark-redis-streams-app created
+```
+
+~~~
+kubectl get pods -n spark-apps --watch
+~~~
+
+```
+NAME                                              READY   STATUS    RESTARTS   AGE
+spark-redis-streams-app-758c4df9ff-ftxkz          1/1     Running   0          20s
+spark-redis-streams-app-758c4df9ff-ftxkz-driver   1/1     Running   0          11s
+```
+
+Now your spark application brings all of its own resources with it.
+
+> Look at the tool called Kustomize which ships with the `kubectl`. This can automatically render complete deployments like the one from the `deployment-redis-streams.yaml`. Kustomize is beyond the scope of the book but can help solve the problems.
+
+# Trouble Shooting
 ## Check Permissions
 Checking in on your service account permissions. You can replace the resource to check that the role binding is correctly applied. 
 
@@ -171,3 +223,21 @@ kubectl auth can-i create configmaps \
   --as system:serviceaccount:spark-apps:spark-controller
 ~~~
 
+## Service Accounts
+~~~
+kubectl get sa spark-controller -n spark-apps -o yaml
+~~~
+
+## View the Spark Application and Pods
+```
+kubectl get pods -n spark-apps
+```
+
+**Response**
+~~~
+NAME                                                  READY   STATUS    RESTARTS   AGE
+spark-redis-streams-app                               1/1     Running   0          5m27s
+redis-streams-app-driver                              1/1     Running   0          3m45s
+spark-redis-stream-aggs-app-99b48f7d4f7aaf33-exec-1   1/1     Running   0          3m34s
+spark-redis-stream-aggs-app-99b48f7d4f7aaf33-exec-2   1/1     Running   0          3m33s
+~~~

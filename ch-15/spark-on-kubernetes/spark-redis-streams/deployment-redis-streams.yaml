@@ -1,0 +1,208 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis-service
+  namespace: spark-apps
+spec:
+  type: ExternalName
+  externalName: redis-service.data-services.svc.cluster.local
+  ports:
+  - port: 6379
+---
+apiVersion: v1
+data:
+  spark-defaults.conf: |
+    spark.hadoop.fs.s3a.impl org.apache.hadoop.fs.s3a.S3AFileSystem
+    spark.hadoop.fs.s3a.fast.upload true
+    spark.sql.parquet.compression.codec snappy
+    spark.sql.parquet.filterPushdown true
+    spark.sql.parquet.mergeSchema false
+    spark.sql.parquet.output.committer.class org.apache.spark.internal.io.cloud.BindingParquetOutputCommitter
+    spark.jars.ivy /tmp
+    spark.port.maxRetries 4
+
+    spark.driver.extraJavaOptions '-Divy.home=/tmp -Divy.cache.dir=/tmp -Dconfig.file=/opt/spark/app/conf/df-grouped-aggs.conf'
+    spark.executor.extraJavaOptions '-Dconfig.file=/opt/spark/app/conf/df-grouped-aggs.conf'
+
+    spark.kubernetes.context spark-apps
+    spark.kubernetes.namespace spark-apps
+    spark.kubernetes.authenticate.driver.serviceAccountName spark-controller
+    spark.kubernetes.container.image mde/redis-streams-k8s:1.0.0
+    spark.kubernetes.container.image.pullPolicy Never
+
+    # remote logging
+    spark.eventLog.enabled false
+    spark.history.fs.inProgressOptimization.enabled true
+    spark.history.fs.update.interval 5s
+    spark.history.fs.driverlog.cleaner.enabled false
+    spark.driver.log.persistToDfs.enabled false
+    spark.driver.log.allowErasureCoding false
+
+    # Resource Scheduling
+    spark.scheduler.mode FAIR
+    spark.scheduler.allocation.file /opt/spark/app/conf/fairscheduler.xml
+
+    # Dynamic Allocation
+    spark.dynamicAllocation.enabled true
+    spark.dynamicAllocation.shuffleTracking.enabled true
+    spark.dynamicAllocation.sustainedSchedulerBacklogTimeout 30s
+    spark.dynamicAllocation.executorIdleTimeout 120s
+    spark.dynamicAllocation.minExecutors 2
+    spark.dynamicAllocation.maxExecutors 4
+    spark.dynamicAllocation.executorAllocationRatio 0.25
+
+    spark.kubernetes.driver.request.cores 500m
+    spark.kubernetes.driver.limit.cores 1
+    spark.driver.memory 1g
+    spark.kubernetes.executor.request.cores 500m
+    spark.kubernetes.executor.limit.cores 1
+
+    spark.executor.instances 4
+    spark.executor.memory 2g
+
+    # SQL / Security / Timezone
+    spark.redaction.regex (?i)secret|password|token
+    spark.sql.session.timeZone UTC
+    spark.sql.catalogImplementation hive
+    spark.sql.hive.metastore.version 2.3.7
+    spark.sql.hive.metastore.jars builtin
+    spark.sql.hive.metastore.sharedPrefixes com.mysql.cj.jdbc,com.mysql.jdbc,org.postgresql,com.microsoft.sqlserver,oracle.jdbc
+    spark.sql.hive.metastore.schema.verification true
+    spark.sql.hive.metastore.schema.verification.record.version true
+kind: ConfigMap
+metadata:
+  name: spark-redis-streams-conf
+  namespace: spark-apps
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: hivesite-admin
+  namespace: spark-apps
+  labels:
+    rbac.coffeeco.auth: admin
+type: Opaque
+stringData:
+  hive-site.xml: |
+    <configuration>
+      <property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>jdbc:mysql://mysql-service.data-services.svc.cluster.local:3306/metastore</value>
+      </property>
+      <property>
+        <name>javax.jdo.option.ConnectionDriverName</name>
+        <value>org.mariadb.jdbc.Driver</value>
+      </property>
+      <property>
+        <name>javax.jdo.option.ConnectionUserName</name>
+        <value>dataeng</value>
+      </property>
+      <property>
+        <name>javax.jdo.option.ConnectionPassword</name>
+        <value>dataengineering_user</value>
+      </property>
+    </configuration>
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-access
+  namespace: spark-apps
+  labels:
+    rbac.coffeeco.auth: admin
+type: Opaque
+stringData:
+  access: minio
+  secret: minio_admin
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-redis-streams-app
+  namespace: spark-apps
+  labels:
+    app: spark-redis-streams
+    type: canary
+    version: "1.0.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spark-redis-streams
+      type: canary
+  template:
+    metadata:
+      labels:
+        app: spark-redis-streams
+        type: canary
+    spec:
+      restartPolicy: Always
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      serviceAccountName: spark-controller
+      volumes:
+        - name: spark-submit-conf
+          configMap:
+            name: spark-redis-streams-conf
+        - name: scratch
+          emptyDir: {}
+        - name: hive
+          secret:
+            secretName: hivesite-admin
+      containers:
+        - name: redis-streams-app
+          env:
+          - name: K8S_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: SPARK_APP_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: SPARK_USER_NAME
+            value: redis
+          - name: SPARK_CONTAINER_IMAGE
+            value: mde/redis-streams-k8s:1.0.0
+          - name: REDIS_SERVICE_HOST
+            value: redis-service.data-services.svc.cluster.local
+          - name: REDIS_SERVICE_PORT
+            value: "6379"
+          - name: MINIO_SERVICE_HOST
+            value: minio-service.data-services.svc.cluster.local
+          - name: MINIO_SERVICE_PORT
+            value: "9000"
+          - name: MINIO_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-access
+                key: access
+          - name: MINIO_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-access
+                key: secret
+          volumeMounts:
+          - mountPath: /opt/spark/conf/spark-defaults.conf
+            name: spark-submit-conf
+            subPath: spark-defaults.conf
+            readOnly: false
+          - mountPath: /opt/spark/scratch
+            name: scratch
+          - mountPath: /opt/spark/conf/hive-site.xml
+            name: hive
+            subPath: hive-site.xml
+            readOnly: true
+          image: mde/redis-streams-k8s:1.0.0
+          imagePullPolicy: Never
+          command: ["/opt/spark/app/conf/spark-submit.sh"]
+          resources:
+            limits:
+              memory: "2000Mi"
+              cpu: "750m"
+            requests:
+              memory: "1000Mi"
+              cpu: "500m"

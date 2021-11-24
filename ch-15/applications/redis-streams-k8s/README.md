@@ -15,7 +15,7 @@ Then simply build the application image to push the resulting container into the
 
 ~~~
 eval $(minikube docker-env)
-docker build . -t mde/redis-streams-k8s:1.0.4
+docker build . -t mde/redis-streams-k8s:1.0.0
 ~~~
 
 Now the container will be available to run via Spark Submit.
@@ -53,7 +53,7 @@ $SPARK_HOME/bin/spark-submit \
   --conf "spark.hadoop.fs.s3a.secret.key=${MINIO_SECRET_KEY}" \
   --conf "spark.hadoop.fs.s3a.block.size=512M" \
   --conf "spark.hadoop.fs.s3a.connection.ssl.enabled=false" \
-  --conf "spark.kubernetes.container.image=mde/redis-streams-k8s:1.0.4" \
+  --conf "spark.kubernetes.container.image=mde/redis-streams-k8s:1.0.0" \
   --conf "spark.kubernetes.container.image.pullPolicy=Never" \
   --conf "spark.dynamicAllocation.enabled=false" \
   --conf "spark.kubernetes.driver.request.cores=500m" \
