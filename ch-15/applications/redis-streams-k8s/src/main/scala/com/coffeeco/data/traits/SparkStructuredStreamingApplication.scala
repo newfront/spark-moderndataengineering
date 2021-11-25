@@ -1,6 +1,7 @@
 package com.coffeeco.data.traits
 
 import com.coffeeco.data.config.AppConfig
+import com.coffeeco.data.listeners.QueryListener
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.streaming.{DataStreamReader, DataStreamWriter, StreamingQuery, Trigger}
 
@@ -43,20 +44,20 @@ trait SparkStructuredStreamingApplication[T, U] extends SparkApplication {
 
     val QueryName = conf.get(sinkQueryName, SinkQueryNameDefault)
     val SinkOutputMode = conf.get(sinkOutputMode, "append").trim
-    val SinkFormat = conf.get(sinkFormat, sinkFormatDefault)
+    val SinkFormat = conf.get(sinkFormat, sinkFormatDefault).trim.toLowerCase
     val SinkPartitionBy = conf.get(sinkPartitionBy, "").trim
     val SinkPartitionBySeparator = conf.get(sinkPartitionBySeparator, ",").trim
     val TriggerEnabled = conf.get(sinkTriggerEnabled, "false").toBoolean
     val TriggerType = conf.get(sinkTriggerType, TriggerProcessingTime).toLowerCase
     val ProcessingTimeInterval = conf.get(sinkProcessingInterval, SinkProcessingIntervalDefault).trim
+    val options = sparkConf.getAllWithPrefix(appConfig.sinkStreamOptions).toMap[String, String]
 
-    val options = sparkSession.sparkContext.getConf
-      .getAllWithPrefix(appConfig.sourceStreamOptions).toMap[String, String]
-
-    Seq(OutputModeOption, PartitionByOption, TriggerOption)
+    Seq(OutputModeOption, PartitionByOption, TriggerOption, DataSourceOptions)
       .foldLeft[DataStreamWriter[U]](writer)((w, config) => {
         config match {
           case OutputModeOption => w.outputMode(SinkOutputMode)
+          case DataSourceOptions if options.nonEmpty && SinkFormat != "memory" =>
+            w.options(options)
           case PartitionByOption if SinkPartitionBy.nonEmpty =>
             // used for partitioned output (parquet data sink, fs sink, etc)
             val partitionColumns = SinkPartitionBy.split(SinkPartitionBySeparator).map(_.trim)
@@ -77,7 +78,6 @@ trait SparkStructuredStreamingApplication[T, U] extends SparkApplication {
       })
       .format(SinkFormat)
       .queryName(QueryName)
-      .options(options)
   }
 
   /**
@@ -94,6 +94,8 @@ trait SparkStructuredStreamingApplication[T, U] extends SparkApplication {
   override def run(): Unit = {
     super.run()
     runApp()
+    // add the StreamingQuery listener
+    sparkSession.streams.addListener(QueryListener())
     awaitAnyTermination()
   }
 

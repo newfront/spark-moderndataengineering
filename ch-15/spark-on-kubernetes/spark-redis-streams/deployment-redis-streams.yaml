@@ -20,10 +20,10 @@ data:
     spark.sql.parquet.output.committer.class org.apache.spark.internal.io.cloud.BindingParquetOutputCommitter
     spark.jars.ivy /tmp
     spark.port.maxRetries 4
-
+    spark.driver.extraClassPath '/opt/spark/app/user_jars/mariadb-java-client-2.7.2.jar'
+    spark.executor.extraClassPath '/opt/spark/app/user_jars/mariadb-java-client-2.7.2.jar'
     spark.driver.extraJavaOptions '-Divy.home=/tmp -Divy.cache.dir=/tmp -Dconfig.file=/opt/spark/app/conf/df-grouped-aggs.conf'
     spark.executor.extraJavaOptions '-Dconfig.file=/opt/spark/app/conf/df-grouped-aggs.conf'
-
     spark.kubernetes.context spark-apps
     spark.kubernetes.namespace spark-apps
     spark.kubernetes.authenticate.driver.serviceAccountName spark-controller
@@ -168,11 +168,11 @@ spec:
           - name: SPARK_CONTAINER_IMAGE
             value: mde/redis-streams-k8s:1.0.0
           - name: REDIS_SERVICE_HOST
-            value: redis-service.data-services.svc.cluster.local
+            value: redis-service.spark-apps.svc.cluster.local
           - name: REDIS_SERVICE_PORT
             value: "6379"
           - name: MINIO_SERVICE_HOST
-            value: minio-service.data-services.svc.cluster.local
+            value: minio-service.spark-apps.svc.cluster.local
           - name: MINIO_SERVICE_PORT
             value: "9000"
           - name: MINIO_ACCESS_KEY

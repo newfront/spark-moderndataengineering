@@ -41,11 +41,11 @@ spec:
       - name: SPARK_CONTAINER_IMAGE
         value: mde/redis-streams-k8s:1.0.0
       - name: REDIS_SERVICE_HOST
-        value: redis-service.data-services.svc.cluster.local
+        value: redis-service.spark-apps.svc.cluster.local
       - name: REDIS_SERVICE_PORT
         value: "6379"
       - name: MINIO_SERVICE_HOST
-        value: minio-service.data-services.svc.cluster.local
+        value: minio-service.spark-apps.svc.cluster.local
       - name: MINIO_SERVICE_PORT
         value: "9000"
       - name: MINIO_ACCESS_KEY
@@ -75,7 +75,7 @@ spec:
       resources:
         limits:
           memory: "2000Mi"
-          cpu: "750m"
+          cpu: "500m"
         requests:
           memory: "1000Mi"
-          cpu: "500m"
+          cpu: "250m"

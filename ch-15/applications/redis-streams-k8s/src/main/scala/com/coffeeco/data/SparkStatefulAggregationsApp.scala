@@ -2,6 +2,7 @@ package com.coffeeco.data
 
 import com.coffeeco.data.config.AppConfig
 import com.coffeeco.data.format.CoffeeOrder
+import com.coffeeco.data.listeners.SparkApplicationListener
 import com.coffeeco.data.processors.StoreRevenueAggregates
 import com.coffeeco.data.traits.SparkStructuredStreamingApplication
 import org.apache.log4j.Logger
@@ -49,6 +50,9 @@ object SparkStatefulAggregationsApp extends SparkStructuredStreamingApplication[
     // 3. that are then emitted as an append or update stream
     // to a StreamingSink using a DataStreamWriter
     val writer = outputStream(pipeline.writeStream)
+
+    sparkSession.sparkContext.addSparkListener(SparkApplicationListener())
+
 
     // 4. which conditionally outputs data to a Streaming Table or simply starts
     // the StreamingQuery
