@@ -86,3 +86,9 @@ kube-system     kube-dns          ClusterIP      10.96.0.10       <none>        
 spark-apps      redis-service     ExternalName   <none>           redis-service.data-services.svc.cluster.local   6379/TCP                     43h
 ~~~
 
+## Installing MinIO and MySQL
+If you haven't yet gone through the exercise of adding the additional two services into the data-services namespace. You can head over to `ch-15/spark-on-kubernetes/data-services/README.md` to install the two components, and to do any additional bootstrapping.
+
+## Deploying the Redis Powered Spark Structured Streaming Application
+The step-by-step guide is available at `ch-15/spark-on-kubernetes/spark-redis-streams/README.md`. 
+

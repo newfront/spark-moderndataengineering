@@ -34,6 +34,7 @@ trait SparkAppConfig {
   val OutputModeOption: String = "outputMode"
   val PartitionByOption: String = "partitionBy"
   val TriggerOption: String = "trigger"
+  val DataSourceOptions: String = "options"
   val sinkToTableName = "spark.app.sink.output.tableName"
 
   val TriggerProcessingTime: String = "process"

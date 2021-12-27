@@ -46,8 +46,7 @@ class SparkStatefulAggregationsAppSpec extends StreamingAggregateTestBase {
       .transform(processor.process)
 
     val streamingQuery = SparkStatefulAggregationsApp
-      .outputStream(aggregationPipeline.writeStream)
-      .start()
+      .outputStream(aggregationPipeline.writeStream).start()
 
     // queue up all the data for processing
     coffeeOrders.foreach(orders =>
