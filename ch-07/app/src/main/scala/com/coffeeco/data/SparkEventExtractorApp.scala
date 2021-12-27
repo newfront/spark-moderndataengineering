@@ -30,17 +30,17 @@ object SparkEventExtractorApp extends SparkBatchApplication {
     }
   }
 
-  override def validateConfig()
-    (implicit sparkSession: SparkSession): Boolean = {
-    val isValid = sourceTable.nonEmpty &&
-      destinationTable.nonEmpty &&
-      sourceTable != destinationTable &&
-      sparkSession.catalog.tableExists(sourceTable)
-    if (!isValid) throw new RuntimeException(
-      s"${Conf.SourceTableName} or ${Conf.DestinationTableName} are empty, " +
-        s"or the $sourceTable is missing from the spark warehouse")
-    true
-  }
+  /**
+   * The validation rules test the expected behavior (left hand predicate)
+   * if the predicate returns True, then we are good, otherwise, we have an exception
+   * to the validation rules
+   */
+  override lazy val validationRules = Map[() => Boolean, String](
+    (()=> sourceTable.nonEmpty) -> s"${Conf.SourceTableName} can not be an empty value",
+    (()=> destinationTable.nonEmpty) -> s"${Conf.DestinationTableName} can not be an empty value",
+    (()=> sourceTable != destinationTable) -> s"The source table ${Conf.SourceTableName}:$sourceTable can not be the same as your destination table ${Conf.DestinationTableName}:$destinationTable.",
+    (()=> sparkSession.catalog.tableExists(sourceTable)) -> s"The source table ${Conf.SourceTableName}:$sourceTable} does not exist"
+  )
 
   override def runBatch(saveMode: SaveMode): Unit = {
     //

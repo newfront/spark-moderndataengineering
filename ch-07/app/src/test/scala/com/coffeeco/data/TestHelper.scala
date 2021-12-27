@@ -106,11 +106,12 @@ object TestHelper {
   }
 
   def customerRatingsTable(spark: SparkSession): Unit = {
-    if (!spark.catalog.tableExists("bronze", "customerRatings")) {
+    if (!spark.catalog.tableExists("bronze", "customerRatings") ||
+      spark.table("bronze.customerRatings").count() < 1) {
       customerRatingsDataFrame(spark)
         .coalesce(1)
         .write
-        .mode(SaveMode.Ignore)
+        .mode(SaveMode.Overwrite)
         .saveAsTable("bronze.customerRatings")
     }
   }
