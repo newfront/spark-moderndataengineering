@@ -39,10 +39,12 @@ trait SparkApplication extends App {
     if (validationRules.nonEmpty) {
       val results = validationRules.foldLeft[List[String]](List.empty[String])(
         (accumulator: List[String], rule: (()=>Boolean, String)) => {
-          // if the predicate is not true, we have a problem
-          if (!rule._1()) {
+          if (rule._1()) {
+            accumulator
+          } else {
+            // if the predicate is not true, we have a problem
             accumulator :+ rule._2
-          } else accumulator
+          }
         }
       )
 

@@ -93,6 +93,14 @@ class SparkEventExtractorSpec extends AnyFlatSpec
     testSession.table(destinationTable).count shouldEqual 1
   }
 
+  "SparkEventExtractor" should " not start when bad configuration is encountered" in {
+    val testSession = SparkEventExtractorApp.sparkSession
+    testSession.conf.set(SourceTableName, "bronze.noop")
+    testSession.conf.set(DestinationTableName, " ")
+    //
+    assertThrows[RuntimeException](SparkEventExtractorApp.run())
+  }
+
   "SparkEventExtractor" should " read and join Customer EventData " in {
     val testSession = SparkEventExtractorApp.sparkSession
     import testSession.implicits._

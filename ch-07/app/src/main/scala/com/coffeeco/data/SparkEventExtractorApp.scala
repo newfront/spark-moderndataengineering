@@ -16,10 +16,12 @@ object SparkEventExtractorApp extends SparkBatchApplication {
   lazy val sourceTable: String = sparkSession
     .conf
     .get(Conf.SourceTableName, "")
+    .trim
 
   lazy val destinationTable: String = sparkSession
     .conf
     .get(Conf.DestinationTableName, "")
+    .trim
 
   override lazy val saveMode: SaveMode = {
     sparkSession.conf.get(Conf.SaveModeName, "ErrorIfExists") match {
@@ -39,7 +41,7 @@ object SparkEventExtractorApp extends SparkBatchApplication {
     (()=> sourceTable.nonEmpty) -> s"${Conf.SourceTableName} can not be an empty value",
     (()=> destinationTable.nonEmpty) -> s"${Conf.DestinationTableName} can not be an empty value",
     (()=> sourceTable != destinationTable) -> s"The source table ${Conf.SourceTableName}:$sourceTable can not be the same as your destination table ${Conf.DestinationTableName}:$destinationTable.",
-    (()=> sparkSession.catalog.tableExists(sourceTable)) -> s"The source table ${Conf.SourceTableName}:$sourceTable} does not exist"
+    (()=> sparkSession.catalog.tableExists(sourceTable)) -> s"The source table ${Conf.SourceTableName}:$sourceTable does not exist"
   )
 
   override def runBatch(saveMode: SaveMode): Unit = {
