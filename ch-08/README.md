@@ -41,4 +41,4 @@ The directory `minio` contains a docker-compose.yaml for running the `minio` Ama
 127.0.0.1 minio
 ~~~
 
-Now you can locate the MinIO UI in your browser at http://minio:9000
+Now you can locate the MinIO UI in your browser at http://minio:9001

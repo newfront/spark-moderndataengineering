@@ -108,18 +108,18 @@ services:
     networks:
       - mde
     hostname: mysql
-    restart: always
-
   minio:
-    image: minio/minio:latest
+    image: minio/minio:${MINIO_TAG}
     volumes:
       - ${DATA_ENGINEERING_BASEDIR:-$PWD}/minio/data:/data
     expose:
       - "9000"
+      - "9001"
     environment:
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: minio_admin
-    command: server /data
+      #MINIO_DOMAIN: mydomain.com
+    command: server --console-address ":9001" /data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 30s
@@ -127,10 +127,11 @@ services:
       retries: 3
     ports:
       - 9000:9000
+      - 9001:9001
     networks:
       - mde
     hostname: minio
-    restart: always 
+    restart: always
 
   redis:
     image: redis:latest
