@@ -44,12 +44,10 @@ trait SparkApplication extends App {
           } else {
             // if the predicate is not true, we have a problem
             accumulator :+ rule._2
-          }
-        }
-      )
-
-      if (results.nonEmpty) throw new RuntimeException(s"Configuration Issues Encountered:\n ${results.mkString("\n")}")
-      true
+          }})
+      if (results.nonEmpty)
+        throw new RuntimeException(s"Configuration Issues Encountered:\n ${results.mkString("\n")}")
+      else true
     } else true
   }
 
