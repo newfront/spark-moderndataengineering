@@ -1,4 +1,4 @@
-ARG AIRFLOW_BASE_IMAGE=apache/airflow:2.1.0
+ARG AIRFLOW_BASE_IMAGE=apache/airflow:2.1.0-python3.8
 
 FROM docker.io/${AIRFLOW_BASE_IMAGE}
 
